@@ -34,14 +34,4 @@ router.get(
   },
 );
 
-router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
-
-  res.json({ success: true });
-});
-
 module.exports = router;
