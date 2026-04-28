@@ -25,9 +25,23 @@ router.get(
       { expiresIn: "1d" },
     );
 
-    // redirect to frontend with token
-    res.redirect(`${process.env.CLIENT_URL}/admin/?token=${token}`);
+    const CLIENT_URL =
+      process.env.NODE_ENV === "production"
+        ? process.env.CLIENT_URL
+        : process.env.LOCAL_URL;
+
+    res.redirect(`${CLIENT_URL}/admin/?token=${token}`);
   },
 );
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+
+  res.json({ success: true });
+});
 
 module.exports = router;

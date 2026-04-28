@@ -24,7 +24,7 @@ connectDB()
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://orboevents.vercel.app"],
+    origin: [process.env.LOCAL_URL, process.env.CLIENT_URL],
     credentials: true,
   }),
 );
