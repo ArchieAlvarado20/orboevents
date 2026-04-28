@@ -5,7 +5,6 @@ import axios from "axios";
 import Footer from "@/components/shared/Footer";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/shared/Logo";
-import { showError } from "@/lib/alert";
 import { jwtDecode } from "jwt-decode";
 
 type JwtPayload = {
@@ -50,6 +49,34 @@ export default function Auth() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // ✅ FRONTEND VALIDATION
+    if (!form.email || !form.password) {
+      setError("Email and password are required");
+      return;
+    }
+
+    // email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Invalid email format");
+      return;
+    }
+
+    // password length
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    // register-only validation
+    if (!isLogin) {
+      if (!form.name) {
+        setError("Name is required");
+        return;
+      }
+    }
+
     setLoading(true);
     setError("");
 
@@ -76,11 +103,11 @@ export default function Auth() {
       } else {
         navigate("/");
       }
-    } catch (err: unknown) {
+    } catch (err: any) {
       const message =
-        err instanceof Error ? err.message : "Somethind Went Wrong!";
+        err.response?.data?.message || err.message || "Something went wrong";
 
-      showError(message);
+      setError(message);
     } finally {
       setLoading(false);
     }
