@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
-const cors = require("cors");
+
 const passport = require("passport");
 require("./config/passport");
 
@@ -23,7 +23,7 @@ connectDB()
 
 app.use(
   cors({
-    origin: [process.env.LOCAL_URL, process.env.CLIENT_URL],
+    origin: ["http://localhost:5173", process.env.CLIENT_URL],
     credentials: true,
   }),
 );
