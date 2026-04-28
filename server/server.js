@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
-
+app.use(cors());
 const passport = require("passport");
 require("./config/passport");
 
@@ -29,14 +29,16 @@ app.use(
 );
 
 app.use(express.json());
-app.use(passport.initialize());
 
+// now safe to use app
+app.use(passport.initialize());
 app.use("/api/ticket-types", ticketTypeRoutes);
 
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", ticketRoutes);
+
 app.use("/api", eventRoutes);
 
 app.get("/", (req, res) => {
