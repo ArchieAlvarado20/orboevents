@@ -22,9 +22,13 @@ connectDB()
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("DB Error:", err));
 
+const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"].filter(
+  Boolean,
+);
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://orboevents.vercel.app"],
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
