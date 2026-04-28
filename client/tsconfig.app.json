@@ -18,7 +18,8 @@
     // "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    // "noEmit": true,
+    "strict": true,
+    "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
