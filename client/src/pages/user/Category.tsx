@@ -1,10 +1,7 @@
-import Logo from "@/components/shared/Logo";
+import Topbar from "@/components/shared/usersPage/topbar";
 import {
   Music,
   FlaskConical,
-  Search,
-  Bell,
-  UserCircle,
   CalendarHeartIcon,
   MonitorCheck,
   Map,
@@ -27,53 +24,8 @@ export default function Category() {
   ];
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-violet-100 dark:border-violet-900/30 shadow-sm shadow-violet-500/5 h-16 flex items-center">
-        <div className="flex justify-between items-center px-6 w-full max-w-7xl mx-auto">
-          <Logo className="h-16" />
-          <nav className="hidden md:flex items-center gap-8 font-['Plus_Jakarta_Sans'] text-sm">
-            <a
-              className="text-slate-600 dark:text-slate-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors active:scale-95 transition-transform"
-              href="#"
-            >
-              Explore
-            </a>
-            <a
-              className="text-slate-600 dark:text-slate-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors active:scale-95 transition-transform"
-              href="#"
-            >
-              Nearby
-            </a>
-            <a
-              className="text-slate-600 dark:text-slate-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors active:scale-95 transition-transform"
-              href="#"
-            >
-              My Tickets
-            </a>
-            <a
-              className="text-slate-600 dark:text-slate-400 hover:text-violet-500 dark:hover:text-violet-300 transition-colors active:scale-95 transition-transform"
-              href="#"
-            >
-              Community
-            </a>
-          </nav>
-          <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center bg-slate-100 px-4 py-2 rounded-full border-none focus-within:ring-2 ring-violet-600 ring-offset-2 transition-all">
-              <Search />
-              <input
-                className="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface"
-                placeholder="Search events..."
-                type="text"
-              />
-            </div>
-            <button className="material-symbols-outlined text-slate-600 hover:text-violet-600 transition-colors">
-              <Bell />
-            </button>
-            <button className="material-symbols-outlined text-slate-600 hover:text-violet-600 transition-colors">
-              <UserCircle />
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* <!-- TopAppBar --> */}
+      <Topbar />
       <main className="pt-16 pb-24 md:pb-0">
         {/* <!-- Hero Section --> */}
         <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
