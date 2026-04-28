@@ -25,14 +25,14 @@ function App() {
         <Route path="/tickets" element={<UserTickets />} />
 
         {/* Admin Group */}
-        <Route path="/admin" element={<Auth />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="events" element={<Events />} />
-          <Route path="tickets" element={<Ticket />} />
-          <Route path="scanner" element={<Scanner />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="settings" element={<Scanner />} />
-        </Route>
+        <Route path="/admin" element={<Auth />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/events" element={<Events />} />
+        <Route path="/admin/tickets" element={<Ticket />} />
+        <Route path="/admin/scanner" element={<Scanner />} />
+        <Route path="/admin/analytics" element={<Analytics />} />
+
+        <Route path="/admin/settings" element={<Scanner />} />
 
         {/* Other routes */}
         <Route path="/scanner" element={<QRScanner />} />
