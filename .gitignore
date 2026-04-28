@@ -1,0 +1,34 @@
+# ========================
+# GLOBAL
+# ========================
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db
+
+# ========================
+# CLIENT
+# ========================
+client/node_modules/
+client/dist/
+client/.next/
+client/.env*
+
+# ========================
+# SERVER
+# ========================
+server/node_modules/
+server/.env*
+
+# ========================
+# EDITOR
+# ========================
+.vscode/
+.idea/
+
+# ========================
+# BUILD / CACHE
+# ========================
+coverage/
