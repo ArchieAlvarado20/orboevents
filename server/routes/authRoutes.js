@@ -25,12 +25,8 @@ router.get(
       { expiresIn: "1d" },
     );
 
-    const CLIENT_URL =
-      process.env.NODE_ENV === "production"
-        ? process.env.CLIENT_URL
-        : process.env.LOCAL_URL;
-
-    res.redirect(`${CLIENT_URL}/admin/?token=${token}`);
+    // redirect to frontend with token
+    res.redirect(`${process.env.CLIENT_URL}/admin/?token=${token}`);
   },
 );
 
