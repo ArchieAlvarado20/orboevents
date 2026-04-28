@@ -23,7 +23,7 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden group hover:shadow-md transition-shadow">
+    <div className="bg-white  border border-slate-200  rounded-xl overflow-hidden group hover:shadow-md transition-shadow">
       {/* IMAGE */}
       <div className="h-48 relative overflow-hidden">
         <img
@@ -47,7 +47,7 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
       <div className="p-6">
         {/* HEADER */}
         <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-lg text-slate-900 dark:text-white leading-tight">
+          <h3 className="font-semibold text-lg text-slate-900  leading-tight">
             {event.name}
           </h3>
 
@@ -78,16 +78,16 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
         </div>
 
         {/* FOOTER */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div className="pt-4 border-t border-slate-100  flex items-center justify-between">
           {/* AVATARS (placeholder) */}
           <div className="flex -space-x-2">
-            <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
+            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
               A
             </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
+            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
               B
             </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">
+            <div className="w-8 h-8 rounded-full border-2 border-white  bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">
               +99
             </div>
           </div>

@@ -2,9 +2,9 @@ export default function Eventstable() {
   return (
     <>
       <div className="p-8 max-w-container-max mx-auto space-y-stack-lg">
-        <section className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-            <h4 className="font-semibold text-slate-900 dark:text-white">
+        <section className="bg-white  border-slate-200  rounded-xl overflow-hidden shadow-sm">
+          <div className="px-6 py-4 border-b border-slate-100  flex items-center justify-between">
+            <h4 className="font-semibold text-slate-900 ">
               Recent Transactions
             </h4>
             <a
@@ -16,7 +16,7 @@ export default function Eventstable() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-              <thead className="bg-slate-50 dark:bg-slate-900">
+              <thead className="bg-slate-50 ">
                 <tr>
                   <th className="px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">
                     Attendee
@@ -38,25 +38,25 @@ export default function Eventstable() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+              <tbody className="divide-y divide-slate-100 ">
+                <tr className="hover:bg-slate-50  transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
                         JD
                       </div>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white">
+                      <span className="text-sm font-medium text-slate-900 ">
                         Jane Doe
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     Summer Music Fest 2024
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     VIP Pass
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">
+                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 ">
                     $299.00
                   </td>
                   <td className="px-6 py-4">
@@ -68,24 +68,24 @@ export default function Eventstable() {
                     2 mins ago
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                <tr className="hover:bg-slate-50  transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-xs font-bold">
                         BS
                       </div>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white">
+                      <span className="text-sm font-medium text-slate-900 ">
                         Brian Smith
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     Summer Music Fest 2024
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     General Entry
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">
+                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 ">
                     $89.00
                   </td>
                   <td className="px-6 py-4">
@@ -97,24 +97,24 @@ export default function Eventstable() {
                     15 mins ago
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                <tr className="hover:bg-slate-50  transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center text-xs font-bold">
                         AL
                       </div>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white">
+                      <span className="text-sm font-medium text-slate-900 ">
                         Alice Lawson
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     Global Tech Summit
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                  <td className="px-6 py-4 text-sm text-slate-600 ">
                     Early Bird
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 dark:text-white">
+                  <td className="px-6 py-4 text-sm font-semibold text-slate-900 ">
                     $150.00
                   </td>
                   <td className="px-6 py-4">

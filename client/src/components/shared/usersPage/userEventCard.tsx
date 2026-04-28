@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -57,9 +58,11 @@ export default function UserEventCard({ event }: EventCardProps) {
             ₹ {event.price}
           </span>
 
-          <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:opacity-90 transition-opacity">
-            Book Now
-          </button>
+          <Link to="/events">
+            <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:opacity-90 transition-opacity">
+              Book Now
+            </button>
+          </Link>
         </div>
       </div>
     </div>

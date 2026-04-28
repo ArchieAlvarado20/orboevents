@@ -46,16 +46,16 @@ export default function EventModal({
           <div
             ref={modalRef}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white dark:bg-slate-900 w-full max-w-2xl sm:rounded-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            className="relative bg-white  w-full max-w-2xl sm:rounded-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
           >
             {/* <!-- Header --> */}
-            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <div className="px-6 py-4 border-b border-slate-100  flex items-center justify-between sticky top-0 bg-white  z-10">
+              <h3 className="text-xl font-bold text-slate-900 ">
                 Create New Event
               </h3>
               <button
                 onClick={() => onClose()}
-                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-600  transition-colors"
               >
                 <X />
               </button>
@@ -210,7 +210,7 @@ export default function EventModal({
               </div>
             </div>
             {/* <!-- Footer --> */}
-            <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 flex items-center justify-end gap-3 sticky bottom-0 z-10">
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
               <Button variant="outline" onClick={() => onClose()}>
                 cancel
               </Button>
