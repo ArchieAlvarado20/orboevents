@@ -91,29 +91,23 @@ export default function Auth() {
   };
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get("token");
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
 
-    if (!token) return;
-
-    try {
+    if (token) {
       localStorage.setItem("token", token);
+
+      window.history.replaceState({}, "", "/auth");
 
       const decoded = jwtDecode<JwtPayload>(token);
 
-      // clean URL safely
-      window.history.replaceState({}, "", window.location.pathname);
-
       if (decoded.role === "admin") {
-        navigate("/admin/dashboard", { replace: true });
+        navigate("/admin/dashboard");
       } else {
-        navigate("/", { replace: true });
+        navigate("/");
       }
-    } catch (err) {
-      console.error("Invalid token");
-      navigate("/auth");
     }
-  }, [navigate]);
-
+  }, []);
   return (
     <>
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">

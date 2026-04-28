@@ -26,7 +26,7 @@ router.get(
     );
 
     // redirect to frontend with token
-    res.redirect(`${process.env.CLIENT_URL}/admin`);
+    res.redirect(`${process.env.CLIENT_URL}/admin/?token=${token}`);
   },
 );
 
