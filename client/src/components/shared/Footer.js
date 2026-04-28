@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import Logo from "./Logo";
+export default function Footer() {
+    return (_jsx(_Fragment, { children: _jsx("footer", { className: "relative z-10 w-full border-t border-slate-200 bg-white", children: _jsx("div", { className: "max-w-7xl mx-auto px-6 py-10", children: _jsxs("div", { className: "flex flex-col md:flex-row items-center justify-between gap-6", children: [_jsxs("div", { className: "flex flex-col items-center md:items-start gap-1", children: [_jsx(Logo, { className: "h-16" }), _jsx("p", { className: "text-xs text-slate-500 text-center", children: "Modern ticketing system for seamless event management" })] }), _jsxs("div", { className: "flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border border-slate-200", children: [_jsx("span", { className: "w-2 h-2 rounded-full bg-green-500 animate-pulse" }), _jsx("span", { className: "text-xs text-slate-600 font-medium", children: "All systems operational" })] }), _jsxs("div", { className: "text-xs text-slate-500", children: ["\u00A9 ", new Date().getFullYear(), " SmartTicket \u2022 v1.0.0"] })] }) }) }) }));
+}
