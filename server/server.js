@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
-
+const cors = require("cors");
 const passport = require("passport");
 require("./config/passport");
 
@@ -23,23 +23,20 @@ connectDB()
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://orboevents.vercel.app"],
+    origin: [process.env.LOCAL_URL, process.env.CLIENT_URL],
     credentials: true,
   }),
 );
 
-app.use(cors());
 app.use(express.json());
-
-// now safe to use app
 app.use(passport.initialize());
+
 app.use("/api/ticket-types", ticketTypeRoutes);
 
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", ticketRoutes);
-
 app.use("/api", eventRoutes);
 
 app.get("/", (req, res) => {
