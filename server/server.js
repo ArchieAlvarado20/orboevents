@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require("express");
-const cors = require("cors");
+
 const passport = require("passport");
 require("./config/passport");
 
@@ -17,7 +17,16 @@ const testRoutes = require("./routes/testRoutes");
 
 const app = express();
 
-connectDB();
+connectDB()
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("DB Error:", err));
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://orboevents.vercel.app"],
+    credentials: true,
+  }),
+);
 
 app.use(cors());
 app.use(express.json());
@@ -39,6 +48,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });

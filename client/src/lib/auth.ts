@@ -1,6 +1,6 @@
-export const handleLogout = () => {
+export const handleLogout = (redirectTo = "/admin") => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
 
-  window.location.href = "/admin/";
+  window.location.replace(redirectTo);
 };
