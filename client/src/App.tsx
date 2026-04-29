@@ -29,6 +29,7 @@ function App() {
         <Route path="/tickets/:id" element={<UserTickets />} />
         <Route path="/organizer" element={<Organizer />} />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<div>Page Not Found</div>} />
 
         {/* Admin Group */}
         <Route path="/admin" element={<Auth />} />

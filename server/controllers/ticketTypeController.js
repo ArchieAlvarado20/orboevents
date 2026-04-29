@@ -87,7 +87,6 @@ const updateTicketType = async (req, res) => {
   }
 };
 
-// ❌ DELETE Ticket Type
 const deleteTicketType = async (req, res) => {
   try {
     const { id } = req.params;

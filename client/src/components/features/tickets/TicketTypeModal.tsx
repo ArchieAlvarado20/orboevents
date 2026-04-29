@@ -189,9 +189,9 @@ export default function TicketTypeModal({
                     <span>Ticket Badge Color: </span>
                   </div>
                   {[
-                    { name: "green", label: "" },
-                    { name: "yellow", label: "" },
-                    { name: "red", label: "" },
+                    { name: "green", label: "#17a105" },
+                    { name: "yellow", label: "#bdad04" },
+                    { name: "red", label: "#990202" },
                   ].map((c) => (
                     <button
                       key={c.name}
@@ -200,10 +200,8 @@ export default function TicketTypeModal({
                       className={`w-10 h-10 rounded-lg  flex items-center justify-center ${
                         form.color === c.name ? "ring-2 ring-indigo-500" : ""
                       }`}
-                      style={{ backgroundColor: c.name }}
-                    >
-                      {c.label}
-                    </button>
+                      style={{ backgroundColor: c.label }}
+                    ></button>
                   ))}
                 </div>
               </div>

@@ -1,9 +1,9 @@
 import UserTicketCard from "@/components/features/tickets/UserTickettCard";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import Topbar from "@/components/shared/usersPage/topbar";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import { formatTime } from "@/lib/timeLongFormat";
 import axios from "axios";
-import { Rocket } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -34,30 +34,45 @@ export default function UserTickets() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [tickets, setTickets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchEvent = async () => {
+    if (!id) return;
+
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/event/${id}`,
-        );
+        setLoading(true);
 
-        const ress = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`,
-        );
+        const [eventRes, ticketRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_API_URL}/api/event/${id}`),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`),
+        ]);
 
-        setTickets(ress.data);
-
-        setEvent(res.data);
-      } catch (err) {
+        setEvent(eventRes.data);
+        setTickets(ticketRes.data);
+      } catch (err: any) {
         console.error(err);
+        setError("Failed to load event");
+      } finally {
+        setLoading(false);
       }
     };
 
-    if (id) fetchEvent();
+    fetchData();
   }, [id]);
-  console.log(event?.ticketTypes);
-  if (!event) return <div>Loading...</div>;
+
+  if (loading) {
+    return <TransparentSpinner />;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
+  if (!event) {
+    return <div className="text-center py-10">Event not found</div>;
+  }
 
   return (
     <>
