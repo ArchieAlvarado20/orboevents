@@ -209,13 +209,13 @@ export default function TicketTypeModal({
               </div>
 
               {/* <!-- Footer --> */}
-              <div className="px-6 py-4 border-t border-slate-100  bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <div className="px-6 py-4 border-t text-indigo-400 border-slate-300  bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
                 <Button variant="outline" onClick={() => onClose()}>
                   cancel
                 </Button>
 
                 <Button onClick={createTicketType} loading={loading}>
-                  Create Ticket
+                  Create <span className="hidden sm:inline">Ticket</span>
                 </Button>
               </div>
             </div>
