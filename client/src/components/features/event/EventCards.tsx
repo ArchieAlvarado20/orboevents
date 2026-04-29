@@ -23,7 +23,7 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
   };
 
   return (
-    <div className="bg-white  border border-slate-200  rounded-xl overflow-hidden group hover:shadow-md transition-shadow">
+    <div className="bg-white  border border-slate-200  rounded-xl overflow-hidden group shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition-shadow">
       {/* IMAGE */}
       <div className="h-48 relative overflow-hidden">
         <img

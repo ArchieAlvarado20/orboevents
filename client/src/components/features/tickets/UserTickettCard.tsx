@@ -1,0 +1,68 @@
+import { Ticket } from "lucide-react";
+
+type TicketCardProps = {
+  name: string;
+  accessLevel: string;
+  description: string;
+  price: number;
+  onSelect: () => void;
+
+  color?: "green" | "yellow" | "red";
+};
+
+export default function UserTicketCard({
+  name,
+  accessLevel,
+  description,
+  price,
+  onSelect,
+
+  color = "green",
+}: TicketCardProps) {
+  const colorMap = {
+    green: "#22c55e",
+    yellow: "#eab308",
+    red: "#ef4444",
+  };
+
+  const colorHex = colorMap[color];
+
+  return (
+    <div
+      className="bg-white p-6 rounded-2xl border-2 border-indigo-500 flex flex-col justify-between relative shadow-lg shadow-indigo-100"
+      style={{ borderColor: colorHex, boxShadow: `0 4px 15px ${colorHex}33` }}
+    >
+      <span
+        className="absolute -top-3 left-1/2 -translate-x-1/2 text-center bg-indigo-600 w-45 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider"
+        style={{ backgroundColor: colorHex }}
+      >
+        {accessLevel}{" "}
+      </span>
+
+      <div>
+        <div className="w-10 h-10 bg-transparent rounded-lg flex items-center justify-center mb-4">
+          <Ticket className="w-10 h-10" style={{ color: colorHex }} />
+        </div>
+
+        <h3 className="font-bold text-lg"> {name || "Regular Ticket"}</h3>
+
+        <p className="text-xs text-slate-500 mb-4">{description}</p>
+
+        <p
+          className="text-2xl font-bold text-indigo-600"
+          style={{ color: colorHex }}
+        >
+          ₱{price.toFixed(2)}
+        </p>
+      </div>
+
+      <button
+        onClick={onSelect}
+        className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+        style={{ backgroundColor: colorHex }}
+      >
+        Book Now
+      </button>
+    </div>
+  );
+}

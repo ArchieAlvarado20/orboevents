@@ -21,7 +21,6 @@ const eventSchema = new mongoose.Schema({
     type: String,
     enum: [
       "Sports & Travel",
-      "Sports & Travel",
       "Science & Research",
       "New Years Eve",
       "Industrial Engineering",
@@ -50,6 +49,13 @@ const eventSchema = new mongoose.Schema({
   dressCode: String, // "Formal"
 
   createdAt: { type: Date, default: Date.now },
+
+  ticketTypes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TicketType",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Event", eventSchema);

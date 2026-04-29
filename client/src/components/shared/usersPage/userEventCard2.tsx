@@ -1,5 +1,5 @@
 import { CalendarDays, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -17,6 +17,12 @@ interface EventCardProps {
 }
 
 export default function UserEventCard2({ event }: EventCardProps) {
+  const navigate = useNavigate();
+
+  const handleBookNow = (event: any) => {
+    navigate(`/tickets/${event._id}`);
+  };
+
   return (
     <>
       <div className="bg-white rounded-2xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
@@ -73,11 +79,13 @@ export default function UserEventCard2({ event }: EventCardProps) {
                 ₹ {event.price}
               </span>
             </div>
-            <Link to="/tickets">
-              <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                Book Spot
-              </button>
-            </Link>
+
+            <button
+              onClick={() => handleBookNow(event)}
+              className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5"
+            >
+              Book Spot
+            </button>
           </div>
         </div>
       </div>

@@ -1,33 +1,84 @@
-import Logo from "@/components/shared/Logo";
+import UserTicketCard from "@/components/features/tickets/UserTickettCard";
 import Topbar from "@/components/shared/usersPage/topbar";
 import UserFooter from "@/components/shared/usersPage/userFooter";
+import { formatTime } from "@/lib/timeLongFormat";
+import axios from "axios";
 import { Rocket } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+interface Event {
+  _id: string;
+  name?: string;
+  date: string;
+  location: string;
+  image?: string;
+  startTime?: string;
+  endTime?: string;
+  status?: "active" | "pending" | "completed";
+  description: string;
+  price?: number;
+  ticketTypes?: {
+    _id: string;
+    name: string;
+    price: number;
+  }[];
+}
 
 export default function UserTickets() {
+  const { id } = useParams();
+  const [event, setEvent] = useState<Event | null>(null);
+  const navigate = useNavigate();
+
+  const colors = [
+    { name: "green", label: "Green", hex: "#22c55e" },
+    { name: "yellow", label: "Yellow", hex: "#eab308" },
+    { name: "red", label: "Red", hex: "#ef4444" },
+  ];
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/event/${id}`,
+        );
+
+        setEvent(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (id) fetchEvent();
+  }, [id]);
+
+  if (!event) return <div>Loading...</div>;
+
   return (
     <>
       <Topbar />
+
       {/* <!-- END: MainHeader --> */}
       <main className="max-w-7xl mt-20 mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
-            <section className="bg-white rounded-3xl overflow-hidden soft-shadow flex flex-col md:flex-row border border-slate-100">
+
+            <section className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100">
               <div className="md:w-1/2 relative">
                 <img
                   alt="Holi Festival Event"
                   className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNQtXRaHq2A-IHTBJ797yZXNR3XlCdtg_xWqyIXUxRfNtR2FMtB6RW6UtsBopjV2CehS43abb4-AWY5R6o9kZCcpa0q2kdTknqBBo2AAAiRcj1eIXEXnjiMd52F5ybII-dtZ1FYnurDCZVWzZa6mg2xUO7f8H7hI-vkdnoWPs-NYlaiyJKG5ngznT9dnVqCv469YjWd2_ndknSxX9ZSBPfQ6f3GG11nlPVe3t0w5znhEBVzFmFzmLPPHPSrfcMdgEU3gDOzY57R8Q"
+                  src={event.image}
                 />
                 <span className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                  Festival
+                  {event.status || "active"}
                 </span>
               </div>
               <div className="md:w-1/2 p-8 flex flex-col justify-center">
                 <h1 className="text-3xl font-bold text-slate-900 mb-4 leading-tight">
-                  City Event: Holi Festival of Colors
+                  {event.name}
                 </h1>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-slate-600">
@@ -36,7 +87,13 @@ export default function UserTickets() {
                       data-lucide="calendar"
                     ></i>
                     <span className="text-sm font-medium">
-                      Sat, Aug 24, 2024
+                      {new Date(event.date).toLocaleDateString("en-US", {
+                        timeZone: "UTC",
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-slate-600">
@@ -45,7 +102,8 @@ export default function UserTickets() {
                       data-lucide="clock"
                     ></i>
                     <span className="text-sm font-medium">
-                      10:00 AM - 6:00 PM
+                      {formatTime(event.startTime || "")} -{" "}
+                      {formatTime(event.endTime || "")}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-slate-600">
@@ -54,7 +112,7 @@ export default function UserTickets() {
                       data-lucide="map-pin"
                     ></i>
                     <span className="text-sm font-medium">
-                      Central Park Arena
+                      {event.location || "Location not specified"}
                     </span>
                   </div>
                 </div>
@@ -93,33 +151,17 @@ export default function UserTickets() {
                   </div>
                 </div>
                 {/* <!-- General - Selected --> */}
-                <div className="bg-white p-6 rounded-2xl border-2 border-indigo-500 flex flex-col justify-between relative shadow-lg shadow-indigo-100">
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                    Most Popular
-                  </span>
-                  <div>
-                    <div className="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center mb-4">
-                      <i
-                        className="w-6 h-6 text-indigo-600"
-                        data-lucide="ticket"
-                      ></i>
-                    </div>
-                    <h3 className="font-bold text-lg">General</h3>
-                    <p className="text-xs text-slate-500 mb-4">
-                      Access to all public festival areas
-                    </p>
-                    <p className="text-2xl font-bold text-indigo-600">$45.00</p>
-                  </div>
-                  <div className="mt-6 flex items-center bg-indigo-50 rounded-xl p-1 w-full justify-between">
-                    <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-white shadow-sm text-indigo-600 hover:bg-indigo-100 transition-colors">
-                      <i className="w-5 h-5" data-lucide="minus"></i>
-                    </button>
-                    <span className="font-bold text-lg text-slate-800">2</span>
-                    <button className="w-10 h-10 flex items-center justify-center rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-                      <i className="w-5 h-5" data-lucide="plus"></i>
-                    </button>
-                  </div>
-                </div>
+                <UserTicketCard
+                  name="Most Popular"
+                  accessLevel="General Admission"
+                  description="Access to all public festival areas"
+                  price={45}
+                  color="green"
+                  onSelect={() =>
+                    navigate(`/user/tickets/${event._id}/general`)
+                  }
+                />
+
                 {/* <!-- VIP - Available --> */}
                 <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 flex flex-col justify-between hover:border-indigo-200 transition-all">
                   <div>
@@ -158,12 +200,7 @@ export default function UserTickets() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 {/* <!-- Credit Card Option --> */}
                 <label className="relative flex items-center p-4 border-2 border-indigo-600 bg-indigo-50/30 rounded-2xl cursor-pointer">
-                  <input
-                    checked=""
-                    className="hidden"
-                    name="payment"
-                    type="radio"
-                  />
+                  <input className="hidden" name="payment" type="radio" />
                   <i
                     className="w-6 h-6 text-indigo-600 mr-4"
                     data-lucide="credit-card"

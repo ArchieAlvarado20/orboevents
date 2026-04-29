@@ -26,7 +26,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/category" element={<Category />} />
         <Route path="/events" element={<UserEvents />} />
-        <Route path="/tickets" element={<UserTickets />} />
+        <Route path="/tickets/:id" element={<UserTickets />} />
         <Route path="/organizer" element={<Organizer />} />
         <Route path="/about" element={<About />} />
 

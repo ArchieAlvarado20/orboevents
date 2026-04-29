@@ -16,7 +16,7 @@ export type EventType = {
   capacity: number;
   image?: string;
   status: "draft" | "active" | "cancelled" | "completed";
-  color: "green";
+  color: "green" | "red" | "blue";
 };
 
 type TicketTypeModalProps = {
