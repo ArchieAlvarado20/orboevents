@@ -41,7 +41,7 @@ export default function EventModal({
       {open && (
         <div
           onClick={onClose}
-          className="fixed mb-6 inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed mb-12 inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
         >
           <div
             ref={modalRef}
@@ -209,14 +209,17 @@ export default function EventModal({
                 />
               </div>
             </div>
-            {/* <!-- Footer --> */}
-            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
-              <Button variant="outline" onClick={() => onClose()}>
+            <div className="px-6 py-4 mb-2 border-t text-indigo-400 border-slate-300  bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <Button
+                variant="outline"
+                className="text-indigo-500"
+                onClick={() => onClose()}
+              >
                 cancel
               </Button>
 
               <Button onClick={createEvent} loading={loading}>
-                Create Events
+                Create <span className="hidden sm:inline">Event</span>
               </Button>
             </div>
           </div>
