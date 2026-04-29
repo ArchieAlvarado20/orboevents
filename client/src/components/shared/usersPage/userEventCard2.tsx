@@ -19,7 +19,7 @@ interface EventCardProps {
 export default function UserEventCard2({ event }: EventCardProps) {
   return (
     <>
-      <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
+      <div className="bg-white rounded-2xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
         <div className="relative h-64 overflow-hidden">
           <img
             src={event.image}

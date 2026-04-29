@@ -18,7 +18,7 @@ interface EventCardProps {
 
 export default function UserEventCard({ event }: EventCardProps) {
   return (
-    <div className="bg-white rounded-4xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow group">
+    <div className="bg-white rounded-4xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] hover:shadow-xl transition-shadow group">
       {/* Image Section */}
       <div className="relative h-46 overflow-hidden">
         <img
