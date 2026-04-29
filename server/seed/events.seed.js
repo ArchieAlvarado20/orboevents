@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Event = require("../models/Event");
 const { faker } = require("@faker-js/faker");
 
-mongoose.connect("mongodb://localhost:27017/ticketing_db");
+mongoose.connect(process.env.MONGO_URI);
 
 const imagePool = [
   "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-6.png",
