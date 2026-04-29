@@ -67,7 +67,11 @@ export default function UserTickets() {
   }
 
   if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+    return (
+      <div className="text-center py-10 text-red-500">
+        <TransparentSpinner />;
+      </div>
+    );
   }
 
   if (!event) {
