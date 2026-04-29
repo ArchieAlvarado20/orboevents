@@ -25,18 +25,18 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+        <label className="block text-sm font-semibold text-slate-700  mb-2">
           {label}
         </label>
       )}
 
       <div
         onClick={handleClick}
-        className={`w-full h-40 border-2 border-dashed rounded-xl flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950/50 group transition-colors
+        className={`w-full h-40 border-2 border-dashed rounded-xl flex flex-col items-center justify-center bg-slate-50  group transition-colors
         ${
           error
             ? "border-red-500"
-            : "border-slate-200 dark:border-slate-800 hover:border-indigo-400 cursor-pointer"
+            : "border-slate-200  hover:border-indigo-400 cursor-pointer"
         }`}
       >
         {value ? (
