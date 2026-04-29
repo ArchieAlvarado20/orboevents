@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, Filter, SwatchBook } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Music, FlaskConical } from "lucide-react";
 import UserFooter from "@/components/shared/usersPage/userFooter";
-import { useNavigate } from "react-router-dom";
 
 interface Event {
   _id: string;

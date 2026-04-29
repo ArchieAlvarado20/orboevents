@@ -9,7 +9,7 @@ const {
 } = require("../controllers/ticketTypeController");
 
 router.post("/", createTicketType);
-router.get("/:eventId", getTicketTypesByEvent);
+router.get("/ticket-types/:eventId", getTicketTypesByEvent);
 router.put("/:id", updateTicketType);
 router.delete("/:id", deleteTicketType);
 

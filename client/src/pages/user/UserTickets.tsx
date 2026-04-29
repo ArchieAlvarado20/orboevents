@@ -5,7 +5,7 @@ import { formatTime } from "@/lib/timeLongFormat";
 import axios from "axios";
 import { Rocket } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -18,23 +18,22 @@ interface Event {
   status?: "active" | "pending" | "completed";
   description: string;
   price?: number;
+  accessLevel: string;
+  color: string;
   ticketTypes?: {
     _id: string;
     name: string;
     price: number;
+    description?: string;
+    accessLevel: string;
+    color: string;
   }[];
 }
 
 export default function UserTickets() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
-  const navigate = useNavigate();
-
-  const colors = [
-    { name: "green", label: "Green", hex: "#22c55e" },
-    { name: "yellow", label: "Yellow", hex: "#eab308" },
-    { name: "red", label: "Red", hex: "#ef4444" },
-  ];
+  const [tickets, setTickets] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -42,6 +41,12 @@ export default function UserTickets() {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/event/${id}`,
         );
+
+        const ress = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`,
+        );
+
+        setTickets(ress.data);
 
         setEvent(res.data);
       } catch (err) {
@@ -51,7 +56,7 @@ export default function UserTickets() {
 
     if (id) fetchEvent();
   }, [id]);
-
+  console.log(event?.ticketTypes);
   if (!event) return <div>Loading...</div>;
 
   return (
@@ -131,7 +136,7 @@ export default function UserTickets() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* <!-- Early Bird - Sold Out --> */}
-                <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 flex flex-col justify-between opacity-60 grayscale relative">
+                {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">
                     Sold Out
                   </span>
@@ -149,38 +154,23 @@ export default function UserTickets() {
                     <span className="text-xs">Out of stock</span>
                     <i className="w-5 h-5" data-lucide="slash"></i>
                   </div>
-                </div>
+                </div> */}
                 {/* <!-- General - Selected --> */}
-                <UserTicketCard
-                  name="Most Popular"
-                  accessLevel="General Admission"
-                  description="Access to all public festival areas"
-                  price={45}
-                  color="green"
-                  onSelect={() =>
-                    navigate(`/user/tickets/${event._id}/general`)
-                  }
-                />
-
-                {/* <!-- VIP - Available --> */}
-                <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 flex flex-col justify-between hover:border-indigo-200 transition-all">
-                  <div>
-                    <div className="w-10 h-10 bg-pink-50 rounded-lg flex items-center justify-center mb-4">
-                      <i
-                        className="w-6 h-6 text-pink-500"
-                        data-lucide="award"
-                      ></i>
-                    </div>
-                    <h3 className="font-bold text-lg">VIP</h3>
-                    <p className="text-xs text-slate-500 mb-4">
-                      Express entry, VIP lounge &amp; kit
-                    </p>
-                    <p className="text-2xl font-bold text-slate-900">$95.00</p>
-                  </div>
-                  <button className="mt-6 w-full py-2.5 px-4 border-2 border-pink-500 text-pink-500 font-bold rounded-xl hover:bg-pink-50 transition-colors">
-                    Select
-                  </button>
-                </div>
+                {tickets.map((ticket) => (
+                  <UserTicketCard
+                    key={ticket._id}
+                    name={ticket.name}
+                    accessLevel={ticket.accessLevel}
+                    description={ticket.description}
+                    price={ticket.price}
+                    color={
+                      ticket.color
+                        ? (ticket.color as "green" | "yellow" | "red")
+                        : "green"
+                    }
+                    onSelect={() => alert(`Selected ${ticket.name} ticket`)}
+                  />
+                ))}
               </div>
             </section>
             {/* <!-- END: TicketSelection --> */}

@@ -50,10 +50,20 @@ const getTicketTypesByEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    const tickets = await TicketType.find({ eventId });
+    const tickets = await TicketType.find({
+      eventId,
+      isActive: true, // 🔥 optional filter
+    });
+
+    if (!tickets || tickets.length === 0) {
+      return res.status(404).json({
+        message: "No ticket types found for this event",
+      });
+    }
 
     res.json(tickets);
   } catch (err) {
+    console.error("GET TICKETS ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };

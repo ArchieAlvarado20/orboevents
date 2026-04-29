@@ -3,10 +3,9 @@ import { Ticket } from "lucide-react";
 type TicketCardProps = {
   name: string;
   accessLevel: string;
-  description: string;
+  description?: string;
   price: number;
   onSelect: () => void;
-
   color?: "green" | "yellow" | "red";
 };
 
@@ -16,13 +15,12 @@ export default function UserTicketCard({
   description,
   price,
   onSelect,
-
   color = "green",
 }: TicketCardProps) {
   const colorMap = {
-    green: "#22c55e",
-    yellow: "#eab308",
-    red: "#ef4444",
+    green: "#17a105",
+    yellow: "#bdad04",
+    red: "#990202",
   };
 
   const colorHex = colorMap[color];
