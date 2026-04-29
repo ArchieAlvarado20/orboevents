@@ -123,17 +123,17 @@ export default function Events() {
 
               <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md-w-50">
                 {/* FILTERS */}
-                <div className="inline-flex flex-wrap p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
-                  <button className="px-4 py-2 text-sm font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400">
+                <div className="inline-flex flex-wrap p-1 bg-white  border border-slate-200  rounded-xl">
+                  <button className="px-4 py-2 text-sm font-medium rounded-lg bg-slate-100  text-indigo-600 ">
                     All <span className="hidden md:inline">Events</span>
                   </button>
-                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600  hover:text-slate-900  transition-colors">
                     Active
                   </button>
-                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600  hover:text-slate-900  transition-colors">
                     Pending
                   </button>
-                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                  <button className="px-4 py-2 text-sm font-medium rounded-lg text-slate-600  hover:text-slate-900  transition-colors">
                     Completed
                   </button>
                 </div>
@@ -144,8 +144,8 @@ export default function Events() {
                     <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
 
                     <input
-                      className="w-full md:w-64 pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg 
-        bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white
+                      className="w-full md:w-64 pl-10 pr-4 py-2 border border-slate-200  rounded-lg 
+        bg-white  text-sm text-slate-900 
         focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 
         transition-all"
                       placeholder="Search events..."
@@ -154,9 +154,9 @@ export default function Events() {
                   </div>
 
                   <button
-                    className="p-2 border border-slate-200 dark:border-slate-800 rounded-lg 
-      bg-white dark:bg-slate-900 text-slate-600 hover:bg-slate-50 
-      dark:hover:bg-slate-800 transition-colors"
+                    className="p-2 border border-slate-200  rounded-lg 
+      bg-white  text-slate-600 hover:bg-slate-50 
+       transition-colors"
                   >
                     <List className="w-5 h-5" />
                   </button>
