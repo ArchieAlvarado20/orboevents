@@ -209,7 +209,7 @@ export default function TicketTypeModal({
               </div>
 
               {/* <!-- Footer --> */}
-              <div className="px-6 py-4 mb-2 border-t text-indigo-400 border-slate-300  bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <div className="px-6 py-4 border-t text-indigo-400 border-slate-300  bg-slate-50/50  flex items-center justify-end gap-3 sticky bottom-0 z-10">
                 <Button
                   variant="outline"
                   className="text-indigo-500"
