@@ -53,7 +53,8 @@ export default function UserEventCard2({ event }: EventCardProps) {
                 month: "long",
                 day: "numeric",
               })}
-
+            </div>
+            <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <MapPin className="w-4 h-4 text-indigo-500" />
               {event.location}
             </div>
