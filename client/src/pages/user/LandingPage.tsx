@@ -1,11 +1,10 @@
-import Logo from "@/components/shared/Logo";
 import Topbar from "@/components/shared/usersPage/topbar";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
+import UserFooter from "@/components/shared/usersPage/userFooter";
 import axios from "axios";
-
 import { ArrowRight, Lightbulb, Megaphone, Newspaper } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FaAndroid, FaApple } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -28,7 +27,7 @@ export default function LandingPage() {
           `${import.meta.env.VITE_API_URL}/api/event`,
         );
 
-        setEvents(res.data.events || []);
+        setEvents(res.data.events?.slice(0, 6) || []);
       } catch (err) {
         console.error(err);
       }
@@ -40,10 +39,10 @@ export default function LandingPage() {
   return (
     <>
       {/* <!-- TopAppBar --> */}
-      <Topbar />
+      <Topbar active="/" />
       <main>
         {/* <!-- Hero Section --> */}
-        <section className="relative min-h-[800px] flex items-center py-20 px-6 overflow-hidden bg-white">
+        <section className="relative mt-10 min-h-[800px] flex items-center py-20 px-6 overflow-hidden bg-white">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="z-10">
               <span className="inline-block px-4 py-1.5 bg-pink-100 text-pink-700 text-sm font-semibold rounded-full mb-6">
@@ -59,9 +58,11 @@ export default function LandingPage() {
                 and never miss out on the events that shape your city.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="bg-violet-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-violet-600/25 hover:-translate-y-1 transition-all">
-                  Explore Events
-                </button>
+                <Link to="/events">
+                  <button className="bg-violet-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-violet-600/25 hover:-translate-y-1 transition-all">
+                    Explore Events
+                  </button>
+                </Link>
                 <div className="flex items-center gap-4 px-6 py-4 bg-white/70 backdrop-blur-md rounded-full border border-white/50 shadow-sm">
                   <div className="flex -space-x-3">
                     <img
@@ -278,161 +279,7 @@ export default function LandingPage() {
         </section>
       </main>
       {/* <!-- Footer --> */}
-      <footer className="w-full rounded-t-[32px] bg-slate-50 border-t border-slate-200 antialiased font-['Plus_Jakarta_Sans'] text-sm">
-        <div className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <Logo className="h-16" />
-            </div>
-            <p className="text-slate-500 mb-6 leading-relaxed">
-              Connecting people through extraordinary live experiences.
-              Discover, book, and enjoy events that matter.
-            </p>
-            <div className="flex gap-4">
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="public"
-              >
-                public
-              </span>
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="language"
-              >
-                language
-              </span>
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="hub"
-              >
-                hub
-              </span>
-            </div>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Explore
-            </h4>
-            <ul className="space-y-4">
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Events
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Categories
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Trending Now
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Organizers
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Company
-            </h4>
-            <ul className="space-y-4">
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Contact Support
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Download
-            </h4>
-            <p className="text-slate-500 mb-6">
-              Get our mobile app for better experience.
-            </p>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-2xl cursor-pointer hover:border-violet-600 transition-colors">
-                <FaApple />
-                <div>
-                  <p className="text-[8px] uppercase text-slate-400 leading-none">
-                    App Store
-                  </p>
-                  <p className="font-bold text-xs">iOS App</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-2xl cursor-pointer hover:border-violet-600 transition-colors">
-                <FaAndroid />
-                <div>
-                  <p className="text-[8px] uppercase text-slate-400 leading-none">
-                    Google Play
-                  </p>
-                  <p className="font-bold text-xs">Android App</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-8 py-6 border-t border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400 text-xs">
-            © 2026 orboevents. Discover your next community experience.
-          </p>
-          <div className="flex gap-8 text-slate-400 text-xs">
-            <a className="hover:text-violet-600" href="#">
-              Terms
-            </a>
-            <a className="hover:text-violet-600" href="#">
-              Privacy
-            </a>
-            <a className="hover:text-violet-600" href="#">
-              Cookies
-            </a>
-          </div>
-        </div>
-      </footer>
+      <UserFooter />
     </>
   );
 }

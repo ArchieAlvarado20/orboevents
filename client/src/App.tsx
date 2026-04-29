@@ -13,16 +13,22 @@ import LandingPage from "./pages/user/LandingPage";
 import Category from "./pages/user/Category";
 import UserEvents from "./pages/user/UserEvents";
 import UserTickets from "./pages/user/UserTickets";
+import ScrollToTop from "./lib/topUponNavigate";
+import Organizer from "./pages/user/Organizer";
+import About from "./pages/user/About";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/category" element={<Category />} />
         <Route path="/events" element={<UserEvents />} />
         <Route path="/tickets" element={<UserTickets />} />
+        <Route path="/organizer" element={<Organizer />} />
+        <Route path="/about" element={<About />} />
 
         {/* Admin Group */}
         <Route path="/admin" element={<Auth />} />

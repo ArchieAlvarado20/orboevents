@@ -1,8 +1,9 @@
-import { Rocket, Clock3, Sparkles } from "lucide-react";
+import { Rocket, Clock3 } from "lucide-react";
+import Logo from "./Logo";
 
 export default function ComingSoon() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex bg-white items-center justify-center  from-slate-50 to-slate-200   p-6">
+    <div className="h-[calc(100vh-4rem)] flex bg-white items-center justify-center  from-slate-50 to-slate-200 p-6">
       <div className="text-center max-w-md w-full bg-white  backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-slate-200 ">
         {/* Icon */}
         <div className="flex justify-center mb-6">
@@ -16,9 +17,7 @@ export default function ComingSoon() {
 
         {/* Subtitle */}
         <p className="text-indigo-600 font-semibold mb-4 flex items-center justify-center gap-2">
-          <Sparkles className="w-4 h-4" />
-          orboevents
-          <Sparkles className="w-4 h-4" />
+          <Logo className="w-38 h-18 text-indigo-600" />
         </p>
 
         {/* Message */}
@@ -35,7 +34,7 @@ export default function ComingSoon() {
         {/* Button */}
         <button
           onClick={() => (window.location.href = "/admin/dashboard")}
-          className="px-6 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow"
+          className="hidden px-6 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow"
         >
           Go Back Home
         </button>

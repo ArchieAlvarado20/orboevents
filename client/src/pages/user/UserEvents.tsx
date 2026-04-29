@@ -1,11 +1,59 @@
-import Topbar from "@/components/shared/Topbar";
-import { Link } from "react-router-dom";
+import Topbar from "@/components/shared/usersPage/topbar";
+import UserEventCard2 from "@/components/shared/usersPage/userEventCard2";
+import axios from "axios";
+import { ChevronLeft, ChevronRight, Filter, SwatchBook } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Music, FlaskConical } from "lucide-react";
+import UserFooter from "@/components/shared/usersPage/userFooter";
+
+interface Event {
+  _id: string;
+  name?: string;
+  date: string;
+  location: string;
+  image?: string;
+  status?: "active" | "pending" | "completed";
+  description: string;
+  price?: number;
+}
 
 export default function UserEvents() {
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const categoryOptions = [
+    { label: "Sports & Travel", value: "sports", icon: Music },
+    { label: "Science & Research", value: "science", icon: FlaskConical },
+    { label: "New Years Eve", value: "newyear", icon: Music },
+    {
+      label: "Industrial Engineering",
+      value: "engineering",
+      icon: FlaskConical,
+    },
+    { label: "Holi", value: "holi", icon: Music },
+    { label: "Health & Wellness", value: "health", icon: FlaskConical },
+    { label: "Garbe", value: "garbe", icon: Music },
+    { label: "Public Event", value: "public", icon: Music },
+  ];
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/event`,
+        );
+
+        setEvents(res.data.events || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchEvents();
+  }, []);
   return (
     <>
-      <Topbar />
-      <main className="pt-24 pb-20 flex-grow">
+      <Topbar active="events" />
+      <main className="pt-24 pb-20 flex-grow mt-5">
         {/* <!-- Hero Section --> */}
         <section className="max-w-7xl mx-auto px-6 mb-12">
           <div className="relative rounded-[2rem] overflow-hidden h-[320px] flex items-center p-12 group">
@@ -18,12 +66,7 @@ export default function UserEvents() {
             <div className="relative z-10 max-w-2xl">
               <nav className="flex items-center gap-2 text-white/70 font-semibold text-sm mb-4">
                 <span>Explore</span>
-                <span
-                  className="material-symbols-outlined text-[10px]"
-                  data-icon="chevron_right"
-                >
-                  chevron_right
-                </span>
+                <ChevronRight className="w-4 h-4" />
                 <span className="text-white">Art &amp; Culture</span>
               </nav>
               <h1 className="text-white font-headline text-5xl font-extrabold mb-4">
@@ -40,39 +83,24 @@ export default function UserEvents() {
         <section className="max-w-7xl mx-auto px-6 mb-2">
           <div className="flex flex-wrap items-center justify-between gap-4 py-2">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              <button className="px-6 py-2 bg-violet-600 text-white rounded-full font-semibold text-sm whitespace-nowrap shadow-lg shadow-violet-600/20">
-                All Events
-              </button>
-              <button className="px-6 py-2 bg-blue-50 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:bg-blue-100 transition-colors">
-                Exhibitions
-              </button>
-              <button className="px-6 py-2 bg-blue-50 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:bg-blue-100 transition-colors">
-                Workshops
-              </button>
-              <button className="px-6 py-2 bg-blue-50 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:bg-blue-100 transition-colors">
-                Museums
-              </button>
-              <button className="px-6 py-2 bg-blue-50 text-gray-600 rounded-full font-semibold text-sm whitespace-nowrap hover:bg-blue-100 transition-colors">
-                Performances
-              </button>
+              {categoryOptions.map((cat, index) => {
+                return (
+                  <button
+                    key={cat.value}
+                    className={`px-6 py-2 rounded-full font-semibold text-sm whitespace-nowrap shadow-lg shadow-violet-600/20 ${index === 0 ? "bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200" : "text-slate-500 dark:text-slate-400 hover:bg-violet-50"}`}
+                  >
+                    {cat.label}
+                  </button>
+                );
+              })}
             </div>
             <div className="flex items-center gap-3">
               <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl font-semibold text-sm text-gray-900 hover:shadow-sm transition-all">
-                <span
-                  className="material-symbols-outlined text-sm"
-                  data-icon="filter_list"
-                >
-                  filter_list
-                </span>
+                <Filter className="w-4 h-4" />
                 Filter
               </button>
               <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl font-semibold text-sm text-gray-900 hover:shadow-sm transition-all">
-                <span
-                  className="material-symbols-outlined text-sm"
-                  data-icon="swap_vert"
-                >
-                  swap_vert
-                </span>
+                <SwatchBook className="w-4 h-4" />
                 Sort: Popular
               </button>
             </div>
@@ -81,361 +109,15 @@ export default function UserEvents() {
         {/* <!-- Event Grid --> */}
         <section className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* <!-- Card 1: Echoes of the Canvas --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="Echoes of the Canvas"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS3mQFIxAd_Gb9ai6jvAYOifbe5k9Iw_2eIfCxk2-JdpSwP6jO69nZh8Sz3GV1k71wieOv7-WDZk3aMAGHB2q76CddQgBKy5IRS-6NAtt9-iM-mq48upGFPJ3GiTBhaE5Bgu0RuPfP29AHwPul8BraG2Pu4ZQQCO93STRULpC35WtxRiW33XSAstZQVM1k3CI9UDTZijWEBLMqHlfOfsxB-IHNjJFWbWx9yyMhw8WjhlihStbZCE4sL3Q40L2cp4l2YgaC8PVswXw"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    4.9
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Exhibition
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Oct 12 - Oct 20, 2024
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  Echoes of the Canvas
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  Explore the deep intersections of emotional frequency and
-                  visual texture in this groundbreaking solo exhibition by Elena
-                  Mirelle.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $25.00
-                    </span>
-                  </div>
-                  <Link to="/tickets">
-                    <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                      Book Spot
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Card 2: Urban Heritage Walk --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="Urban Heritage Walk"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuArMbODraK2a_2AANaR41cv3Hm5sbu0wqB2p4oFYXefK6Vt-jxtG6WOPsTy0KWUPWiCtBszI7Evc5JbUJ8nWwLoCnIvHTdsSunsf-SKQihIeP1aG4qTaRSIG0BrBXRC4qnjTSQgVFz2_PwaEXMpDk9B9C7pj4RVI38FVnYie5cmCtIVfA_SWdEsZplWrv7A1cqEpid0iFg9KwpJ6WUvmcLnyghredAo6JK7nvt7cDc5q09Q1Y-tTIzuUjTi12JqlXq1nlDy4sAtzHw"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    4.7
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Walking Tour
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Daily | 10:00 AM
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  Urban Heritage Walk
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  Discover the hidden stories of our city's oldest districts
-                  through architecture, local lore, and secret gardens.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $15.00
-                    </span>
-                  </div>
-                  <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                    Book Spot
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Card 3: The Sculptor's Hands --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="The Sculptor's Hands"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQKucGuI8NWKEKMYr9z44TL_KniSzr2OKI7eKkdujZxBxCpsna74a0OCCZFpnXsDauHOko-VG3XwuRhjR2EQ96xiihUSrdCopk9DNIsYSK66TYfU0z3bptN0oNdYFRIHDapflvES_3AEa0wTk9pezn9kKR8dYo0v920sXR2_fw2djTynvOk0bCekyB8fx5JghUjP5ZNXzXnWWb5MwwhrvBA_isSI5JDPVNEj3w67X2jQFToruotjzgZUR0Qn6HT6OrvAhnC-S3Qx4"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    5.0
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Workshop
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Oct 15, 2024 | 2:00 PM
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  The Sculptor's Hands
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  A hands-on masterclassName in traditional clay modeling
-                  techniques led by award-winning artist Julian Thorne.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $45.00
-                    </span>
-                  </div>
-                  <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                    Book Spot
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Card 4: Midnight Jazz Fusion --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="Midnight Jazz Fusion"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyaZYIILkea_Sf8NbUYmoP5OiZ8iCOgC3vwhXBun0k5Xw-HsLzPBZTA94W77u9FJEee9Q6GfrqzQ5swirx5DZ9MV0MxLNGfL9Uif62VbaUX_-hM_gjnby8_P6cg4Wnw_kDG3JIMGXzHZQ0vHNoFi_e9PEHdWHd63DaiZ_hfqXOFhT3VIqdm2iIPY1d9UJEDi8aMUYxzQE2mZCOUbidkdylGwj2Yhpw-7wvwU06XdaHdOgPCw0VwyfDnWhikrotsGaWYRlYVuYjrYw"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    4.8
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Concert
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Fridays | 9:00 PM
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  Midnight Jazz Fusion
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  Experience the soul of the city with late-night jazz sessions
-                  featuring world-className quartets and local talent.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $30.00
-                    </span>
-                  </div>
-                  <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                    Book Spot
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Card 5: Museum of Light --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="Museum of Light"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWf1VfPTEUlTxPQfbLtdRTjGS4JlVL-U6qGgVILkPSwvK53oQUhvC4Ki9WAOEi4WVyRNRNNeV-AChiDPCTGjXYx01voknHzl06oO-9h75A3UsiZJk2bGKBiHMq6fPXsA2jQrmrlTJyX5_Vs_3KOEpQ7gCqL5vTx9LHawCMLbS4yyUehMhNlVQpP3EW_dgdQdJr6L7lZNnqApKWSNKBbWPl_b3pvX512BENzkhAi1e2BAcifzpR0UNUlP2u0O6p1AZVURm37A-mx1g"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    4.9
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Immersive Art
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Permanent Exhibition
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  Museum of Light
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  A multi-sensory journey through digital landscapes where light
-                  and sound redefine your perception of space.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $20.00
-                    </span>
-                  </div>
-                  <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                    Book Spot
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* <!-- Card 6: Ancient Calligraphy --> */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(124,58,237,0.04)] hover:shadow-[0_20px_50px_rgba(124,58,237,0.12)] transition-all duration-300 group flex flex-col h-full border border-gray-50">
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  alt="Ancient Calligraphy"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeLHdI8M31io4UQ2lCDQG3h6u3z4gnelGhHKnPjl3xUvhjR8lnYZkR7dqVPOX4v1s1_7bvZsnQFpXTwpgoji2LogsRMOuMFVN32We8_RyVBlfjHIIZx6B2Q1juWWiLgT55adb7OqIEdi2Qvqr_daNx-YGtCIgtsFXWVZ_Ou7syjk1aoShFuOIzzhs-0EK5TIotGPzEpOTQTq09vFDU-M7Fw173eNfx3c7mJFDRQ0mv-L9qh5AQquqy8K6FZQg87JJQRV-HvPedy5Y"
-                />
-                <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
-                  <span
-                    className="material-symbols-outlined text-violet-600 text-base"
-                    data-icon="star"
-                  >
-                    star
-                  </span>
-                  <span className="font-semibold text-sm text-violet-600">
-                    4.6
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-                    Cultural Art
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-2 text-gray-400 font-semibold text-xs mb-3">
-                  <span
-                    className="material-symbols-outlined text-sm"
-                    data-icon="calendar_today"
-                  >
-                    calendar_today
-                  </span>
-                  Oct 22, 2024 | 11:00 AM
-                </div>
-                <h3 className="font-headline font-bold text-2xl text-gray-900 mb-2 group-hover:text-violet-600 transition-colors">
-                  Ancient Calligraphy
-                </h3>
-                <p className="text-gray-600 line-clamp-2 mb-4">
-                  Unlock the meditative art of ancient brushwork. Learn the
-                  history and technique of Eastern calligraphy.
-                </p>
-                <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-gray-400 font-semibold text-[10px] uppercase">
-                      Starting from
-                    </span>
-                    <span className="font-headline font-bold text-violet-600 text-xl">
-                      $35.00
-                    </span>
-                  </div>
-                  <button className="bg-violet-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-lg hover:shadow-violet-600/30 transition-all hover:-translate-y-0.5">
-                    Book Spot
-                  </button>
-                </div>
-              </div>
-            </div>
+            {/* <!-- Event Card --> */}
+            {events?.map((event) => (
+              <UserEventCard2 key={event._id} event={event} />
+            ))}
           </div>
           {/* <!-- Pagination --> */}
           <div className="mt-20 flex items-center justify-center gap-2">
             <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <span
-                className="material-symbols-outlined"
-                data-icon="chevron_left"
-              >
-                chevron_left
-              </span>
+              <ChevronLeft className="w-4 h-4" />
             </button>
             <button className="w-10 h-10 bg-violet-600 text-white rounded-lg font-semibold text-sm">
               1
@@ -451,12 +133,7 @@ export default function UserEvents() {
               8
             </button>
             <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <span
-                className="material-symbols-outlined"
-                data-icon="chevron_right"
-              >
-                chevron_right
-              </span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </section>
@@ -500,69 +177,7 @@ export default function UserEvents() {
         </section>
       </main>
       {/* <!-- Footer --> */}
-      <footer className="bg-gray-50 dark:bg-gray-950 w-full py-12 mt-auto border-t border-gray-100 dark:border-gray-800">
-        <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto space-y-8 md:space-y-0">
-          <div className="flex flex-col items-center md:items-start space-y-4">
-            <span className="text-lg font-bold text-gray-900 dark:text-white font-headline">
-              VibeCheck
-            </span>
-            <p className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 text-center md:text-left">
-              © 2024 VibeCheck Events. Join the community.
-            </p>
-          </div>
-          <nav className="flex gap-8">
-            <a
-              className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 hover:text-violet-500 transition-colors"
-              href="#"
-            >
-              Privacy
-            </a>
-            <a
-              className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 hover:text-violet-500 transition-colors"
-              href="#"
-            >
-              Terms
-            </a>
-            <a
-              className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 hover:text-violet-500 transition-colors"
-              href="#"
-            >
-              Support
-            </a>
-            <a
-              className="text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500 hover:text-violet-500 transition-colors"
-              href="#"
-            >
-              Contact
-            </a>
-          </nav>
-          <div className="flex gap-4">
-            <a
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-400 hover:text-violet-600 transition-all"
-              href="#"
-            >
-              <span className="material-symbols-outlined" data-icon="share">
-                share
-              </span>
-            </a>
-            <a
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-400 hover:text-violet-600 transition-all"
-              href="#"
-            >
-              <span className="material-symbols-outlined" data-icon="public">
-                public
-              </span>
-            </a>
-          </div>
-        </div>
-      </footer>
-      {/* <!-- FAB --> */}
-      <button className="fixed bottom-8 right-8 bg-[#fc79bd] text-white p-4 rounded-full shadow-[0_8px_32px_rgba(252,121,189,0.3)] hover:scale-110 active:scale-95 transition-all z-40 flex items-center gap-2 pr-6">
-        <span className="material-symbols-outlined" data-icon="add">
-          add
-        </span>
-        <span className="font-semibold text-sm">Post Event</span>
-      </button>
+      <UserFooter />
     </>
   );
 }

@@ -4,7 +4,7 @@ const getEvents = async (req, res) => {
   try {
     const { category, search, page = 1, status, tags, location } = req.query;
 
-    const limit = 6;
+    const limit = 12;
     const skip = (page - 1) * limit;
 
     const filter = {};

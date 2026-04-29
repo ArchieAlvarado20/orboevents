@@ -1,10 +1,12 @@
 import Topbar from "@/components/shared/usersPage/topbar";
+import UserFooter from "@/components/shared/usersPage/userFooter";
 import {
   Music,
   FlaskConical,
   CalendarHeartIcon,
   MonitorCheck,
   Map,
+  ArrowRight,
 } from "lucide-react";
 
 export default function Category() {
@@ -25,8 +27,8 @@ export default function Category() {
   return (
     <>
       {/* <!-- TopAppBar --> */}
-      <Topbar />
-      <main className="pt-16 pb-24 md:pb-0">
+      <Topbar active="category" />
+      <main className="pt-16 mt-16 pb-24 md:pb-0">
         {/* <!-- Hero Section --> */}
         <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -278,69 +280,14 @@ transition-colors duration-200"
             <div className="mt-16 flex justify-center">
               <button className="group flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-primary px-8 py-4 rounded-full font-headline-md transition-all">
                 Discover More Events
-                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
-                  arrow_forward
-                </span>
+                <ArrowRight className="w-4 h-4 text-indigo-600 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
         </div>
       </main>
       {/* <!-- BottomNavBar (Mobile Only) --> */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-2 pb-safe bg-white dark:bg-slate-900 border-t border-violet-100 dark:border-violet-900/20 rounded-t-3xl z-50 shadow-[0_-4px_20px_rgba(124,58,237,0.1)]">
-        <a
-          className="flex flex-col items-center justify-center bg-violet-600 text-white rounded-2xl p-2 min-w-[64px] active:scale-90 transition-all duration-200"
-          href="#"
-        >
-          <span className="material-symbols-outlined" data-icon="explore">
-            explore
-          </span>
-          <span className="text-[10px] font-bold font-['Plus_Jakarta_Sans']">
-            Explore
-          </span>
-        </a>
-        <a
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-violet-500 transition-colors active:scale-90 transition-all duration-200"
-          href="#"
-        >
-          <span className="material-symbols-outlined" data-icon="search">
-            search
-          </span>
-          <span className="text-[10px] font-bold font-['Plus_Jakarta_Sans']">
-            Search
-          </span>
-        </a>
-        <a
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-violet-500 transition-colors active:scale-90 transition-all duration-200"
-          href="#"
-        >
-          <span
-            className="material-symbols-outlined"
-            data-icon="confirmation_number"
-          >
-            confirmation_number
-          </span>
-          <span className="text-[10px] font-bold font-['Plus_Jakarta_Sans']">
-            Tickets
-          </span>
-        </a>
-        <a
-          className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-violet-500 transition-colors active:scale-90 transition-all duration-200"
-          href="#"
-        >
-          <span className="material-symbols-outlined" data-icon="person">
-            person
-          </span>
-          <span className="text-[10px] font-bold font-['Plus_Jakarta_Sans']">
-            Profile
-          </span>
-        </a>
-      </nav>
-      {/* <!-- Floating Action Button - Contextual for Home/Explore --> */}
-      <button className="fixed bottom-24 right-6 md:bottom-12 md:right-12 bg-primary text-white p-4 rounded-2xl shadow-xl shadow-primary/40 hover:-translate-y-1 active:scale-90 transition-all z-40 flex items-center gap-2">
-        <span className="material-symbols-outlined">add</span>
-        <span className="font-headline-md text-sm pr-2">Post Event</span>
-      </button>
+      <UserFooter />
     </>
   );
 }
