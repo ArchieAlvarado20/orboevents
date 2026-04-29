@@ -1,33 +1,15 @@
 import Logo from "@/components/shared/Logo";
+import Topbar from "@/components/shared/usersPage/topbar";
+import UserFooter from "@/components/shared/usersPage/userFooter";
 import { Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function UserTickets() {
   return (
     <>
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/">
-            {" "}
-            <Logo className="h-16" />{" "}
-          </Link>
-          <div className="flex items-center gap-6">
-            <div className="text-right hidden sm:block">
-              <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                Checkout Step
-              </p>
-              <p className="text-sm font-bold text-indigo-600">
-                1 of 3: Ticket Selection
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center border-2 border-indigo-600">
-              <i className="w-6 h-6 text-indigo-600" data-lucide="user"></i>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Topbar />
       {/* <!-- END: MainHeader --> */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mt-20 mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
@@ -367,6 +349,7 @@ export default function UserTickets() {
           {/* <!-- END: Sidebar --> */}
         </div>
       </main>
+      <UserFooter />
     </>
   );
 }

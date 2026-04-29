@@ -4,6 +4,20 @@ const { faker } = require("@faker-js/faker");
 
 mongoose.connect("mongodb://localhost:27017/ticketing_db");
 
+const imagePool = [
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-6.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-5.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-7.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-4.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-3.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-2.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-9.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-8.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-10.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-12.png",
+  "https://res.cloudinary.com/dimv9axkl/image/upload/v1777437145/SmartTicketing/Events/-11.png",
+];
+
 const categories = [
   "Sports & Travel",
   "Sports & Travel",
@@ -16,7 +30,7 @@ const categories = [
   "Public Event",
 ];
 const accessLevels = ["vip", "media", "general", "speaker", "staff"];
-const statusOptions = ["active", "draft", "completed"];
+const statusOptions = ["active", "pending", "completed"];
 
 const dressCodes = [
   "Formal",
@@ -179,7 +193,7 @@ const generateEvents = (count = 10000) => {
       location: `${faker.location.streetAddress()}, ${faker.location.city()}`,
       capacity: totalCapacity,
       price: faker.number.int({ min: 0, max: 500 }),
-      image: "",
+      image: faker.helpers.arrayElement(imagePool),
       status: faker.helpers.arrayElement(statusOptions),
       organizerName: faker.person.fullName(),
       contactNumber: faker.phone.number("##########"),
@@ -200,7 +214,7 @@ const seedDB = async () => {
     await Event.deleteMany();
     console.log("🗑️  Cleared existing events");
 
-    const data = generateEvents(10000);
+    const data = generateEvents(100);
     await Event.insertMany(data);
 
     console.log("🔥 10,000 events seeded successfully");
