@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "build": "echo 'no build needed'",
     "seed": "node seed/events.seed.js"
   },
   "keywords": [],
