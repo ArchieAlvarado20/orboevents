@@ -1,30 +1,20 @@
-import MobileBottomNav from "@/components/shared/BottomNav";
-import Sidebar from "@/components/shared/Sidebar";
-import Topbar from "@/components/shared/Topbar";
+import ComingSoon from "@/components/shared/ComingSoon";
+
 import { useState } from "react";
 
 export default function Ticket() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
-      {/* <!-- TopAppBar --> */}
-      <Topbar />
-
-      {/* <!-- Main Content Area --> */}
-      <main className="flex mb-12 min-h-screen">
-        {/* <!-- Navigation Drawer (SideNav) --> */}
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        {/* <!-- Page Canvas --> */}
-        {/* <div className="flex-1 p-4 md:p-4 flex flex-col items-center justify-center">
-          {open && (
-            <TicketTypeModal
-              eventId={event._id}
-              onClose={() => setOpen(false)}
-            />
-          )}
-        </div> */}
-        {/* <!-- Bottom Navigation (Mobile Only) --> */}
-        <MobileBottomNav active="scan" />
+      <main
+        className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
+      >
+        <div className="max-w-container-max mx-auto">
+          {/* <!-- Page Header --> */}
+          <div className="mb-0 space-y-1">
+            <ComingSoon />
+          </div>
+        </div>
       </main>
     </>
   );

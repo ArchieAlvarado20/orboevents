@@ -18,9 +18,9 @@ export default function UserTicketCard({
   color = "green",
 }: TicketCardProps) {
   const colorMap = {
-    green: "#17a105",
-    yellow: "#bdad04",
-    red: "#990202",
+    green: "#77fc84",
+    yellow: "#fae173",
+    red: "#e01039",
   };
 
   const colorHex = colorMap[color];
@@ -47,8 +47,8 @@ export default function UserTicketCard({
         <p className="text-xs text-slate-500 mb-4">{description}</p>
 
         <p
-          className="text-2xl font-bold text-indigo-600"
-          style={{ color: colorHex }}
+          className="text-2xl font-bold"
+          // style={{ color: colorHex }}
         >
           ₱{price.toFixed(2)}
         </p>

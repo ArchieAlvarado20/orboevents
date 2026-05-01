@@ -2,21 +2,25 @@ import {
   BarChart3,
   LayoutDashboard,
   QrCode,
-  Settings,
   Ticket,
   PanelLeft,
   CalendarDays,
 } from "lucide-react";
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 type SidebarProps = {
   isCollapsed: boolean;
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Sidebar({
+  isCollapsed,
+  setIsCollapsed,
+  isOpen,
+  setIsOpen,
+}: SidebarProps) {
   const iconSize = isCollapsed ? "w-5 h-5" : "w-5 h-5";
 
   return (
@@ -49,7 +53,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
           </p>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className={`hidden md:flex items-center text-sm font-medium rounded-lg transition-all text-slate-600 hover:bg-slate-100 ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`}
+            className={`hidden md:hidden items-center text-sm font-medium rounded-lg transition-all text-slate-600 hover:bg-slate-100 ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`}
           >
             <PanelLeft
               className={`${iconSize} shrink-0 transition-all duration-200`}
@@ -149,25 +153,6 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             <span className={`${isCollapsed ? "hidden" : "inline"}`}>
               {" "}
               Analytics
-            </span>
-          </NavLink>
-
-          <NavLink
-            to="/admin/settings"
-            className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
-                isActive
-                  ? "text-indigo-600 bg-indigo-50"
-                  : "text-slate-600 hover:bg-slate-100"
-              } ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`
-            }
-          >
-            <Settings
-              className={`${iconSize} shrink-0 transition-all duration-200`}
-            />
-            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
-              {" "}
-              Settings
             </span>
           </NavLink>
         </nav>

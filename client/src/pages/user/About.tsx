@@ -1,10 +1,8 @@
 import ComingSoon from "@/components/shared/ComingSoon";
-import Topbar from "@/components/shared/usersPage/topbar";
 
 export default function About() {
   return (
     <>
-      <Topbar active="about" />
       <div className="max-w-container-max mx-auto">
         {/* <!-- Page Header --> */}
         <div className="mb-0 space-y-1">

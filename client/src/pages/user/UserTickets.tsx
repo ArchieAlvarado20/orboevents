@@ -1,11 +1,13 @@
+import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
 import UserTicketCard from "@/components/features/tickets/UserTickettCard";
+import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import Topbar from "@/components/shared/usersPage/topbar";
-import UserFooter from "@/components/shared/usersPage/userFooter";
-import { formatTime } from "@/lib/timeLongFormat";
+import { showSuccess } from "@/lib/toast";
+import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -27,6 +29,7 @@ interface Event {
     description?: string;
     accessLevel: string;
     color: string;
+    privileges?: [string];
   }[];
 }
 
@@ -36,27 +39,41 @@ export default function UserTickets() {
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+
+  const total = selectedTicket?.price || 0;
+
+  const handleSelectTicket = (ticket: any) => {
+    setSelectedTicket(ticket);
+  };
 
   useEffect(() => {
     if (!id) return;
 
     const fetchData = async () => {
+      setLoading(true);
+
       try {
-        setLoading(true);
-
-        const [eventRes, ticketRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/api/event/${id}`),
-          axios.get(`${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`),
-        ]);
-
+        const eventRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/event/${id}`,
+        );
         setEvent(eventRes.data);
-        setTickets(ticketRes.data);
-      } catch (err: any) {
-        console.error(err);
+      } catch (err) {
+        console.error("Event failed", err);
         setError("Failed to load event");
-      } finally {
-        setLoading(false);
       }
+
+      try {
+        const ticketRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`,
+        );
+        setTickets(ticketRes.data || []);
+      } catch (err) {
+        console.error("Tickets failed", err);
+        setTickets([]); // fallback, NOT crash UI
+      }
+
+      setLoading(false);
     };
 
     fetchData();
@@ -67,11 +84,7 @@ export default function UserTickets() {
   }
 
   if (error) {
-    return (
-      <div className="text-center py-10 text-red-500">
-        <TransparentSpinner />;
-      </div>
-    );
+    return <TransparentSpinner />;
   }
 
   if (!event) {
@@ -80,11 +93,9 @@ export default function UserTickets() {
 
   return (
     <>
-      <Topbar />
-
-      {/* <!-- END: MainHeader --> */}
       <main className="max-w-7xl mt-20 mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <BackButton />
+        <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
@@ -145,17 +156,25 @@ export default function UserTickets() {
             {/* <!-- END: EventSummaryCard --> */}
             {/* <!-- BEGIN: TicketSelection --> */}
             <section>
-              <div className="flex justify-between items-end mb-6">
+              <div className="flex flex-col md:flex-row justify-between md:items-end gap-2 mb-6">
                 <h2 className="text-xl font-bold text-slate-800">
                   Select Your Experience
                 </h2>
+                <p className="text-xs text-gray-500 mt-1">
+                  Note: One ticket per person per event only.
+                </p>
                 <span className="text-indigo-600 text-sm font-medium">
                   Prices include all taxes
                 </span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* <!-- Early Bird - Sold Out --> */}
-                {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
+              {!tickets.length ? (
+                <div className="flex items-center justify-center min-h-[300px]">
+                  <NoTicketsAvailable />
+                </div>
+              ) : (
+                <div className="grid px-20 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {/* <!-- Early Bird - Sold Out --> */}
+                  {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">
                     Sold Out
                   </span>
@@ -174,27 +193,32 @@ export default function UserTickets() {
                     <i className="w-5 h-5" data-lucide="slash"></i>
                   </div>
                 </div> */}
-                {/* <!-- General - Selected --> */}
-                {tickets.map((ticket) => (
-                  <UserTicketCard
-                    key={ticket._id}
-                    name={ticket.name}
-                    accessLevel={ticket.accessLevel}
-                    description={ticket.description}
-                    price={ticket.price}
-                    color={
-                      ticket.color
-                        ? (ticket.color as "green" | "yellow" | "red")
-                        : "green"
-                    }
-                    onSelect={() => alert(`Selected ${ticket.name} ticket`)}
-                  />
-                ))}
-              </div>
+                  {/* <!-- General - Selected --> */}
+
+                  {tickets.map((ticket) => (
+                    <UserTicketCard
+                      key={ticket._id}
+                      name={ticket.name}
+                      accessLevel={ticket.accessLevel}
+                      description={ticket.description}
+                      price={ticket.price}
+                      color={
+                        ticket.color
+                          ? (ticket.color as "green" | "yellow" | "red")
+                          : "green"
+                      }
+                      onSelect={() => {
+                        handleSelectTicket(ticket);
+                        showSuccess(`${ticket.name} selected`);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </section>
             {/* <!-- END: TicketSelection --> */}
             {/* <!-- BEGIN: PaymentSection --> */}
-            <section className="bg-white rounded-3xl p-8 border border-slate-100 soft-shadow">
+            <section className=" hidden bg-white rounded-3xl p-8 border border-slate-100 soft-shadow">
               <div className="flex items-center gap-3 mb-8">
                 <div className="p-2 bg-indigo-50 rounded-lg">
                   <i
@@ -302,7 +326,7 @@ export default function UserTickets() {
           {/* <!-- BEGIN: Sidebar --> */}
           <aside className="lg:col-span-4 space-y-6">
             {/* <!-- BEGIN: OrderSummary --> */}
-            <div className="bg-white rounded-3xl overflow-hidden soft-shadow border border-slate-100">
+            <div className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100">
               <div className="bg-indigo-700 text-white p-6 text-center">
                 <h3 className="text-lg font-bold">Order Summary</h3>
               </div>
@@ -310,31 +334,37 @@ export default function UserTickets() {
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <p className="font-bold text-slate-900">
-                      General Admission × 2
+                      {selectedTicket?.name || "No ticket selected"}
                     </p>
                     <p className="text-xs text-slate-500">
-                      Primary Entry + Color Kit
+                      {selectedTicket?.privileges?.length
+                        ? selectedTicket.privileges.join(", ")
+                        : "No privileges"}
                     </p>
                   </div>
-                  <p className="font-bold text-slate-900">$90.00</p>
+                  <p className="font-bold text-slate-900">
+                    ₹{selectedTicket?.price.toFixed(2) || "0.00"}
+                  </p>
                 </div>
                 <div className="space-y-3 py-6 border-y border-slate-100">
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Subtotal</span>
-                    <span className="font-medium text-slate-900">$90.00</span>
+                    <span className="font-medium text-slate-900">
+                      ₹{selectedTicket?.price.toFixed(2) || "0.00"}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Service Fee</span>
-                    <span className="font-medium text-slate-900">$4.50</span>
+                    <span className="font-medium text-slate-900">₹0.00</span>
                   </div>
                   <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Tax (GST 5%)</span>
-                    <span className="font-medium text-slate-900">$4.72</span>
+                    <span>Tax (GST 0%)</span>
+                    <span className="font-medium text-slate-900">₹0.00</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 mt-6">
+                <div className="hidden items-center gap-2 mt-6">
                   <input
-                    className="flex-grow bg-slate-100 border-none rounded-lg text-sm px-4 py-2.5"
+                    className="grow bg-slate-100 border-none rounded-lg text-sm px-4 py-2.5"
                     placeholder="Promo code"
                     type="text"
                   />
@@ -347,16 +377,24 @@ export default function UserTickets() {
                     Total Amount
                   </span>
                   <span className="text-4xl font-black text-indigo-600">
-                    $99.22
+                    ₹{total.toFixed(2)}
                   </span>
                 </div>
-                <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg shadow-indigo-200 group">
-                  <span>Complete Payment</span>
-                  <i
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    data-lucide="arrow-right"
-                  ></i>
-                </button>
+                <Link to="/checkout">
+                  <button
+                    disabled={!selectedTicket}
+                    className={`w-full font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg group
+    ${
+      selectedTicket
+        ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+    }
+  `}
+                  >
+                    <span>Checkout</span>
+                    <ArrowRight />
+                  </button>
+                </Link>
                 <p className="text-[10px] text-center text-slate-400 mt-6 leading-relaxed">
                   By clicking Complete Payment, you agree to the
                   <br />
@@ -371,14 +409,12 @@ export default function UserTickets() {
                 </p>
               </div>
             </div>
+
             {/* <!-- END: OrderSummary --> */}
             {/* <!-- BEGIN: SecurityBadge --> */}
-            <div className="bg-white rounded-2xl p-5 border border-slate-100 flex items-start gap-4">
+            <div className="bg-white rounded-2xl p-5 border border-slate-100  shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex items-start gap-4">
               <div className="p-2.5 bg-green-50 rounded-full">
-                <i
-                  className="w-6 h-6 text-green-500"
-                  data-lucide="shield-check"
-                ></i>
+                <ShieldCheck className="w-5 h-5 text-green-500" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-800">
@@ -395,7 +431,6 @@ export default function UserTickets() {
           {/* <!-- END: Sidebar --> */}
         </div>
       </main>
-      <UserFooter />
     </>
   );
 }

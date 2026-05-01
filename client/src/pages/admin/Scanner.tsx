@@ -1,6 +1,3 @@
-import MobileBottomNav from "@/components/shared/BottomNav";
-import Sidebar from "@/components/shared/Sidebar";
-import Topbar from "@/components/shared/Topbar";
 import {
   Camera,
   CheckCircle,
@@ -14,14 +11,9 @@ export default function Scanner() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
-      {/* <!-- TopAppBar --> */}
-      <Topbar />
-
-      {/* <!-- Main Content Area --> */}
-      <main className="flex mb-12 min-h-screen">
-        {/* <!-- Navigation Drawer (SideNav) --> */}
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        {/* <!-- Page Canvas --> */}
+      <main
+        className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
+      >
         <div
           className={`flex-1 justify-center mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
         >
@@ -147,8 +139,6 @@ export default function Scanner() {
             </div>
           </div>
         </div>
-        {/* <!-- Bottom Navigation (Mobile Only) --> */}
-        <MobileBottomNav active="scan" />
       </main>
     </>
   );

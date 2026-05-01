@@ -2,9 +2,10 @@ import Topbar from "@/components/shared/usersPage/topbar";
 import UserEventCard2 from "@/components/shared/usersPage/userEventCard2";
 import axios from "axios";
 import { ChevronLeft, ChevronRight, Filter, SwatchBook } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Music, FlaskConical } from "lucide-react";
 import UserFooter from "@/components/shared/usersPage/userFooter";
+import { getPagination } from "@/lib/pagination";
 
 interface Event {
   _id: string;
@@ -19,6 +20,9 @@ interface Event {
 
 export default function UserEvents() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const categoryOptions = [
     { label: "Sports & Travel", value: "sports", icon: Music },
@@ -35,24 +39,41 @@ export default function UserEvents() {
     { label: "Public Event", value: "public", icon: Music },
   ];
 
+  const handlePageClick = (p: number, index: number) => {
+    setPage(p);
+
+    window.scrollTo({
+      top: 50,
+      behavior: "smooth",
+    });
+
+    pageRefs.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+
+    pageRefs.current[index]?.focus();
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/event`,
+          `${import.meta.env.VITE_API_URL}/api/event?page=${page}`,
         );
 
         setEvents(res.data.events || []);
+        setTotalPages(res.data.totalPages || 1);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchEvents();
-  }, []);
+  }, [page]);
   return (
     <>
-      <Topbar active="events" />
       <main className="pt-24 pb-20 flex-grow mt-5">
         {/* <!-- Hero Section --> */}
         <section className="max-w-7xl mx-auto px-6 mb-12">
@@ -116,23 +137,57 @@ export default function UserEvents() {
           </div>
           {/* <!-- Pagination --> */}
           <div className="mt-20 flex items-center justify-center gap-2">
-            <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <button
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button className="w-10 h-10 bg-violet-600 text-white rounded-lg font-semibold text-sm">
-              1
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
+            >
+              Prev
             </button>
-            <button className="w-10 h-10 border border-gray-200 text-gray-900 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors">
-              2
+            {/* Pages */}
+            {getPagination(page, totalPages).map((p, i) =>
+              p === "..." ? (
+                <span key={i} className="px-2 text-slate-500">
+                  ...
+                </span>
+              ) : (
+                <button
+                  ref={(el) => {
+                    pageRefs.current[i] = el;
+                  }}
+                  key={i}
+                  onClick={() => handlePageClick(p, i)}
+                  className={`px-3 py-1 rounded transition-all ${
+                    page === p
+                      ? "bg-violet-600 text-white"
+                      : "bg-slate-200 hover:bg-slate-300"
+                  }`}
+                >
+                  {p}
+                </button>
+              ),
+            )}
+            {/* Next */}
+            <button
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
+            >
+              Next
             </button>
-            <button className="w-10 h-10 border border-gray-200 text-gray-900 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors">
-              3
-            </button>
-            <span className="mx-1 text-gray-400">...</span>
-            <button className="w-10 h-10 border border-gray-200 text-gray-900 rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors">
-              8
-            </button>
-            <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={page === totalPages}
+              className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -176,8 +231,6 @@ export default function UserEvents() {
           </div>
         </section>
       </main>
-      {/* <!-- Footer --> */}
-      <UserFooter />
     </>
   );
 }

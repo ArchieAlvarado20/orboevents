@@ -1,12 +1,14 @@
 import { ShieldAlert } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export default function Unauthorized({
   message = "Admin access only",
 }: {
   message?: string;
 }) {
+  const Navigate = useNavigate();
   return (
-    <div className="max-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-950  p-6">
+    <div className="h-[calc(100vh-4rem)] flex bg-white items-center justify-center  from-slate-50 to-slate-200 p-6">
       <div className="max-w-md w-full text-center bg-white/80  backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-slate-200 ">
         {/* 🔥 Big Icon */}
         <div className="flex justify-center mb-6">
@@ -26,7 +28,7 @@ export default function Unauthorized({
         {/* Actions */}
         <div className="flex justify-center gap-3">
           <button
-            onClick={() => (window.location.href = "/")}
+            onClick={() => Navigate("/admin")}
             className="px-5 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow"
           >
             Login as an Admin

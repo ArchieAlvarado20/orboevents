@@ -5,47 +5,56 @@ import Auth from "./pages/Auth";
 import Events from "./pages/admin/Events";
 import QRScanner from "./components/QRScanner";
 import QRImageScanner from "./components/QRimage";
-import Test from "./pages/admin/test";
-import CreateTest from "./pages/admin/testCreate";
 import Analytics from "./pages/admin/Analytics";
 import Ticket from "./pages/admin/Tickets";
 import LandingPage from "./pages/user/LandingPage";
 import Category from "./pages/user/Category";
 import UserEvents from "./pages/user/UserEvents";
 import UserTickets from "./pages/user/UserTickets";
-import ScrollToTop from "./lib/topUponNavigate";
+
 import Organizer from "./pages/user/Organizer";
 import About from "./pages/user/About";
+import AdminLayout from "./Layout/AdminLayout";
+import _404Page from "./components/shared/_404Page";
+import _404UserPage from "./components/shared/usersPage/_404UserPage";
+import Checkout from "./pages/user/Checkout";
+import UserLayout from "./Layout/UserLayout";
+import UserAuth from "./pages/UserAuth";
+import ToastProvider from "./components/shared/ToastProvider";
+import ScrollToTop from "./components/shared/topUponNavigate";
 
 function App() {
   return (
     <BrowserRouter>
+      <ToastProvider />
       <ScrollToTop />
       <Routes>
         {/* Public */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/events" element={<UserEvents />} />
-        <Route path="/tickets/:id" element={<UserTickets />} />
-        <Route path="/organizer" element={<Organizer />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<div>Page Not Found</div>} />
 
-        {/* Admin Group */}
+        <Route path="login" element={<UserAuth />} />
+        <Route path="/" element={<UserLayout />}>
+          <Route path="*" element={<_404UserPage />} />
+          <Route index element={<LandingPage />} />
+          <Route path="category" element={<Category />} />
+          <Route path="events" element={<UserEvents />} />
+          <Route path="tickets/:id" element={<UserTickets />} />
+          <Route path="organizer" element={<Organizer />} />
+          <Route path="about" element={<About />} />
+          <Route path="scanner" element={<QRScanner />} />
+          <Route path="image" element={<QRImageScanner />} />
+          <Route path="checkout" element={<Checkout />} />
+        </Route>
+
         <Route path="/admin" element={<Auth />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/events" element={<Events />} />
-        <Route path="/admin/tickets" element={<Ticket />} />
-        <Route path="/admin/scanner" element={<Scanner />} />
-        <Route path="/admin/analytics" element={<Analytics />} />
-
-        <Route path="/admin/settings" element={<Scanner />} />
-
-        {/* Other routes */}
-        <Route path="/scanner" element={<QRScanner />} />
-        <Route path="/image" element={<QRImageScanner />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/tests" element={<CreateTest />} />
+        {/* Admin Group */}
+        <Route path="/admin/*" element={<AdminLayout />}>
+          <Route path="*" element={<_404Page />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="events" element={<Events />} />
+          <Route path="tickets" element={<Ticket />} />
+          <Route path="scanner" element={<Scanner />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

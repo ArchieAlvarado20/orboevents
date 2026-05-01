@@ -1,3 +1,4 @@
+import BackButton from "@/components/shared/BackButton";
 import Topbar from "@/components/shared/usersPage/topbar";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import {
@@ -26,9 +27,8 @@ export default function Category() {
   ];
   return (
     <>
-      {/* <!-- TopAppBar --> */}
-      <Topbar active="category" />
       <main className="pt-16 mt-16 pb-24 md:pb-0">
+        <BackButton className="mb-2" />
         {/* <!-- Hero Section --> */}
         <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -286,8 +286,6 @@ transition-colors duration-200"
           </div>
         </div>
       </main>
-      {/* <!-- BottomNavBar (Mobile Only) --> */}
-      <UserFooter />
     </>
   );
 }

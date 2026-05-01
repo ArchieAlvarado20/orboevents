@@ -5,12 +5,7 @@ import axios from "axios";
 import Footer from "@/components/shared/Footer";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/shared/Logo";
-import { jwtDecode } from "jwt-decode";
-
-type JwtPayload = {
-  id: string;
-  role: "admin" | "user";
-};
+import { showError, showSuccess } from "@/lib/toast";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +15,7 @@ export default function Auth() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const resetForm = () => {
@@ -27,12 +23,13 @@ export default function Auth() {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     });
   };
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -52,33 +49,50 @@ export default function Auth() {
 
     // ✅ FRONTEND VALIDATION
     if (!form.email || !form.password) {
-      setError("Email and password are required");
+      showError("Email and password are required");
       return;
     }
 
     // email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
-      setError("Invalid email format");
+      showError("Invalid email format");
       return;
     }
 
     // password length
     if (form.password.length < 6) {
-      setError("Password must be at least 6 characters");
+      showError("Password must be at least 6 characters");
+      return;
+    }
+
+    if (form.password.length > 50) {
+      showError("Password must be less than 50 characters");
+      return;
+    }
+    if (form.name.length > 50) {
+      showError("Name must be less than 50 characters");
+      return;
+    }
+    if (form.email.length > 100) {
+      showError("Email must be less than 100 characters");
       return;
     }
 
     // register-only validation
     if (!isLogin) {
       if (!form.name) {
-        setError("Name is required");
+        showError("Name is required");
+        return;
+      }
+
+      if (form.password !== form.confirmPassword) {
+        showError("Passwords do not match");
         return;
       }
     }
 
     setLoading(true);
-    setError("");
 
     try {
       const url = isLogin
@@ -90,24 +104,35 @@ export default function Auth() {
       console.log("SUCCESS:", res.data);
 
       if (isLogin) {
-        const { accessToken, user } = res.data;
+        const { accessToken } = res.data;
 
+        // 1. store token ONLY
         localStorage.setItem("token", accessToken);
+
+        // 2. fetch user from /me
+        const meRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+
+        const user = meRes.data;
+
+        // optional: store user (for UI only, not source of truth)
         localStorage.setItem("user", JSON.stringify(user));
 
-        if (user.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/");
-        }
+        navigate("/admin/dashboard"); // better redirect
       } else {
-        navigate("/");
+        navigate("/admin");
       }
     } catch (err: any) {
       const message =
         err.response?.data?.message || err.message || "Something went wrong";
 
-      setError(message);
+      showError(message);
     } finally {
       setLoading(false);
     }
@@ -121,19 +146,48 @@ export default function Auth() {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
-    if (token) {
-      localStorage.setItem("token", token);
+    if (!token) return;
 
-      window.history.replaceState({}, "", "/auth");
+    const handleAuth = async () => {
+      try {
+        // 1. store token
+        localStorage.setItem("token", token);
 
-      const decoded = jwtDecode<JwtPayload>(token);
+        // 2. clean URL (remove token from browser)
+        window.history.replaceState({}, "", "/auth");
 
-      if (decoded.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
+        // 3. get real user from backend
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const user = res.data;
+
+        // 4. store user (optional)
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // 5. role-based redirect
+        if (user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/admin"); // or "/" depende sa system mo
+          showError(
+            "Unauthorized: You do not have access to the admin dashboard",
+          );
+        }
+      } catch (err) {
+        console.error("Invalid token");
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/admin");
       }
-    }
+    };
+
+    handleAuth();
   }, []);
   return (
     <>
@@ -145,13 +199,6 @@ export default function Auth() {
       <header className="relative z-10 w-full px-8 py-5 mt-5 flex justify-center items-center">
         <Logo className="h-24" />
       </header>
-      <div className="relative z-10 flex-grow flex items-center justify-center px-4 pb-1">
-        {error && (
-          <div className="w-full max-w-[440px] mb-2 text-sm p-5 m-3 rounded-lg bg-red-500 text-white text-center">
-            {error}
-          </div>
-        )}
-      </div>
 
       {/* <!-- Main Login Content --> */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4 pb-20">
@@ -166,7 +213,7 @@ export default function Auth() {
             </p>
           </div>
           {/* <!-- Social Login --> */}
-          <div className="grid grid-cols-1 gap-3 mb-8">
+          <div className="hidden grid grid-cols-1 gap-3 mb-8">
             <button
               type="button"
               onClick={handleGoogleLogin}
@@ -176,7 +223,7 @@ export default function Auth() {
               <span>Continue with Google</span>
             </button>
           </div>
-          <div className="relative flex items-center justify-center mb-8">
+          <div className="hidden relative flex items-center justify-center mb-8">
             <div className="w-full border-t border-slate-200"></div>
             <span className="absolute px-4 bg-white text-[10px] font-bold text-slate-500 uppercase tracking-widest">
               Or continue with
@@ -256,6 +303,38 @@ transition-all"
                 </button>
               </div>
             </div>
+
+            {!isLogin && (
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Confirm Password
+                  </label>
+                </div>
+
+                <div className="relative">
+                  <input
+                    name="confirmPassword"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm your password"
+                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-md text-slate-900 text-base
+focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-600
+transition-all"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <Eye size={18} />
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="flex items-center">
               <input
                 className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500/20"
@@ -276,7 +355,7 @@ transition-all"
           </form>
 
           {/* TOGGLE */}
-          <div className="text-center mt-5 mb-5">
+          <div className="hidden text-center mt-5 mb-5">
             <p className="text-xs text-on-surface font-medium">
               {isLogin ? "No account?" : "Already have account?"}
               <button

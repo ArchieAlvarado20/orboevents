@@ -1,10 +1,9 @@
-import Topbar from "@/components/shared/usersPage/topbar";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
-import UserFooter from "@/components/shared/usersPage/userFooter";
+import { showError, showSuccess } from "@/lib/toast";
 import axios from "axios";
 import { ArrowRight, Lightbulb, Megaphone, Newspaper } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -19,6 +18,45 @@ interface Event {
 
 export default function LandingPage() {
   const [events, setEvents] = useState<Event[]>([]);
+  const navigate = useNavigate();
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (!token) return;
+
+    const handleAuth = async () => {
+      if (hasRun.current) return;
+
+      hasRun.current = true;
+      try {
+        localStorage.setItem("token", token);
+
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const user = res.data;
+        localStorage.setItem("user", JSON.stringify(user));
+
+        window.history.replaceState({}, "", "/auth");
+
+        showSuccess(`Welcome back, ${user.name}!`);
+        navigate("/");
+      } catch (err) {
+        console.error(err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        showError("Authentication failed.");
+        navigate("/login");
+      }
+    };
+
+    handleAuth();
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -27,7 +65,8 @@ export default function LandingPage() {
           `${import.meta.env.VITE_API_URL}/api/event`,
         );
 
-        setEvents(res.data.events?.slice(0, 6) || []);
+        const events = res.data.events || [];
+        setEvents(events.slice(0, 6));
       } catch (err) {
         console.error(err);
       }
@@ -38,10 +77,7 @@ export default function LandingPage() {
 
   return (
     <>
-      {/* <!-- TopAppBar --> */}
-      <Topbar active="/" />
       <main>
-        {/* <!-- Hero Section --> */}
         <section className="relative mt-10 min-h-[800px] flex items-center py-20 px-6 overflow-hidden bg-white">
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="z-10">
@@ -122,7 +158,7 @@ export default function LandingPage() {
         </section>
         {/* <!-- Categories Bento Grid --> */}
         <section className="py-20 px-6 max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
+          <div className="items-end justify-between mb-12">
             <div>
               <h2 className="font-['Plus_Jakarta_Sans'] font-bold text-3xl text-slate-900 mb-2">
                 Explore by Category
@@ -131,9 +167,11 @@ export default function LandingPage() {
                 Find exactly what you're looking for
               </p>
             </div>
-            <button className="text-violet-600 font-bold flex items-center gap-1 group">
-              View All <ArrowRight />
-            </button>
+            <Link to="/category">
+              <button className="mt-2 text-violet-600 font-bold flex items-center gap-1 group">
+                View All <ArrowRight />
+              </button>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="md:col-span-2 relative group cursor-pointer overflow-hidden rounded-[32px] aspect-video">
@@ -194,7 +232,7 @@ export default function LandingPage() {
                 Celebrate the festival of colors in your city
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* <!-- Event Card --> */}
               {events?.map((event) => (
                 <UserEventCard key={event._id} event={event} />
@@ -278,8 +316,6 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-      {/* <!-- Footer --> */}
-      <UserFooter />
     </>
   );
 }
