@@ -1,4 +1,5 @@
 import { Ticket } from "lucide-react";
+import { useState } from "react";
 
 type TicketCardProps = {
   name: string;
@@ -17,6 +18,7 @@ export default function UserTicketCard({
   onSelect,
   color = "green",
 }: TicketCardProps) {
+  const [loading, setLoading] = useState(false);
   const colorMap = {
     green: "#77fc84",
     yellow: "#fae173",
@@ -24,6 +26,15 @@ export default function UserTicketCard({
   };
 
   const colorHex = colorMap[color];
+
+  const handleClick = async () => {
+    try {
+      setLoading(true);
+      await onSelect();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -55,11 +66,12 @@ export default function UserTicketCard({
       </div>
 
       <button
-        onClick={onSelect}
+        onClick={handleClick}
         className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
         style={{ backgroundColor: colorHex }}
+        disabled={loading}
       >
-        Book Now
+        {loading ? "Booking..." : "Book Now"}
       </button>
     </div>
   );
