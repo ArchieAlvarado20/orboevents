@@ -1,5 +1,5 @@
 import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
-import UserTicketCard from "@/components/features/tickets/UserTickettCard";
+import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { showSuccess } from "@/lib/toast";
@@ -172,7 +172,7 @@ export default function UserTickets() {
                   <NoTicketsAvailable />
                 </div>
               ) : (
-                <div className="grid px-20 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid px-5 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {/* <!-- Early Bird - Sold Out --> */}
                   {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">
