@@ -1,15 +1,15 @@
+import api from "@/api/interceptor.api";
 import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { showError, showSuccess } from "@/lib/toast";
-import { addToCart } from "@/utils/cart";
+
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
 import { ArrowRight, ShieldCheck, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 interface Event {
   _id: string;
@@ -97,8 +97,8 @@ export default function UserTickets() {
     if (!selectedTicket || !event) return;
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/reservations`,
+      const res = await api.post(
+        "/api/reservations",
         {
           eventId: event._id,
           ticketTypeId: selectedTicket._id,

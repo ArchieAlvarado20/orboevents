@@ -1,5 +1,5 @@
 import { handleLogout } from "@/lib/auth";
-import { X, Menu, LogOut } from "lucide-react";
+import { X, Menu, LogOut, ShoppingCart } from "lucide-react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 type SidebarProps = {
@@ -89,6 +89,18 @@ export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
           >
             About
           </NavLink>
+
+          <NavLink
+            to="/reservation"
+            onClick={() => setIsOpen(false)}
+            className="inline-block md:hidden relative p-2 text-violet-600"
+          >
+            <ShoppingCart className="w-6 h-6" />
+            <span className="absolute top-0 right-0 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              1
+            </span>
+          </NavLink>
+
           <button
             onClick={() => handleLogout(navigate, "/login")}
             className="flex items-center gap-2 p-2 mt-4 text-red-600 hover:bg-red-50 rounded"
