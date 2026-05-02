@@ -6,7 +6,7 @@ const { nanoid } = require("nanoid");
 // CREATE TICKET
 const createTicket = async (req, res) => {
   try {
-    const { eventId, ticketTypeId, zoneId } = req.body;
+    const { eventId, ticketTypeId, zoneId, transactionId } = req.body;
 
     if (!eventId || !ticketTypeId) {
       return res.status(400).json({
@@ -71,6 +71,7 @@ const createTicket = async (req, res) => {
     const ticket = await Ticket.create({
       eventId,
       userId: req.user.id,
+      transactionId,
       ticketTypeId,
       ticketTypeName: ticketType.name,
       accessLevel: ticketType.accessLevel,

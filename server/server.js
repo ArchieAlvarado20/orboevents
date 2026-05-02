@@ -13,7 +13,8 @@ const userRoutes = require("./routes/userRoutes");
 const ticketRoutes = require("./routes/ticketRoutes");
 const eventRoutes = require("./routes/eventRoutes.js");
 const ticketTypeRoutes = require("./routes/ticketTypeRoutes");
-
+const transactionRoutes = require("./routes/transactionRoutes");
+const reservationRoutes = require("./routes/reservationRoutes");
 const testRoutes = require("./routes/testRoutes");
 
 const app = express();
@@ -36,6 +37,9 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use("/api/ticket-types", ticketTypeRoutes);
 
+app.use("/api/reservations", reservationRoutes);
+
+app.use("/api/transactions", transactionRoutes);
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);

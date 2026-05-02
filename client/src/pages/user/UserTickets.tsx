@@ -2,12 +2,14 @@ import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import { showSuccess } from "@/lib/toast";
+import { showError, showSuccess } from "@/lib/toast";
+import { addToCart } from "@/utils/cart";
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Event {
   _id: string;
@@ -91,6 +93,31 @@ export default function UserTickets() {
     return <div className="text-center py-10">Event not found</div>;
   }
 
+  const handleReserve = async () => {
+    if (!selectedTicket || !event) return;
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/reservations`,
+        {
+          eventId: event._id,
+          ticketTypeId: selectedTicket._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      console.log("Reservation success:", res.data);
+      showSuccess("Ticket Reserved!");
+    } catch (error: any) {
+      console.log(error.response?.data || error.message);
+      showError(error.response?.data?.message || "Reservation failed");
+    }
+  };
+
   return (
     <>
       <main className="max-w-7xl mt-20 mx-auto px-4 py-8">
@@ -159,10 +186,11 @@ export default function UserTickets() {
               <div className="flex flex-col md:flex-row justify-between md:items-end gap-2 mb-6">
                 <h2 className="text-xl font-bold text-slate-800">
                   Select Your Experience
+                  <p className="text-xs text-gray-500 mt-1">
+                    Note: One ticket per person per event only.
+                  </p>
                 </h2>
-                <p className="text-xs text-gray-500 mt-1">
-                  Note: One ticket per person per event only.
-                </p>
+
                 <span className="text-indigo-600 text-sm font-medium">
                   Prices include all taxes
                 </span>
@@ -172,7 +200,7 @@ export default function UserTickets() {
                   <NoTicketsAvailable />
                 </div>
               ) : (
-                <div className="grid px-5 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid px-5 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
                   {/* <!-- Early Bird - Sold Out --> */}
                   {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">
@@ -209,7 +237,6 @@ export default function UserTickets() {
                       }
                       onSelect={() => {
                         handleSelectTicket(ticket);
-                        showSuccess(`${ticket.name} selected`);
                       }}
                     />
                   ))}
@@ -380,21 +407,23 @@ export default function UserTickets() {
                     ₹{total.toFixed(2)}
                   </span>
                 </div>
-                <Link to="/checkout">
-                  <button
-                    disabled={!selectedTicket}
-                    className={`w-full font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg group
+
+                <button
+                  onClick={handleReserve}
+                  disabled={!selectedTicket}
+                  className={`w-full font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg group
     ${
       selectedTicket
         ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
         : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
     }
   `}
-                  >
-                    <span>Checkout</span>
-                    <ArrowRight />
-                  </button>
-                </Link>
+                >
+                  <span>Reserve Ticket</span>
+                  <ArrowRight />
+                  <ShoppingCart className="w-6 h-6" />
+                </button>
+
                 <p className="text-[10px] text-center text-slate-400 mt-6 leading-relaxed">
                   By clicking Complete Payment, you agree to the
                   <br />

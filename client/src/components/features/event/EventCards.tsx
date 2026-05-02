@@ -1,3 +1,4 @@
+import FormattedDate from "@/utils/dateLongFormat";
 import { Calendar, MapPin, MoreVertical, Edit, Ticket } from "lucide-react";
 
 interface EventType {
@@ -61,13 +62,7 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
           <div className="flex items-center gap-2 text-slate-500 text-sm">
             <Calendar size={16} />
             <span>
-              {new Date(event.date).toLocaleDateString("en-US", {
-                timeZone: "UTC",
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              <FormattedDate date={event.date} />
             </span>
           </div>
 

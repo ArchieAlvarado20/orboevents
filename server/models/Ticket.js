@@ -12,6 +12,12 @@ const ticketSchema = new mongoose.Schema({
   // Reference the embedded subdoc by its auto-generated _id
   ticketTypeId: { type: mongoose.Schema.Types.ObjectId, required: true },
 
+  transactionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Transaction",
+    required: true,
+  },
+
   // Snapshot — store at purchase time so you don't lose data if the event is edited
   ticketTypeName: String, // "VIP / Red Carpet"
   accessLevel: String, // "vip"

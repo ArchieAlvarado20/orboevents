@@ -32,6 +32,11 @@ const ticketTypeSchema = new mongoose.Schema(
       default: 0,
     },
 
+    quantityReserved: {
+      type: Number,
+      default: 0,
+    },
+
     isActive: {
       type: Boolean,
       default: true,

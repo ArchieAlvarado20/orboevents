@@ -1,6 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
-import { Bell, LogInIcon, Search, UserCircle } from "lucide-react";
+import {
+  Bell,
+  LogInIcon,
+  Search,
+  ShoppingCart,
+  UserCircle,
+} from "lucide-react";
 import { useState } from "react";
 import UserMobileSidebar from "./MobileSidebar";
 
@@ -60,7 +66,7 @@ export default function Topbar() {
           </nav>
         </div>
 
-        <div className="items-center gap-4 md:inline-flex">
+        <div className=" gap-4 md:inline-flex">
           <div className="hidden lg:flex items-center bg-gray-50  rounded-full px-4 py-2 border border-transparent focus-within:border-primary transition-all">
             <Search className="w-4 h-4 text-gray-400 mr-2" />
             <input
@@ -80,6 +86,14 @@ export default function Topbar() {
             </>
           ) : (
             <>
+              <Link to="/reservation">
+                <div className="hidden md:block relative p-2 text-violet-600">
+                  <ShoppingCart className="w-6 h-6" />
+                  <span className="absolute top-0 right-0 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                    1
+                  </span>
+                </div>
+              </Link>
               <button className="p-2 hover:bg-gray-100  rounded-full transition-colors relative">
                 <Bell className="hidden md:block w-6 h-6 text-gray-600 " />
               </button>

@@ -166,7 +166,7 @@ export default function Events() {
                 />
               ))}
             </div>
-            <div className="flex items-center gap-2 mt-6">
+            <div className="flex items-center gap-2 mt-6 flex-wrap justify-center">
               {/* First */}
               <button
                 onClick={() => setPage(1)}

@@ -27,7 +27,7 @@ export default function Category() {
   ];
   return (
     <>
-      <main className="pt-16 mt-16 pb-24 md:pb-0">
+      <main className="pt-16 mt-10 pb-24 md:pb-0">
         <BackButton className="mb-2" />
         {/* <!-- Hero Section --> */}
         <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
@@ -77,7 +77,7 @@ export default function Category() {
           {/* <!-- Content Canvas --> */}
           <div className="flex-1 py-8">
             {/* <!-- Filters Bar --> */}
-            <div className="glass-card mb-10 p-4 rounded-2xl flex flex-wrap items-center gap-4 border border-violet-100/50 shadow-sm">
+            <div className="hidden glass-card mb-10 p-4 rounded-2xl flex flex-wrap items-center gap-4 border border-violet-100/50 shadow-sm">
               <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-xl shadow-sm border border-slate-100">
                 <CalendarHeartIcon />
                 <select

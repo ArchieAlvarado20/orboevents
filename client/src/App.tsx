@@ -17,17 +17,18 @@ import About from "./pages/user/About";
 import AdminLayout from "./Layout/AdminLayout";
 import _404Page from "./components/shared/_404Page";
 import _404UserPage from "./components/shared/usersPage/_404UserPage";
-import Checkout from "./pages/user/Checkout";
 import UserLayout from "./Layout/UserLayout";
 import UserAuth from "./pages/UserAuth";
 import ToastProvider from "./components/shared/ToastProvider";
 import ScrollToTop from "./components/shared/topUponNavigate";
+import Reservation from "./pages/user/Reservation";
 
 function App() {
   return (
     <BrowserRouter>
-      <ToastProvider />
       <ScrollToTop />
+      <ToastProvider />
+
       <Routes>
         {/* Public */}
 
@@ -42,7 +43,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="scanner" element={<QRScanner />} />
           <Route path="image" element={<QRImageScanner />} />
-          <Route path="checkout" element={<Checkout />} />
+          <Route path="reservation" element={<Reservation />} />
         </Route>
 
         <Route path="/admin" element={<Auth />} />
