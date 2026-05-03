@@ -32,8 +32,8 @@ const checkout = async (req, res) => {
     }
 
     const items = reservations.map((r) => ({
-      eventId: r.eventId._id,
-      ticketTypeId: r.ticketTypeId._id,
+      eventId: r.eventId,
+      ticketTypeId: r.ticketTypeId,
       name: r.ticketTypeId.name,
       price: r.totalAmount,
       quantity: r.quantity,
