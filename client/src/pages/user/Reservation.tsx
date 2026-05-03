@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Clock,
   ChevronLeft,
+  Currency,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -16,42 +17,65 @@ import FormattedDate from "@/utils/dateLongFormat";
 import { confirmToast } from "@/lib/confirmToast";
 
 export default function Reservation() {
-  const [reservations, setReservations] = useState<any>(null);
+  const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedReservations, setSelectedReservations] =
+    useState(reservations);
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const fetchReservations = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/reservations/my`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      setReservations(res.data.reservations);
+    } catch (error) {
+      console.log(error);
+      setReservations([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/reservations/my`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          },
-        );
-
-        setReservations(res.data.reservations);
-      } catch (error) {
-        console.log(error);
-        setReservations([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchReservations();
-  }, []);
+    if (reservations.length > 0) {
+      setSelectedReservations(reservations);
+    }
+  }, [reservations.length]);
+
+  const toggleReservation = (reservation) => {
+    setSelectedReservations((prev) => {
+      const exists = prev.some((r) => r._id === reservation._id);
+
+      if (exists) {
+        return prev.filter((r) => r._id !== reservation._id);
+      } else {
+        return [...prev, reservation];
+      }
+    });
+  };
 
   if (loading) return <div>Loading...</div>;
 
+  const checkoutItems = reservations.filter((r) =>
+    selectedReservations.some((s) => s._id === r._id),
+  );
+
   const ticketCount = reservations.reduce((acc, r) => acc + r.quantity, 0);
 
-  const subtotal = reservations.reduce((a, r) => a + (r.totalAmount || 0), 0);
+  const subtotal = checkoutItems.reduce((a, r) => a + (r.totalAmount || 0), 0);
 
-  const processingFee = 50;
+  const processingFee = 0;
 
-  const bookingFee = 50;
+  const bookingFee = 0;
 
   const grandTotal = subtotal + bookingFee + processingFee;
 
@@ -76,6 +100,99 @@ export default function Reservation() {
     }
   };
 
+  const handlePayment = async () => {
+    try {
+      // 1. CREATE TRANSACTION (backend computes total)
+      const txRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/transactions/checkout`,
+        {
+          reservationIds: selectedReservations.map((r) => r._id),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      const transaction = txRes.data.transaction;
+
+      // 2. CREATE RAZORPAY ORDER (based on transaction)
+      const orderRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/razorpay/create-order`,
+        {
+          amount: transaction.total * 100, // convert to paise
+          currency: "INR",
+          transactionId: transaction._id,
+        },
+      );
+
+      const order = orderRes.data;
+
+      // 3. CHECK RAZORPAY SCRIPT
+      if (!window.Razorpay) {
+        showError("Razorpay not loaded");
+        return;
+      }
+
+      // 4. OPEN PAYMENT MODAL
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.id,
+
+        name: "orboevents",
+        description: `Payment for ${selectedReservations.length} ticket(s)`,
+
+        handler: async function (response) {
+          try {
+            // 5. CONFIRM PAYMENT (VERY IMPORTANT)
+            await axios.post(
+              `${import.meta.env.VITE_API_URL}/api/transactions/success`,
+              {
+                transactionId: transaction._id,
+                reservationIds: selectedReservations.map((r) => r._id),
+
+                paymentId: response.razorpay_payment_id,
+                orderId: response.razorpay_order_id,
+                signature: response.razorpay_signature,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              },
+            );
+
+            showSuccess("Payment successful!");
+
+            await fetchReservations();
+          } catch (err) {
+            console.error(err);
+            showError("Payment verification failed");
+          }
+        },
+
+        prefill: {
+          name: user?.name || "Guest",
+          email: user?.email || "user@email.com",
+        },
+
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error(err);
+      showError("Payment failed to initialize");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f8f9ff] font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 pb-20">
       <main className="max-w-7xl mx-auto px-6 py-12">
@@ -95,6 +212,12 @@ export default function Reservation() {
                   key={r._id}
                   className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
                 >
+                  <input
+                    type="checkbox"
+                    checked={selectedReservations.some((s) => s._id === r._id)}
+                    onChange={() => toggleReservation(r)}
+                    className="w-5 h-5"
+                  />
                   <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
                     <img
                       src={r.eventId?.image}
@@ -221,7 +344,11 @@ export default function Reservation() {
                 </div>
               </div>
 
-              <button className="w-full bg-violet-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-violet-700 transition-all shadow-xl shadow-violet-600/20 flex items-center justify-center gap-3 group">
+              <button
+                onClick={handlePayment}
+                // disabled={!reservations}
+                className="w-full bg-violet-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-violet-700 transition-all shadow-xl shadow-violet-600/20 flex items-center justify-center gap-3 group"
+              >
                 Proceed to Checkout
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>

@@ -12,9 +12,15 @@ const transactionSchema = new mongoose.Schema(
     // 🎟️ Tickets purchased
     items: [
       {
-        ticketId: {
+        eventId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Ticket",
+          ref: "Event",
+          required: true,
+        },
+        ticketTypeId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "TicketType",
+          required: true,
         },
         name: String,
         price: Number,

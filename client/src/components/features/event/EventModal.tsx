@@ -5,7 +5,7 @@ import Select from "@/components/shared/Select";
 import Textarea from "@/components/shared/TextAria";
 import Button from "@/components/shared/Button";
 import FileUpload from "@/components/shared/FileUpload";
-import useEventForm from "@/hooks/useEventForm";
+import useEventForm from "@/hooks/eventHook/useEventForm";
 
 interface EventModalProps {
   open: boolean;

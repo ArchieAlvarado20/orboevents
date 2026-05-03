@@ -5,10 +5,15 @@ const {
   checkout,
   getUserTransactions,
   getTransactionById,
+  paymentSuccess,
 } = require("../controllers/transactionController");
 
+const authMiddleware = require("../middleware/authMiddleware");
+
 // 🧾 CREATE CHECKOUT
-router.post("/checkout", checkout);
+router.post("/checkout", authMiddleware, checkout);
+
+router.post("/success", paymentSuccess);
 
 // 📜 GET all user transactions
 router.get("/user/:userId", getUserTransactions);

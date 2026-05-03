@@ -16,6 +16,7 @@ const ticketTypeRoutes = require("./routes/ticketTypeRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const testRoutes = require("./routes/testRoutes");
+const razorpayRoutes = require("./routes/razorpayRoutes.js");
 
 const app = express();
 
@@ -46,6 +47,8 @@ app.use("/api", userRoutes);
 app.use("/api", ticketRoutes);
 
 app.use("/api", eventRoutes);
+
+app.use("/api/razorpay", razorpayRoutes);
 
 app.get("/", (req, res) => {
   res.send("Smart Ticketing API Running");

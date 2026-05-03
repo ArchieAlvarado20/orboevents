@@ -5,7 +5,7 @@ import Button from "@/components/shared/Button";
 import { MoreVertical, X } from "lucide-react";
 import Checkbox from "@/components/shared/Checkbox";
 import { useRef } from "react";
-import useTicketTypeForm from "@/hooks/useTicketTypeForm";
+import useTicketTypeForm from "@/hooks/ticketTypeHook/useTicketTypeForm";
 
 export type EventType = {
   _id: string;
