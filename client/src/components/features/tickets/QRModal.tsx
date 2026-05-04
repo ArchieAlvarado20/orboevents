@@ -37,11 +37,11 @@ export default function TicketModal({
               ticket.status === "active" ? "bg-green-400" : "bg-red-400"
             }`}
           >
-            <div className="bg-transparent p-2  rounded-3xl  mb-4">
+            <div className="bg-white p-2 rounded-3xl shadow-xl mb-4">
               <img
                 alt="Ticket QR Code"
-                className="w-65 h-65 object-contain"
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${ticket?.qrToken}`}
+                className="w-56 h-56 object-contain"
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${ticket?.qrToken}`}
               />
             </div>
 
