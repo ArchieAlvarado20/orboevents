@@ -95,7 +95,7 @@ export default function Transaction() {
       <main className="max-w-7xl mx-auto px-6 py-12 mt-18">
         {/* <!-- Dashboard Header & Tabs --> */}
         <div className="mb-12">
-          <h1 className="font-headline-lg text-4xl lg:text-5xl text-[#121c2a] mb-6">
+          <h1 className="font-headline-lg font-bold text-4xl lg:text-5xl text-[#121c2a] mb-6">
             My Tickets
           </h1>
           <div className="flex gap-4 border-b border-slate-200">
@@ -109,7 +109,7 @@ export default function Transaction() {
         </div>
 
         {/* <!-- Active Tickets Section --> */}
-        <section className="mb-20 ">
+        <section className="mb-20">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-[#121c2a]">
               Upcoming Events

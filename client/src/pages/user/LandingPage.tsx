@@ -13,7 +13,7 @@ export default function LandingPage() {
     const fetchEvents = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/event`,
+          `${import.meta.env.VITE_API_URL}/api/events`,
         );
 
         const events = res.data.events || [];

@@ -3,7 +3,7 @@ import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import { showError, showSuccess } from "@/lib/toast";
+import { showError, showInfo, showSuccess } from "@/lib/toast";
 
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
@@ -34,7 +34,7 @@ export default function UserTickets() {
 
       try {
         const eventRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/event/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/events/${id}`,
         );
         setEvent(eventRes.data);
       } catch (err) {
@@ -95,6 +95,17 @@ export default function UserTickets() {
       showError(error.response?.data?.message || "Reservation failed");
     }
   };
+
+  setTimeout(() => {
+    const el = document.getElementById("selectedTicket");
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, 50);
 
   return (
     <>
@@ -215,6 +226,7 @@ export default function UserTickets() {
                       }
                       onSelect={() => {
                         handleSelectTicket(ticket);
+                        showInfo(`You select ${ticket.name} ticket`);
                       }}
                     />
                   ))}
@@ -331,7 +343,10 @@ export default function UserTickets() {
           {/* <!-- BEGIN: Sidebar --> */}
           <aside className="lg:col-span-4 space-y-6">
             {/* <!-- BEGIN: OrderSummary --> */}
-            <div className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100">
+            <div
+              id="selectedTicket"
+              className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100"
+            >
               <div className="bg-indigo-700 text-white p-6 text-center">
                 <h3 className="text-lg font-bold">Order Summary</h3>
               </div>

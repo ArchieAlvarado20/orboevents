@@ -193,7 +193,7 @@ export default function UserMobileSidebar({
                 0
               </span>
             </div>
-            Transactions
+            My Tickets
           </NavLink>
           <button
             onClick={() => handleLogout(navigate, "/login")}

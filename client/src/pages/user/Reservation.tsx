@@ -197,10 +197,12 @@ export default function Reservation() {
 
   return (
     <div className="min-h-screen bg-[#f8f9ff] font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 pb-20">
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12 mt-18">
         <div className="flex items-center gap-3 mb-8">
-          <h2 className="text-5xl font-extrabold tracking-tight">Your Cart</h2>
-          <span className="bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1 rounded-full mt-2">
+          <h2 className="font-headline-lg font-bold text-4xl lg:text-5xl text-[#121c2a] mb-6">
+            Ticket Reserved
+          </h2>
+          <span className="bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1 rounded-full mb-5">
             {} Items
           </span>
         </div>

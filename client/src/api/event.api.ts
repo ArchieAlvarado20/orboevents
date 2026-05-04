@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 
-const API = `${import.meta.env.VITE_API_URL}/api/admin/event`;
+const API = `${import.meta.env.VITE_API_URL}/api/admin/events`;
 
 export const eventApi = {
   get: (config?: AxiosRequestConfig) => axios.get(API, config),

@@ -60,7 +60,7 @@ export default function UserEvents() {
     const fetchEvents = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/event?page=${page}`,
+          `${import.meta.env.VITE_API_URL}/api/events?page=${page}`,
         );
 
         setEvents(res.data.events || []);

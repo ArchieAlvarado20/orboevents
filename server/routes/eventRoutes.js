@@ -45,10 +45,10 @@ router.post(
 );
 
 // GET ALL EVENTS
-router.get("/admin/event", authMiddleware, adminMiddleware, getEvents);
+router.get("/admin/events", authMiddleware, adminMiddleware, getEvents);
 
-router.get("/event", getEvents);
+router.get("/events", getEvents);
 
-router.get("/event/:id", getEventById);
+router.get("/events/:id", getEventById);
 
 module.exports = router;
