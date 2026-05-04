@@ -27,7 +27,7 @@ export default function UserEventCard({ event }: EventCardProps) {
       {/* Image Section */}
       <div className="relative h-46 overflow-hidden">
         <img
-          src={event.image}
+          src={event.image || "/images/images.jpg"}
           alt={event.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
