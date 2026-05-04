@@ -4,6 +4,7 @@ import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { showError, showInfo, showSuccess } from "@/lib/toast";
+import { Event } from "@/types/event";
 
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
@@ -121,7 +122,7 @@ export default function UserTickets() {
                 <img
                   alt="Holi Festival Event"
                   className="w-full h-full object-cover"
-                  src={event.image}
+                  src={event.image || "/images/images.jpg"}
                 />
                 <span className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
                   {event.status || "active"}
