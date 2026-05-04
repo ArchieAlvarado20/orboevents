@@ -16,6 +16,7 @@ import {
   Users,
   UsersRound,
   Users2Icon,
+  Ticket,
 } from "lucide-react";
 import { useState } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
@@ -188,7 +189,7 @@ export default function UserMobileSidebar({
           >
             <div className="relative">
               {" "}
-              <FileText size={24} />{" "}
+              <Ticket size={24} />{" "}
               <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                 0
               </span>
