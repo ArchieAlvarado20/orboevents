@@ -1,20 +1,10 @@
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
 import { showError, showSuccess } from "@/lib/toast";
+import { Event } from "@/types/event";
 import axios from "axios";
 import { ArrowRight, Lightbulb, Megaphone, Newspaper } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-interface Event {
-  _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-  description: string;
-  price?: number;
-}
 
 export default function LandingPage() {
   const [events, setEvents] = useState<Event[]>([]);

@@ -22,6 +22,7 @@ import UserAuth from "./pages/UserAuth";
 import ToastProvider from "./components/shared/ToastProvider";
 import ScrollToTop from "./components/shared/topUponNavigate";
 import Reservation from "./pages/user/Reservation";
+import Transaction from "./pages/user/Transaction";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="scanner" element={<QRScanner />} />
           <Route path="image" element={<QRImageScanner />} />
           <Route path="reservation" element={<Reservation />} />
+          <Route path="transaction" element={<Transaction />} />
         </Route>
 
         <Route path="/admin" element={<Auth />} />

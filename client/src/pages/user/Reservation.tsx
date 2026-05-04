@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   Currency,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { showError, showInfo, showSuccess } from "@/lib/toast";
 import FormattedDate from "@/utils/dateLongFormat";
@@ -21,6 +21,8 @@ export default function Reservation() {
   const [loading, setLoading] = useState(true);
   const [selectedReservations, setSelectedReservations] =
     useState(reservations);
+
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -165,7 +167,7 @@ export default function Reservation() {
                 },
               },
             );
-
+            navigate(`/transaction`);
             showSuccess("Payment successful!");
 
             await fetchReservations();
@@ -345,7 +347,11 @@ export default function Reservation() {
               </div>
 
               <button
-                onClick={handlePayment}
+                onClick={() =>
+                  confirmToast("Proceed to Checkout now?", () => {
+                    handlePayment();
+                  })
+                }
                 // disabled={!reservations}
                 className="w-full bg-violet-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-violet-700 transition-all shadow-xl shadow-violet-600/20 flex items-center justify-center gap-3 group"
               >

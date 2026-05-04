@@ -34,14 +34,10 @@ export const useAuthInit = ({
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
 
-        // cleanup URL (google callback case)
-        window.history.replaceState({}, "", "/");
-
         if (!hasShown) {
           showSuccess?.(`Welcome back, ${user.name}!`);
           sessionStorage.setItem("auth-toast", "true");
         }
-        navigate("/");
       } catch (err) {
         console.error(err);
 

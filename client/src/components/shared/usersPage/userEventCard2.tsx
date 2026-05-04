@@ -1,3 +1,4 @@
+import FormattedDate from "@/utils/dateLongFormat";
 import { CalendarDays, MapPin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -52,13 +53,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
           <div className="flex flex-col gap-2 text-xs mb-3">
             <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <CalendarDays className="w-4 h-4 text-indigo-500" />
-              {new Date(event.date).toLocaleDateString("en-US", {
-                timeZone: "UTC",
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              <FormattedDate date={event.date} />
             </div>
             <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <MapPin className="w-4 h-4 text-indigo-500" />

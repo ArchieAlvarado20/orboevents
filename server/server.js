@@ -44,7 +44,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
-app.use("/api", ticketRoutes);
+app.use("/api/tickets", ticketRoutes);
 
 app.use("/api", eventRoutes);
 

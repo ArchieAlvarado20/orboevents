@@ -4,13 +4,20 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 const {
   createTicket,
-  getTickets,
+  getMyTickets,
   verifyTicket,
+  getTicketsByTransaction,
+  getAllTickets,
 } = require("../controllers/ticketController");
 
-router.post("/tickets", authMiddleware, createTicket);
+// 🎟️ User tickets
+router.get("/me", authMiddleware, getMyTickets);
 
-router.get("/tickets", authMiddleware, getTickets);
+// 🎟️ Tickets per transaction (success page)
+router.get("/transaction/:id", authMiddleware, getTicketsByTransaction);
+
+// 🛠️ Admin: lahat ng tickets
+router.get("/", authMiddleware, adminMiddleware, getAllTickets);
 
 router.post("/tickets/verify", authMiddleware, adminMiddleware, verifyTicket);
 

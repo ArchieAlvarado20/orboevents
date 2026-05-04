@@ -13,15 +13,24 @@ import {
   Receipt,
   FileText,
   CalendarCheck,
+  Users,
+  UsersRound,
+  Users2Icon,
 } from "lucide-react";
+import { useState } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 type SidebarProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  user: string;
 };
 
-export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
+export default function UserMobileSidebar({
+  isOpen,
+  setIsOpen,
+  user,
+}: SidebarProps) {
   const navigate = useNavigate();
   return (
     <>
@@ -46,10 +55,30 @@ export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
         {/* HEADER */}
         <div
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center justify-between p-4 border-b "
+          className="flex items-center justify-between p-4"
         >
           <NavLink
             to="/"
+            className={({ isActive }) =>
+              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100  text-violet-600 font-semibold ${
+                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
+              }`
+            }
+          >
+            <UserCircle size={24} />
+            {user?.name || "Guest"}
+          </NavLink>
+
+          <button onClick={() => setIsOpen(false)}>
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* LINKS */}
+        <nav className="p-4 space-y-3 bg-white rounded-lg shadow-gray-500 h-screen z-50">
+          <NavLink
+            to="/"
+            onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
                 isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
@@ -60,13 +89,6 @@ export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
             Home
           </NavLink>
 
-          <button onClick={() => setIsOpen(false)}>
-            <X size={24} />
-          </button>
-        </div>
-
-        {/* LINKS */}
-        <nav className="p-4 space-y-3 bg-white rounded-lg shadow-gray-500 h-screen z-50">
           <NavLink
             to="/events"
             onClick={() => setIsOpen(false)}
@@ -100,7 +122,7 @@ export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
               }`
             }
           >
-            <UserCircle size={24} />
+            <Users2Icon size={24} />
             Organizer
           </NavLink>
           <NavLink
@@ -156,7 +178,7 @@ export default function UserMobileSidebar({ isOpen, setIsOpen }: SidebarProps) {
           </NavLink>
 
           <NavLink
-            to="/transactions"
+            to="/transaction"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
               `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${

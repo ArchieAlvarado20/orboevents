@@ -60,7 +60,7 @@ export default function Topbar({ user }: any) {
         </div>
 
         <div className=" gap-4 md:inline-flex">
-          <div className="hidden lg:flex items-center bg-gray-50  rounded-full px-4 py-2 border border-transparent focus-within:border-primary transition-all">
+          <div className="hidden lg:flex items-end bg-gray-50  rounded-full px-4 py-2 border border-transparent focus-within:border-primary transition-all">
             <Search className="w-4 h-4 text-gray-400 mr-2" />
             <input
               className="bg-transparent border-0 focus:ring-0 focus:outline-none text-sm font-body-md w-48"
@@ -69,17 +69,15 @@ export default function Topbar({ user }: any) {
             />
           </div>
           {!user ? (
-            <>
-              <Link to="/login" className="">
-                {/* <LogInIcon className="sm:hidden w-6 h-6 text-purple-600  " /> */}
-                <Button
-                  variant="primary"
-                  className="text-indigo-900 bg-violet-600"
-                >
-                  LOGIN
-                </Button>
-              </Link>
-            </>
+            <Link to="/login" className="">
+              {/* <LogInIcon className="sm:hidden w-6 h-6 text-purple-600  " /> */}
+              <Button
+                variant="primary"
+                className="text-indigo-900 bg-violet-600"
+              >
+                LOGIN
+              </Button>
+            </Link>
           ) : (
             <>
               <Link to="/reservation">
@@ -99,7 +97,7 @@ export default function Topbar({ user }: any) {
             </>
           )}
         </div>
-        <UserMobileSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <UserMobileSidebar isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
       </div>
     </header>
   );

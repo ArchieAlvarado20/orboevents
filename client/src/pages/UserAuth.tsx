@@ -35,7 +35,7 @@ export default function UserAuth() {
       if (isLogin) {
         const user = await login(form);
 
-        showSuccess(`Welcome back1ss, ${user.name}!`);
+        showSuccess(`Welcome back, ${user.name}!`);
         navigate("/");
       } else {
         await register(form);
@@ -52,9 +52,9 @@ export default function UserAuth() {
 
   return (
     <>
-      <div className="min-h-screen bg-purple-300  flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-purple-300  flex items-center justify-center p-0 md:p-6 font-sans">
         <BackButton className="absolute top-4 left-4 text-gray-700 hover:text-gray-900 transition-colors z-50" />
-        <div className="max-w-5xl w-full bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-purple-200/50 flex flex-col md:flex-row">
+        <div className="max-w-5xl w-full bg-white rounded-0 md:rounded-[40px] overflow-hidden shadow-2xl shadow-purple-200/50 flex flex-col md:flex-row">
           {/* Left Side: Brand & Visuals */}
           <div className="md:w-1/2 bg-purple-500 relative overflow-hidden p-12 flex flex-col justify-between text-white min-h-[400px]">
             {/* Background Decoration */}

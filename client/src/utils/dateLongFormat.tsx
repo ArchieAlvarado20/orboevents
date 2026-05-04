@@ -1,4 +1,9 @@
-export default function FormattedDate({ date }) {
+type Props = {
+  date?: string;
+  className?: string;
+};
+
+export default function FormattedDate({ date, className }: Props) {
   if (!date) return null;
 
   const formatted = new Date(date).toLocaleDateString("en-US", {
@@ -9,5 +14,5 @@ export default function FormattedDate({ date }) {
     day: "numeric",
   });
 
-  return <span>{formatted}</span>;
+  return <span className={className}>{formatted}</span>;
 }

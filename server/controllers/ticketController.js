@@ -112,16 +112,36 @@ const createTicket = async (req, res) => {
 };
 
 // GET TICKETS
-const getTickets = async (req, res) => {
+const getMyTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find()
-      .populate("userId", "name email")
-      .populate("eventId", "name date location organizerName");
+    const tickets = await Ticket.find({ userId: req.user.id })
+      .populate("eventId", "name date location image startTime organizerName")
+      .populate("ticketTypeId", "name price")
+      .populate("transactionId")
+      .sort({ createdAt: -1 });
 
-    res.json(tickets);
+    res.json({ data: tickets });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+// GET /api/tickets/transaction/:id
+const getTicketsByTransaction = async (req, res) => {
+  const tickets = await Ticket.find({
+    transactionId: req.params.id,
+  }).populate("eventId");
+
+  res.json({ data: tickets });
+};
+
+// 🛠️ admin only
+const getAllTickets = async (req, res) => {
+  const tickets = await Ticket.find()
+    .populate("userId", "name email")
+    .populate("eventId", "name");
+
+  res.json({ data: tickets });
 };
 
 // VERIFY TICKET (used at entrance scanning)
@@ -188,4 +208,10 @@ const verifyTicket = async (req, res) => {
   }
 };
 
-module.exports = { createTicket, getTickets, verifyTicket };
+module.exports = {
+  createTicket,
+  getMyTickets,
+  verifyTicket,
+  getTicketsByTransaction,
+  getAllTickets,
+};

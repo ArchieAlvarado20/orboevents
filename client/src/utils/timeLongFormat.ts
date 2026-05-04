@@ -1,9 +1,11 @@
-export const formatTime = (time: string) => {
+export const formatTime = (time?: string) => {
   if (!time) return "";
 
-  return new Date(`1970-01-01T${time}`).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const [hourStr, minute] = time.split(":");
+  let hour = parseInt(hourStr);
+
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minute} ${ampm}`;
 };

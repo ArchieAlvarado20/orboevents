@@ -9,31 +9,7 @@ import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
 import { ArrowRight, ShieldCheck, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
-interface Event {
-  _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  startTime?: string;
-  endTime?: string;
-  status?: "active" | "pending" | "completed";
-  description: string;
-  price?: number;
-  accessLevel: string;
-  color: string;
-  ticketTypes?: {
-    _id: string;
-    name: string;
-    price: number;
-    description?: string;
-    accessLevel: string;
-    color: string;
-    privileges?: [string];
-  }[];
-}
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function UserTickets() {
   const { id } = useParams();
@@ -42,6 +18,7 @@ export default function UserTickets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const navigate = useNavigate();
 
   const total = selectedTicket?.price || 0;
 
@@ -112,6 +89,7 @@ export default function UserTickets() {
 
       console.log("Reservation success:", res.data);
       showSuccess("Ticket Reserved!");
+      navigate("/reservation");
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       showError(error.response?.data?.message || "Reservation failed");

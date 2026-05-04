@@ -180,8 +180,8 @@ const paymentSuccess = async (req, res) => {
 
     // 5. RESPONSE
     return res.json({
-      message: "Payment successful",
-      transaction: transaction._id,
+      success: true,
+      transactionId: transaction._id,
     });
   } catch (err) {
     console.error(err);
