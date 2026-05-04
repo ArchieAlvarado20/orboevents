@@ -35,7 +35,7 @@ export default function UserAuth() {
       if (isLogin) {
         const user = await login(form);
 
-        showSuccess(`Welcome back, ${user.name}!`);
+        showSuccess(`Welcome back1ss, ${user.name}!`);
         navigate("/");
       } else {
         await register(form);

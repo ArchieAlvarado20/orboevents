@@ -28,7 +28,6 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <ToastProvider />
-
       <Routes>
         {/* Public */}
 

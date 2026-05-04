@@ -23,9 +23,9 @@ export const getPagination = (
 
   pages.push(...range);
 
-  if (range[range.length - 1] < totalPages - 1) {
-    pages.push("...");
-  }
+  // if (range[range.length - 1] < totalPages - 1) {
+  //   pages.push("...");
+  // }
 
   if (totalPages > 1) {
     pages.push(totalPages);

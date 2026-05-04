@@ -182,7 +182,7 @@ export default function Events() {
                 disabled={page === 1}
                 className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
               >
-                Prev
+                {"<"}
               </button>
 
               {/* Pages */}
@@ -212,7 +212,7 @@ export default function Events() {
                 disabled={page === totalPages}
                 className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
               >
-                Next
+                {">"}
               </button>
 
               {/* Last */}

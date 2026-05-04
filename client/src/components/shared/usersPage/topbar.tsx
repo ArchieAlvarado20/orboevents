@@ -1,20 +1,13 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Logo from "../Logo";
-import {
-  Bell,
-  LogInIcon,
-  Search,
-  ShoppingCart,
-  UserCircle,
-} from "lucide-react";
+import { Bell, Search, ShoppingCart, UserCircle } from "lucide-react";
 import { useState } from "react";
 import UserMobileSidebar from "./MobileSidebar";
+import Button from "../Button";
 
-export default function Topbar() {
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+export default function Topbar({ user }: any) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <header className="fixed top-0 w-full z-50 bg-white/80  backdrop-blur-md border-b border-gray-100  shadow-[0_4px_20px_rgba(124,58,237,0.08)]">
       <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto w-full">
@@ -75,13 +68,16 @@ export default function Topbar() {
               type="text"
             />
           </div>
-          {!token ? (
+          {!user ? (
             <>
               <Link to="/login" className="">
                 {/* <LogInIcon className="sm:hidden w-6 h-6 text-purple-600  " /> */}
-                <button className="hidden sm:block w-42 h-10 bg-purple-600 text-white text-center py-auto rounded-2xl font-bold text-md hover:bg-purple-700 transition-all shadow-2xl shadow-purple-600/30 active:scale-[0.98]">
-                  Sign In
-                </button>
+                <Button
+                  variant="primary"
+                  className="text-indigo-900 bg-violet-600"
+                >
+                  LOGIN
+                </Button>
               </Link>
             </>
           ) : (

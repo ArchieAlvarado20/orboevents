@@ -42,10 +42,10 @@ export default function UserEvents() {
   const handlePageClick = (p: number, index: number) => {
     setPage(p);
 
-    window.scrollTo({
-      top: 50,
-      behavior: "smooth",
-    });
+    // window.scrollTo({
+    //   top: 50,
+    //   behavior: "smooth",
+    // });
 
     pageRefs.current[index]?.scrollIntoView({
       behavior: "smooth",
@@ -136,20 +136,20 @@ export default function UserEvents() {
             ))}
           </div>
           {/* <!-- Pagination --> */}
-          <div className="mt-20 flex items-center justify-center gap-2">
+          <div className="flex items-center overflow-x-auto gap-2 mt-6 flex-wrap justify-center">
             <button
               onClick={() => setPage(1)}
               disabled={page === 1}
-              className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              <ChevronLeft className="w-4 h-4" />
+              {"<<"}
             </button>
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
-              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
+              className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              Prev
+              {"<"}
             </button>
             {/* Pages */}
             {getPagination(page, totalPages).map((p, i) =>
@@ -178,17 +178,17 @@ export default function UserEvents() {
             <button
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}
-              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50"
+              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              Next
+              {">"}
             </button>
 
             <button
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
-              className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              <ChevronRight className="w-4 h-4" />
+              {">>"}
             </button>
           </div>
         </section>

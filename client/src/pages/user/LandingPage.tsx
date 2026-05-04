@@ -18,45 +18,6 @@ interface Event {
 
 export default function LandingPage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const navigate = useNavigate();
-  const hasRun = useRef(false);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-
-    if (!token) return;
-
-    const handleAuth = async () => {
-      if (hasRun.current) return;
-
-      hasRun.current = true;
-      try {
-        localStorage.setItem("token", token);
-
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const user = res.data;
-        localStorage.setItem("user", JSON.stringify(user));
-
-        window.history.replaceState({}, "", "/auth");
-
-        showSuccess(`Welcome back, ${user.name}!`);
-        navigate("/");
-      } catch (err) {
-        console.error(err);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
-        showError("Authentication failed.");
-        navigate("/login");
-      }
-    };
-
-    handleAuth();
-  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
