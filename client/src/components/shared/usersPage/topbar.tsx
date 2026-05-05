@@ -73,7 +73,7 @@ export default function Topbar({ user }: any) {
               {/* <LogInIcon className="sm:hidden w-6 h-6 text-purple-600  " /> */}
               <Button
                 variant="primary"
-                className="text-indigo-900 bg-violet-600"
+                className="hidden md:inline-block text-indigo-900 bg-violet-600"
               >
                 LOGIN
               </Button>

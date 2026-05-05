@@ -9,6 +9,7 @@ import {
   Clock,
   ChevronLeft,
   Currency,
+  Calendar,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -195,6 +196,10 @@ export default function Reservation() {
     }
   };
 
+  const activeTickets = reservations.filter((t) => t.status === "pending");
+
+  const count = activeTickets.length;
+
   return (
     <div className="min-h-screen bg-[#f8f9ff] font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 pb-20">
       <main className="max-w-7xl mx-auto px-6 py-12 mt-18">
@@ -203,7 +208,7 @@ export default function Reservation() {
             Ticket Reserved
           </h2>
           <span className="bg-violet-100 text-violet-700 text-xs font-bold px-3 py-1 rounded-full mb-5">
-            {} Items
+            {count} {count === 1 ? "Item" : "Items"}
           </span>
         </div>
 
@@ -282,8 +287,10 @@ export default function Reservation() {
               ))
             ) : (
               <div className="bg-white rounded-3xl p-12 border border-dashed border-slate-200 text-center">
-                <ShoppingCart className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-                <p className="text-slate-500 font-medium">Your cart is empty</p>
+                <Calendar className="w-12 h-12 text-slate-200 mx-auto mb-4" />
+                <p className="text-slate-500 font-medium">
+                  You don’t have any reservations.
+                </p>
                 <Link to="/events">
                   <button className="mt-4 text-violet-600 font-bold hover:underline">
                     Continue Browsing

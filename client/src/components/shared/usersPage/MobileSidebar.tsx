@@ -17,6 +17,7 @@ import {
   UsersRound,
   Users2Icon,
   Ticket,
+  LogIn,
 } from "lucide-react";
 import { useState } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
@@ -152,7 +153,7 @@ export default function UserMobileSidebar({
             <div className="relative">
               {" "}
               <Bell size={24} />{" "}
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                 0
               </span>
             </div>
@@ -171,7 +172,7 @@ export default function UserMobileSidebar({
             <div className="relative">
               {" "}
               <CalendarCheck size={24} />{" "}
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                 0
               </span>
             </div>
@@ -190,19 +191,29 @@ export default function UserMobileSidebar({
             <div className="relative">
               {" "}
               <Ticket size={24} />{" "}
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                 0
               </span>
             </div>
             My Tickets
           </NavLink>
-          <button
-            onClick={() => handleLogout(navigate, "/login")}
-            className="flex items-center gap-2 p-2 mt-4 text-red-600 hover:bg-red-50 rounded"
-          >
-            <LogOut size={24} />
-            Logout
-          </button>
+          {user ? (
+            <button
+              onClick={() => handleLogout(navigate, "/login")}
+              className="flex items-center gap-2 p-2 mt-4 text-red-600 hover:bg-red-50 rounded"
+            >
+              <LogOut size={24} />
+              Logout
+            </button>
+          ) : (
+            <button
+              onClick={() => handleLogout(navigate, "/login")}
+              className="flex items-center gap-2 p-2 mt-4 text-gray-600 hover:bg-red-50 rounded"
+            >
+              <LogIn size={24} />
+              Sign in
+            </button>
+          )}
         </nav>
       </div>
     </>

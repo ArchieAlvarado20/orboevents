@@ -12,7 +12,7 @@ const upload = multer({ dest: "uploads/" });
 
 // CREATE EVENT (WITH IMAGE UPLOAD)
 router.post(
-  "/admin/event",
+  "/admin/events",
   authMiddleware,
   adminMiddleware,
   upload.single("image"),

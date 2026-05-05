@@ -1,5 +1,5 @@
 import FormattedDate from "@/utils/dateLongFormat";
-import { X, Wallet2, Share } from "lucide-react";
+import { X, Wallet2, Share, DownloadCloud } from "lucide-react";
 import { formatTicketId } from "./TicketNumFormat";
 
 type TicketModalProps = {
@@ -63,12 +63,8 @@ export default function TicketModal({
           {/* ACTIONS */}
           <div className="w-full flex gap-3">
             <button className="flex-1 bg-violet-600 text-white py-4 px-6 rounded-2xl font-bold hover:bg-violet-700 transition-all flex items-center justify-center gap-2 shadow-md">
-              <Wallet2 size={18} />
-              Add to Wallet
-            </button>
-
-            <button className="bg-slate-100 text-slate-600 p-4 rounded-2xl hover:bg-slate-200 transition-all">
-              <Share size={18} />
+              <DownloadCloud size={18} />
+              Download QR Image
             </button>
           </div>
         </div>

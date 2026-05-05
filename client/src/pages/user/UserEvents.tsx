@@ -74,7 +74,7 @@ export default function UserEvents() {
   }, [page]);
   return (
     <>
-      <main className="pt-24 pb-20 flex-grow mt-5">
+      <main className="pt-24 pb-20 grow mt-5">
         {/* <!-- Hero Section --> */}
         <section className="max-w-7xl mx-auto px-6 mb-12">
           <div className="relative rounded-[2rem] overflow-hidden h-[320px] flex items-center p-12 group">
