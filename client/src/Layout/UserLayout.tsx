@@ -4,10 +4,19 @@ import UserFooter from "@/components/shared/usersPage/userFooter";
 import { useAuthInit } from "@/hooks/auth/useAuthInit";
 import { useState } from "react";
 import { showSuccess } from "@/lib/toast";
+import UserMobileSidebar from "@/components/shared/usersPage/MobileSidebar";
 
 export default function UserLayout() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   useAuthInit({
     setUser,
@@ -18,10 +27,15 @@ export default function UserLayout() {
   return (
     <div className="flex-1 w-full">
       <div className="flex-1">
-        <Topbar user={user} />
+        <Topbar user={user} setIsOpen={setIsOpen} />
         <Outlet />
       </div>
       <UserFooter />
+      <UserMobileSidebar
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        user={user || ""}
+      />
     </div>
   );
 }

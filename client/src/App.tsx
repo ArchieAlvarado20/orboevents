@@ -23,6 +23,8 @@ import ToastProvider from "./components/shared/ToastProvider";
 import ScrollToTop from "./components/shared/topUponNavigate";
 import Reservation from "./pages/user/Reservation";
 import Transaction from "./pages/user/Transaction";
+import SmartTicketingLanding from "./pages/user/main";
+import DigitalTicketMockup from "./pages/user/mobile";
 
 function App() {
   return (
@@ -35,7 +37,7 @@ function App() {
         <Route path="login" element={<UserAuth />} />
         <Route path="/" element={<UserLayout />}>
           <Route path="*" element={<_404UserPage />} />
-          <Route index element={<LandingPage />} />
+          <Route index element={<SmartTicketingLanding />} />
           <Route path="category" element={<Category />} />
           <Route path="events" element={<UserEvents />} />
           <Route path="tickets/:id" element={<UserTickets />} />

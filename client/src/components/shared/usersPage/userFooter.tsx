@@ -1,161 +1,136 @@
-import { FaAndroid, FaApple } from "react-icons/fa";
+import { FaAndroid, FaApple, FaInstagram, FaTwitter } from "react-icons/fa";
 import Logo from "../Logo";
+import { QrCode } from "lucide-react";
+import OrboeventsLogo from "../LogoIcon";
 
 export default function UserFooter() {
   return (
     <>
-      <footer className="w-full rounded-t-[32px] bg-slate-50 border-t border-slate-200 antialiased font-['Plus_Jakarta_Sans'] text-sm">
-        <div className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <Logo className="h-16" />
+      <footer className="bg-slate-50 pt-10 pb-10 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div className="space-y-6">
+              <OrboeventsLogo />
+              <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                Redefining the event entry experience with smart technology and
+                community energy.
+              </p>
             </div>
-            <p className="text-slate-500 mb-6 leading-relaxed">
-              Connecting people through extraordinary live experiences.
-              Discover, book, and enjoy events that matter.
-            </p>
-            <div className="flex gap-4">
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="public"
-              >
-                public
-              </span>
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="language"
-              >
-                language
-              </span>
-              <span
-                className="material-symbols-outlined text-slate-400 cursor-pointer hover:text-violet-600 transition-colors"
-                data-icon="hub"
-              >
-                hub
-              </span>
+            <div>
+              <h4 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-6">
+                Quick Links
+              </h4>
+              <ul className="space-y-4 text-sm font-bold text-slate-600">
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Featured Events
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Organizer Portal
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Safety & Security
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Pricing Plans
+                  </a>
+                </li>
+              </ul>
             </div>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Explore
-            </h4>
-            <ul className="space-y-4">
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Events
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Categories
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Trending Now
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Organizers
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Company
-            </h4>
-            <ul className="space-y-4">
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Contact Support
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-slate-500 hover:text-violet-600 hover:translate-x-1 transition-all inline-block"
-                  href="#"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 uppercase tracking-wider text-[10px]">
-              Download
-            </h4>
-            <p className="text-slate-500 mb-6">
-              Get our mobile app for better experience.
-            </p>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-2xl cursor-pointer hover:border-violet-600 transition-colors">
-                <FaApple />
-                <div>
-                  <p className="text-[8px] uppercase text-slate-400 leading-none">
-                    App Store
-                  </p>
-                  <p className="font-bold text-xs">iOS App</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-white border border-slate-200 p-3 rounded-2xl cursor-pointer hover:border-violet-600 transition-colors">
-                <FaAndroid />
-                <div>
-                  <p className="text-[8px] uppercase text-slate-400 leading-none">
-                    Google Play
-                  </p>
-                  <p className="font-bold text-xs">Android App</p>
-                </div>
+            <div>
+              <h4 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-6">
+                Support
+              </h4>
+              <ul className="space-y-4 text-sm font-bold text-slate-600">
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    API Documentation
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="hover:text-violet-600 transition-colors"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="space-y-6">
+              <h4 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-6">
+                Newsletter
+              </h4>
+              <p className="text-xs text-slate-500 font-medium">
+                Stay updated on the latest events near you.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Email address"
+                  className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-600/10 focus:border-violet-600 transition-all"
+                />
+                <button className="px-4 py-3 bg-violet-600 text-white rounded-xl font-bold">
+                  Join
+                </button>
               </div>
             </div>
           </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-8 py-6 border-t border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-400 text-xs">
-            © 2026 orboevents. Discover your next community experience.
-          </p>
-          <div className="flex gap-8 text-slate-400 text-xs">
-            <a className="hover:text-violet-600" href="#">
-              Terms
-            </a>
-            <a className="hover:text-violet-600" href="#">
-              Privacy
-            </a>
-            <a className="hover:text-violet-600" href="#">
-              Cookies
-            </a>
+          <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-xs text-slate-400 font-bold">
+              © 2026 Orboevents Systems Inc. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <a
+                href="#"
+                className="text-slate-400 hover:text-violet-600 transition-colors"
+              >
+                <FaTwitter className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="text-slate-400 hover:text-violet-600 transition-colors"
+              >
+                <FaInstagram className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>

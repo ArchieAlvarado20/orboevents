@@ -3,7 +3,7 @@ import UserInput from "@/components/shared/usersPage/components/UserInput";
 import { Mail, Lock, Eye, Apple, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "../lib/toast";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import { useAuthActions } from "@/hooks/auth/useAuthActions";
@@ -11,14 +11,17 @@ import { validateAuthForm } from "@/hooks/auth/useValidateAuthForm";
 import BackButton from "@/components/shared/BackButton";
 
 export default function UserAuth() {
-  const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { form, handleChange, resetForm } = useAuthForm();
   const { login, register, handleGoogleLogin } = useAuthActions();
 
+  const query = new URLSearchParams(location.search);
+  const tab = query.get("tab");
+  const [isLogin, setIsLogin] = useState(tab !== "register");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -48,6 +51,15 @@ export default function UserAuth() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleToggle = () => {
+    const newIsLogin = !isLogin;
+
+    setIsLogin(newIsLogin);
+    resetForm();
+
+    navigate(`/login?tab=${newIsLogin ? "login" : "register"}`);
   };
 
   return (
@@ -197,7 +209,10 @@ export default function UserAuth() {
                   </div>
                 )}
 
-                <button className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]">
+                <button
+                  onClick={handleToggle}
+                  className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]"
+                >
                   {isLogin
                     ? loading
                       ? "Signing in..."

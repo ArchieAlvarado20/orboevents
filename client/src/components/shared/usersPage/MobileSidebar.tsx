@@ -1,4 +1,5 @@
 import { handleLogout } from "@/lib/auth";
+import { useScrollToSection } from "@/utils/scrollToSection";
 import {
   X,
   Menu,
@@ -18,6 +19,10 @@ import {
   Users2Icon,
   Ticket,
   LogIn,
+  HelpCircle,
+  HomeIcon,
+  Building2,
+  Phone,
 } from "lucide-react";
 import { useState } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
@@ -33,61 +38,165 @@ export default function UserMobileSidebar({
   setIsOpen,
   user,
 }: SidebarProps) {
+  const { scrollToSection } = useScrollToSection();
+
+  const navLinks = [
+    { name: "Home", id: "home", icon: Building2 },
+    { name: "Events", id: "events", icon: Calendar },
+    { name: "How It Works", id: "how-it-works", icon: HelpCircle },
+    { name: "Contact", id: "contact", icon: Phone },
+  ];
+
   const navigate = useNavigate();
   return (
     <>
-      {/* MENU BUTTON */}
-      <button onClick={() => setIsOpen(true)} className="p-2 md:hidden">
-        <Menu size={28} />
-      </button>
-
       {/* OVERLAY */}
       {isOpen && (
-        <div className="fixed inset-0 z-100" onClick={() => setIsOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black/40 z-40"
+          onClick={() => setIsOpen(false)}
+        />
       )}
 
       {/* SIDEBAR (RIGHT TO LEFT) */}
       <div
         className={`
-          fixed top-0 right-0 h-full w-full bg-white z-50 shadow-xl
+          fixed top-0 right-0 h-full w-3/4 sm:w-1/2 md:w-1/4 bg-white z-50 shadow-xl 
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "translate-x-full"}
         `}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* HEADER */}
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="flex items-center justify-between p-4"
-        >
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100  text-violet-600 font-semibold ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
-              }`
-            }
-          >
-            <UserCircle size={24} />
-            {user?.name || "Guest"}
-          </NavLink>
+        <div className="flex justify-between w-full  border-b border-slate-200">
+          <div className="flex-row items-center justify-between p-4 font-sans ">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `flex items-center gap-3 p-2 rounded-lg font-black hover:bg-gray-100  text-violet-600 ${
+                  isActive ? "text-violet-600 font-black" : "text-gray-600"
+                }`
+              }
+            >
+              <UserCircle size={24} />
+              {user?.name?.split(" ")[0] || "Guest"}
+            </NavLink>
 
-          <button onClick={() => setIsOpen(false)}>
+            {user ? (
+              <>
+                {" "}
+                {/* NOTIFICATIONS */}
+                <NavLink
+                  to="/notifications"
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                      isActive ? "text-violet-600 font-black" : "text-gray-600"
+                    }`
+                  }
+                >
+                  <div className="relative">
+                    {" "}
+                    <Bell size={24} />{" "}
+                    <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                      0
+                    </span>
+                  </div>
+                  Notifications
+                </NavLink>
+                <NavLink
+                  to="/reservation"
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                      isActive ? "text-violet-600 font-black" : "text-gray-600"
+                    }`
+                  }
+                >
+                  <div className="relative">
+                    {" "}
+                    <CalendarCheck size={24} />{" "}
+                    <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                      0
+                    </span>
+                  </div>
+                  Reservation
+                </NavLink>
+                <NavLink
+                  to="/transaction"
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                      isActive ? "text-violet-600 font-black" : "text-gray-600"
+                    }`
+                  }
+                >
+                  <div className="relative">
+                    {" "}
+                    <Ticket size={24} />{" "}
+                    <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                      0
+                    </span>
+                  </div>
+                  My Tickets
+                </NavLink>
+                <button
+                  onClick={() => handleLogout(navigate, "/login")}
+                  className="flex items-center gap-2 p-2 mt-auto text-red-600 font-bold hover:bg-red-50"
+                >
+                  <LogOut size={24} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => handleLogout(navigate, "/login")}
+                className="flex font-bold items-center gap-2 p-2 mt-auto text-gray-600 hover:bg-red-50 rounded"
+              >
+                <LogIn size={24} />
+                Sign in
+              </button>
+            )}
+          </div>
+          <button
+            className="absolute top-4 right-4"
+            onClick={() => setIsOpen(false)}
+          >
             <X size={24} />
           </button>
         </div>
+        <nav className="lg:hidden p-4 space-y-0 bg-white rounded-lg h-screen">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+
+            return (
+              <button
+                key={link.name}
+                onClick={() => {
+                  setIsOpen(false);
+                  scrollToSection(link.id);
+                }}
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold text-gray-600 hover:text-violet-600"
+              >
+                <Icon size={24} />
+                {link.name}
+              </button>
+            );
+          })}
+        </nav>
 
         {/* LINKS */}
-        <nav className="p-4 space-y-3 bg-white rounded-lg shadow-gray-500 h-screen z-50">
+        <nav className="hidden p-4 space-y-0 bg-white rounded-lg shadow-gray-500 h-screen z-50">
           <NavLink
             to="/"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
+              `flex items-center gap-3 p-2 rounded-lg  hover:bg-gray-100 font-bold ${
+                isActive ? "text-violet-600 font-black" : "text-gray-600"
               }`
             }
           >
-            <Home size={24} />
+            <Building2 size={24} />
             Home
           </NavLink>
 
@@ -95,8 +204,8 @@ export default function UserMobileSidebar({
             to="/events"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
+              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                isActive ? "text-violet-600 font-black" : "text-gray-600"
               }`
             }
           >
@@ -107,113 +216,26 @@ export default function UserMobileSidebar({
             to="/category"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
+              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                isActive ? "text-violet-600 font-black" : "text-gray-600"
               }`
             }
           >
-            <Grid3X3 size={24} />
-            Categories
+            <HelpCircle size={24} />
+            How it works
           </NavLink>
           <NavLink
             to="/organizer"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
+              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100  font-bold ${
+                isActive ? "text-violet-600 font-black" : "text-gray-600"
               }`
             }
           >
-            <Users2Icon size={24} />
-            Organizer
+            <Phone size={24} />
+            Contact
           </NavLink>
-          <NavLink
-            to="/about"
-            onClick={() => setIsOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
-              }`
-            }
-          >
-            <Info size={24} />
-            About
-          </NavLink>
-
-          {/* NOTIFICATIONS */}
-          <NavLink
-            to="/notifications"
-            onClick={() => setIsOpen(false)}
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
-              }`
-            }
-          >
-            <div className="relative">
-              {" "}
-              <Bell size={24} />{" "}
-              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                0
-              </span>
-            </div>
-            Notifications
-          </NavLink>
-
-          <NavLink
-            to="/reservation"
-            onClick={() => setIsOpen(false)}
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
-              }`
-            }
-          >
-            <div className="relative">
-              {" "}
-              <CalendarCheck size={24} />{" "}
-              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                0
-              </span>
-            </div>
-            Reservation
-          </NavLink>
-
-          <NavLink
-            to="/transaction"
-            onClick={() => setIsOpen(false)}
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 ${
-                isActive ? "text-indigo-600 font-semibold" : "text-gray-600"
-              }`
-            }
-          >
-            <div className="relative">
-              {" "}
-              <Ticket size={24} />{" "}
-              <span className="hidden absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-                0
-              </span>
-            </div>
-            My Tickets
-          </NavLink>
-          {user ? (
-            <button
-              onClick={() => handleLogout(navigate, "/login")}
-              className="flex items-center gap-2 p-2 mt-4 text-red-600 hover:bg-red-50 rounded"
-            >
-              <LogOut size={24} />
-              Logout
-            </button>
-          ) : (
-            <button
-              onClick={() => handleLogout(navigate, "/login")}
-              className="flex items-center gap-2 p-2 mt-4 text-gray-600 hover:bg-red-50 rounded"
-            >
-              <LogIn size={24} />
-              Sign in
-            </button>
-          )}
         </nav>
       </div>
     </>
