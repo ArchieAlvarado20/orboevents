@@ -136,10 +136,11 @@ const SmartTicketingLanding = () => {
                 Book Now
               </button>
 
-              <Link to="/events">
-                <button className="px-10 py-3 bg-white border-2 border-violet-100 text-violet-600 font-bold rounded-[10px] hover:bg-violet-50 transition-all">
-                  Explore Events
-                </button>
+              <Link
+                to="/events"
+                className="px-10 py-3 text-center bg-white border-2 border-violet-100 text-violet-600 font-bold rounded-[10px] hover:bg-violet-50 transition-all"
+              >
+                Explore Events
               </Link>
             </div>
           </div>
