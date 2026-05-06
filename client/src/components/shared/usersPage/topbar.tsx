@@ -22,7 +22,7 @@ export default function Topbar({ user, setIsOpen }: any) {
 
   const navLinks = [
     { name: "Home", id: "home" },
-    { name: "Events", id: "events" },
+    { name: "Events", path: "/events" },
     { name: "How It Works", id: "how-it-works" },
     { name: "Contact", id: "contact" },
   ];
@@ -59,6 +59,13 @@ export default function Topbar({ user, setIsOpen }: any) {
     return () => observer.disconnect();
   }, [location.pathname]);
 
+  const isActive = (link) => {
+    if (link.path) {
+      return location.pathname === link.path;
+    }
+    return location.pathname === "/" && activeSection === link.id;
+  };
+
   return (
     <header className="fixed top-0 w-full z-40 bg-white/80  backdrop-blur-md border-b border-gray-100  shadow-[0_4px_20px_rgba(124,58,237,0.08)]">
       <div className="flex justify-between items-center px-6 py-4 mx-auto w-full">
@@ -72,11 +79,20 @@ export default function Topbar({ user, setIsOpen }: any) {
           <nav className="hidden lg:flex items-center  gap-10">
             {navLinks.map((link) => (
               <button
-                onClick={() => scrollToSection(link.id)}
+                onClick={() => {
+                  if (link.path) {
+                    navigate(link.path);
+                  } else {
+                    navigate("/");
+                    setTimeout(() => {
+                      scrollToSection(link.id!);
+                    }, 100); // ensures landing page loads first
+                  }
+                }}
                 key={link.name}
                 className={`text-sm font-bold uppercase tracking-widest transition-colors
         ${
-          activeSection === link.id
+          isActive(link)
             ? "text-violet-600 border-b-2 border-violet-600"
             : "text-slate-600 hover:text-violet-600"
         }

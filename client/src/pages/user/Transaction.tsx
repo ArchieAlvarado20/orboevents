@@ -98,9 +98,7 @@ export default function Transaction() {
       <main className="max-w-7xl mx-auto px-6 py-8 mt-20 font-sans">
         {/* <!-- Dashboard Header & Tabs --> */}
         <div className="mb-12">
-          <h1 className="font-headline-lg font-extrabold text-4xl lg:text-5xl text-[#121c2a] mb-6">
-            My Tickets
-          </h1>
+          <h2 className="text-4xl font-black tracking-tight">My Tickets</h2>
           <div className="flex gap-4 border-b border-slate-200">
             <button className="px-6 py-4 font-bold text-violet-600 border-b-2 border-violet-600 transition-all">
               Active Tickets

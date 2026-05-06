@@ -42,7 +42,7 @@ export default function UserMobileSidebar({
 
   const navLinks = [
     { name: "Home", id: "home", icon: Building2 },
-    { name: "Events", id: "events", icon: Calendar },
+    { name: "Events", path: "/events", id: "events", icon: Calendar },
     { name: "How It Works", id: "how-it-works", icon: HelpCircle },
     { name: "Contact", id: "contact", icon: Phone },
   ];
@@ -79,7 +79,7 @@ export default function UserMobileSidebar({
               }
             >
               <UserCircle size={24} />
-              {user?.name?.split(" ")[0] || "Guest"}
+              {user?.name || "Guest"}
             </NavLink>
 
             {user ? (
@@ -171,10 +171,14 @@ export default function UserMobileSidebar({
 
             return (
               <button
-                key={link.name}
+                key={link.name + (link.id || link.path)}
                 onClick={() => {
                   setIsOpen(false);
-                  scrollToSection(link.id);
+                  if (link.path) {
+                    navigate(link.path);
+                  } else if (link.id) {
+                    scrollToSection(link.id);
+                  }
                 }}
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold text-gray-600 hover:text-violet-600"
               >

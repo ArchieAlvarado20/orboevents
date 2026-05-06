@@ -6,7 +6,7 @@ import OrboeventsLogo from "../LogoIcon";
 export default function UserFooter() {
   return (
     <>
-      <footer className="bg-slate-50 pt-10 pb-10 border-t border-slate-200">
+      <footer className="bg-slate-50 pt-10 pb-10 border-t border-slate-200 lg:px-5">
         <div className="max-w-full mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div className="space-y-6">
