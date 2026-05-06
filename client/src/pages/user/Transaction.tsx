@@ -122,13 +122,13 @@ export default function Transaction() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
             {/* <!-- Main Featured Ticket --> */}
             {tickets.length !== 0 ? (
               tickets.map((ticket) => (
                 <div
                   key={ticket._id}
-                  className="lg:col-span-7 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
+                  className="col-span-6 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
                 >
                   <div className="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
                     <img src={ticket.eventId?.image} />

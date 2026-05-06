@@ -28,6 +28,8 @@ export default function Topbar({ user, setIsOpen }: any) {
   ];
 
   useEffect(() => {
+    if (location.pathname !== "/") return;
+
     const sections = document.querySelectorAll("section");
 
     const observer = new IntersectionObserver(
@@ -55,7 +57,7 @@ export default function Topbar({ user, setIsOpen }: any) {
     sections.forEach((section) => observer.observe(section));
 
     return () => observer.disconnect();
-  }, []);
+  }, [location.pathname]);
 
   return (
     <header className="fixed top-0 w-full z-40 bg-white/80  backdrop-blur-md border-b border-gray-100  shadow-[0_4px_20px_rgba(124,58,237,0.08)]">
