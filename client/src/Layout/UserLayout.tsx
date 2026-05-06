@@ -11,13 +11,6 @@ export default function UserLayout() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   useAuthInit({
     setUser,
     navigate,

@@ -28,10 +28,26 @@ export function useAuthActions() {
   };
 
   const register = async (form: any) => {
-    return await axios.post(
+    const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/register`,
       form,
     );
+
+    const token = res.data.accessToken;
+
+    localStorage.setItem("token", token);
+
+    const meRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const user = meRes.data;
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+    return user;
   };
 
   const googleLogin = () => {

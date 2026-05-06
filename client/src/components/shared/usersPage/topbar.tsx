@@ -146,7 +146,7 @@ export default function Topbar({ user, setIsOpen }: any) {
                 onClick={() => setIsOpen(true)}
                 className="hidden lg:block"
               >
-                <UserCircle className="w-8 h-8 text-gray-600" />
+                <UserCircle className="w-8 h-8 text-violet-600" />
               </button>
             )}
             {/* MENU BUTTON */}

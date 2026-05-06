@@ -9,6 +9,7 @@ import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import { useAuthActions } from "@/hooks/auth/useAuthActions";
 import { validateAuthForm } from "@/hooks/auth/useValidateAuthForm";
 import BackButton from "@/components/shared/BackButton";
+import OrboeventsLogo from "@/components/shared/LogoIcon";
 
 export default function UserAuth() {
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,7 @@ export default function UserAuth() {
   const query = new URLSearchParams(location.search);
   const tab = query.get("tab");
   const [isLogin, setIsLogin] = useState(tab !== "register");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -42,24 +44,15 @@ export default function UserAuth() {
         navigate("/");
       } else {
         await register(form);
-
         showSuccess("Account created successfully");
         setIsLogin(true);
+        navigate("/");
       }
     } catch (err: any) {
       showError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleToggle = () => {
-    const newIsLogin = !isLogin;
-
-    setIsLogin(newIsLogin);
-    resetForm();
-
-    navigate(`/login?tab=${newIsLogin ? "login" : "register"}`);
   };
 
   return (
@@ -82,7 +75,10 @@ export default function UserAuth() {
 
             <div className="relative z-10">
               <h1 className="text-4xl font-black tracking-tighter uppercase mb-6">
-                <Logo className="w-72 h-24 inline-block mr-2" />
+                <OrboeventsLogo
+                  className="w-full h-24 mr-2 text-white"
+                  subClassName="text-white"
+                />
               </h1>
               <p className="text-lg text-purple-100 max-w-md leading-relaxed font-medium">
                 Experience the heartbeat of your city. Join thousands of
@@ -209,10 +205,7 @@ export default function UserAuth() {
                   </div>
                 )}
 
-                <button
-                  onClick={handleToggle}
-                  className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]"
-                >
+                <button className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]">
                   {isLogin
                     ? loading
                       ? "Signing in..."

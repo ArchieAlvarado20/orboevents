@@ -95,10 +95,10 @@ export default function Transaction() {
 
   return (
     <>
-      <main className="max-w-7xl mx-auto px-6 py-8 mt-20">
+      <main className="max-w-7xl mx-auto px-6 py-8 mt-20 font-sans">
         {/* <!-- Dashboard Header & Tabs --> */}
         <div className="mb-12">
-          <h1 className="font-headline-lg font-bold text-4xl lg:text-5xl text-[#121c2a] mb-6">
+          <h1 className="font-headline-lg font-extrabold text-4xl lg:text-5xl text-[#121c2a] mb-6">
             My Tickets
           </h1>
           <div className="flex gap-4 border-b border-slate-200">
@@ -131,8 +131,8 @@ export default function Transaction() {
                   className="col-span-6 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
                 >
                   <div className="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
-                    <img src={ticket.eventId?.image} />
-                    <div className="absolute top-4 left-4 bg-transparent border border-violet-600  px-4 py-2 rounded-2xl shadow-lg">
+                    <img src={ticket.eventId?.image || "/images/events.jpg"} />
+                    <div className="absolute top-4 left-4 bg-violet-600 py-1   border border-violet-600  px-4  rounded-2xl shadow-lg">
                       <p className="font-bold text-white  border-violet-600 text-center leading-tight text-sm">
                         {new Date(ticket.eventId.date).toLocaleDateString(
                           "en-US",
@@ -149,7 +149,7 @@ export default function Transaction() {
                     <div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="bg-violet-50 text-violet-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                          Music Festival
+                          {ticket.ticketTypeId?.name}
                         </span>
                         <MoreVertical className="hidden" />
                       </div>

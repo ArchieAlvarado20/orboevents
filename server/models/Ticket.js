@@ -10,7 +10,11 @@ const ticketSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
   // Reference the embedded subdoc by its auto-generated _id
-  ticketTypeId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  ticketTypeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "TicketType",
+    required: true,
+  },
 
   transactionId: {
     type: mongoose.Schema.Types.ObjectId,
