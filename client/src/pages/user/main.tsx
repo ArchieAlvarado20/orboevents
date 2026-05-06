@@ -25,9 +25,11 @@ import axios from "axios";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
 import { Event } from "@/types/event";
 import { Link } from "react-router-dom";
+import { useScrollToSection } from "@/utils/scrollToSection";
 
 const SmartTicketingLanding = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const { scrollToSection } = useScrollToSection();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -127,12 +129,18 @@ const SmartTicketingLanding = () => {
               event management is here.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="px-10 py-3 bg-violet-600 text-white font-bold rounded-[10px] shadow-2xl shadow-violet-600/30 hover:bg-violet-700 transition-all hover:-translate-y-1">
+              <button
+                onClick={() => scrollToSection("events")}
+                className="px-10 py-3 bg-violet-600 text-white font-bold rounded-[10px] shadow-2xl shadow-violet-600/30 hover:bg-violet-700 transition-all hover:-translate-y-1"
+              >
                 Book Now
               </button>
-              <button className="px-10 py-3 bg-white border-2 border-violet-100 text-violet-600 font-bold rounded-[10px] hover:bg-violet-50 transition-all">
-                Explore Events
-              </button>
+
+              <Link to="/events">
+                <button className="px-10 py-3 bg-white border-2 border-violet-100 text-violet-600 font-bold rounded-[10px] hover:bg-violet-50 transition-all">
+                  Explore Events
+                </button>
+              </Link>
             </div>
           </div>
 
