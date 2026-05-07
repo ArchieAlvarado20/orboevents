@@ -25,6 +25,8 @@ import Reservation from "./pages/user/Reservation";
 import Transaction from "./pages/user/Transaction";
 import SmartTicketingLanding from "./pages/user/main";
 import DigitalTicketMockup from "./pages/user/mobile";
+import Role from "./pages/admin/Role";
+import Users from "./pages/admin/Users";
 
 function App() {
   return (
@@ -55,6 +57,8 @@ function App() {
           <Route path="*" element={<_404Page />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="events" element={<Events />} />
+          <Route path="roles" element={<Role />} />
+          <Route path="users" element={<Users />} />
           <Route path="tickets" element={<Ticket />} />
           <Route path="scanner" element={<Scanner />} />
           <Route path="analytics" element={<Analytics />} />

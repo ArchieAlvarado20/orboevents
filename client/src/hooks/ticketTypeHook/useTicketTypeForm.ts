@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ticketTypeApi } from "@/api/ticketType.api";
-import { showError, showSuccess } from "@/lib/alert";
+import { showError, showSuccess } from "@/lib/toast";
 
 type TicketTypeForm = {
   name: string;

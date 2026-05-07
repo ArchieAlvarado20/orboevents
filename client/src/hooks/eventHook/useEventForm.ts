@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { showError, showSuccess } from "@/lib/alert";
 import { eventApi } from "@/api/event.api";
+import { showSuccess, showError } from "@/lib/toast";
 
 export interface EventForm {
   name: string;

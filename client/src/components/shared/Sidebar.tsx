@@ -5,6 +5,9 @@ import {
   Ticket,
   PanelLeft,
   CalendarDays,
+  Shield,
+  ShieldAlert,
+  UsersRound,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -115,6 +118,42 @@ export default function Sidebar({
             />
             <span className={`${isCollapsed ? "hidden" : "inline"}`}>
               Tickets
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/roles"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-1 py-1" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <ShieldAlert
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Roles & Permissions
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/users"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-1 py-1" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <UsersRound
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Users
             </span>
           </NavLink>
 

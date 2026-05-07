@@ -1,5 +1,15 @@
 import FormattedDate from "@/utils/dateLongFormat";
-import { Calendar, MapPin, MoreVertical, Edit, Ticket } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  MoreVertical,
+  Edit,
+  Ticket,
+  Delete,
+  Trash,
+  Trash2,
+  Trash2Icon,
+} from "lucide-react";
 
 interface EventType {
   _id: string;
@@ -91,6 +101,9 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
           <div className="flex gap-2">
             <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
               <Edit size={18} />
+            </button>
+            <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+              <Trash2Icon size={18} />
             </button>
 
             <button className="p-2  text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">

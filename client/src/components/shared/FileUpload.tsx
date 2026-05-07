@@ -7,6 +7,7 @@ export interface FileUploadProps {
   value?: File | null;
   accept?: string;
   error?: string;
+  clickNote: string;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
@@ -15,6 +16,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   value,
   accept = "image/*",
   error,
+  clickNote,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -49,7 +51,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <>
             <ImagePlus className="w-6 h-6 text-slate-400 group-hover:text-indigo-500 mb-2" />
             <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">
-              Click to upload event image
+              {clickNote}
             </p>
             <p className="text-xs text-slate-400 mt-1">
               Recommended size: 1200x630px

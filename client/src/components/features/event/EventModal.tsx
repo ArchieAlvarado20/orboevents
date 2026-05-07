@@ -68,6 +68,7 @@ export default function EventModal({
                 label="Event Image"
                 value={form.image}
                 error={errors.image}
+                clickNote="Click here to upload event image."
                 onChange={(file) =>
                   setForm((prev) => ({
                     ...prev,

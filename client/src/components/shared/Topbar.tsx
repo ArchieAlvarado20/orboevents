@@ -2,13 +2,14 @@ import { handleLogout } from "@/lib/auth";
 import { Bell, LogOut } from "lucide-react";
 import Logo from "./Logo";
 import { useNavigate } from "react-router";
+import OrboeventsLogo from "./LogoIcon";
 
 export default function Topbar() {
   const Navigate = useNavigate();
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between w-full px-6 h-16 bg-white/80 backdrop-blur-md border-b border-slate-200">
       <span className="flex flex-2 gap-1 text-xl font-bold tracking-tight text-slate-900">
-        <Logo className="h-16 -ml-5 md:ml-0" />
+        <OrboeventsLogo className="h-16 -ml-5 md:ml-0" />
       </span>
 
       <button onClick={() => handleLogout(Navigate, "/admin")}>
