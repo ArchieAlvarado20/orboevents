@@ -27,7 +27,11 @@ connectDB()
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://orboevents.vercel.app"],
+    origin: [
+      "http://localhost:5173",
+      "https://orboevents.vercel.app",
+      "https://orboevents-git-dev-mode-archiealvarado20-2377s-projects.vercel.app",
+    ],
     credentials: true,
   }),
 );
