@@ -60,6 +60,10 @@ const getUsers = async (req, res) => {
   try {
     const userRole = await Role.findOne({ name: "User" });
 
+    if (!userRole) {
+      return res.status(404).json({ message: "User role not found" });
+    }
+
     const users = await User.find({
       role: { $ne: userRole._id },
     })
