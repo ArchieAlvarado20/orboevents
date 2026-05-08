@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Role = require("../models/Role");
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -44,7 +45,7 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -54,11 +55,22 @@ const registerUser = async (req, res) => {
       });
     }
 
+    const hashed = await bcrypt.hash(password, 10);
+
+    // 🔥 DEFAULT ROLE (User)
+    const defaultRole = await Role.findOne({ name: "User" });
+
+    if (!defaultRole) {
+      return res.status(500).json({
+        message: "Default role not found",
+      });
+    }
+
     const user = await User.create({
       name,
       email,
-      password,
-      role: role || "user", // ✅ default user
+      password: hashed,
+      role: defaultRole._id,
     });
 
     const token = jwt.sign(
@@ -78,7 +90,7 @@ const registerUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role, // ✅ include role
+        role: user.role,
       },
     });
   } catch (error) {

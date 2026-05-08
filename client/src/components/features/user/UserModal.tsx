@@ -1,42 +1,57 @@
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "@/components/shared/Input";
-import Textarea from "@/components/shared/TextAria";
 import Button from "@/components/shared/Button";
 import FileUpload from "@/components/shared/FileUpload";
+import { useAdminUsersForm } from "@/hooks/adminUsersHook/useAdminUsersForm";
+import * as roleApi from "@/api/role.api";
+import { RoleFormType } from "@/types/role";
 
 interface UserModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
-  loading?: boolean;
+  onSuccess: () => void;
 }
 
 export default function UserModal({
   open,
   onClose,
-  onSubmit,
-  loading,
+  onSuccess,
 }: UserModalProps) {
   const modalRef = useRef(null);
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    role: "user",
-    status: "active",
-    bio: "",
-    image: null as File | null,
-  });
+  const { form, handleChange, createUser, loading, errors, setForm } =
+    useAdminUsersForm(() => {
+      onSuccess();
+      onClose();
+    });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const [roles, setRoles] = useState<RoleFormType[]>([]);
 
-    if (file) {
-      setForm({ ...form, image: file });
-    }
-  };
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Unauthorized");
+        return;
+      }
+
+      try {
+        const res = await roleApi.getRoles({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setRoles(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   return (
     <>
@@ -69,7 +84,7 @@ export default function UserModal({
                 <FileUpload
                   label="User Image"
                   value={form.image}
-                  error="no error"
+                  error={errors.image}
                   clickNote="Click here to upload user image."
                   onChange={(file) =>
                     setForm((prev) => ({
@@ -88,10 +103,12 @@ export default function UserModal({
 
               {/* NAME */}
               <Input
+                type="text"
                 label="Full Name"
                 name="name"
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                onChange={handleChange}
+                error={errors.name}
               />
 
               {/* EMAIL */}
@@ -99,15 +116,37 @@ export default function UserModal({
                 label="Email"
                 name="email"
                 value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                onChange={handleChange}
+                error={errors.email}
+                type="email"
+              />
+
+              <Input
+                label="Password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                error={errors.password}
+                type="password"
+              />
+
+              <Input
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                error={errors.confirmPassword}
               />
 
               {/* PHONE */}
               <Input
                 label="Phone"
                 name="phone"
+                type="number"
                 value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                onChange={handleChange}
+                error={errors.phone}
               />
 
               {/* ROLE */}
@@ -117,39 +156,22 @@ export default function UserModal({
                 </label>
 
                 <select
+                  name="role"
                   value={form.role}
-                  onChange={(e) => setForm({ ...form, role: e.target.value })}
+                  onChange={handleChange}
                   className="w-full border border-slate-200 rounded-lg p-2"
                 >
-                  <option value="user">User</option>
-                  <option value="staff">Staff</option>
-                  <option value="admin">Admin</option>
+                  <option value="" disabled hidden>
+                    Select Role
+                  </option>
+
+                  {roles.map((role) => (
+                    <option key={role._id} value={role._id}>
+                      {role.name}
+                    </option>
+                  ))}
                 </select>
               </div>
-
-              {/* STATUS */}
-              <div>
-                <label className="text-sm font-medium text-slate-700 mb-2 block">
-                  Status
-                </label>
-
-                <select
-                  value={form.status}
-                  onChange={(e) => setForm({ ...form, status: e.target.value })}
-                  className="w-full border border-slate-200 rounded-lg p-2"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
-
-              {/* BIO */}
-              <Textarea
-                label="Bio"
-                name="bio"
-                value={form.bio}
-                onChange={(e) => setForm({ ...form, bio: e.target.value })}
-              />
             </div>
 
             {/* FOOTER */}
@@ -158,7 +180,7 @@ export default function UserModal({
                 Cancel
               </Button>
 
-              <Button onClick={() => onSubmit(form)} loading={loading}>
+              <Button onClick={createUser} loading={loading}>
                 Save User
               </Button>
             </div>

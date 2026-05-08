@@ -6,33 +6,27 @@ import Button from "@/components/shared/Button";
 import useRoleForm from "@/hooks/roleHook/useRoleForm";
 import Select from "@/components/shared/Select";
 import Checkbox from "@/components/shared/Checkbox";
+import { initialForm, RoleFormType } from "@/types/role";
+import { permissionsList } from "@/types/permissionList";
 
 interface RoleModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  role: RoleFormType;
 }
 
 export default function RoleModal({
+  role,
   open,
   onClose,
   onSuccess,
 }: RoleModalProps) {
   const modalRef = useRef(null);
-  const [selectedRole, setSelectedRole] = useState<any>(null);
 
   const statusOptions = [
     { label: "Active", value: "active" },
     { label: "Inactive", value: "inactive" },
-  ];
-
-  const permissionsList = [
-    "CREATE_EVENT",
-    "EDIT_EVENT",
-    "DELETE_EVENT",
-    "SCAN_TICKET",
-    "VIEW_LOGS",
-    "MANAGE_USERS",
   ];
 
   const togglePermission = (perm: string) => {
@@ -51,25 +45,42 @@ export default function RoleModal({
     createRole,
     loading,
     errors,
-    setEditData,
+    updateRole,
+    resetErrors,
   } = useRoleForm(() => {
     onSuccess();
     onClose();
   });
 
-  const handleEdit = (role: any) => {
-    setSelectedRole(role);
+  const handleSubmit = async () => {
+    let success = false;
 
-    setEditData({
-      name: role.name,
-      description: role.description,
-      permissions: role.permissions,
-      status: role.status,
-    });
+    if (role) {
+      success = await updateRole(role._id);
+    } else {
+      success = await createRole();
+    }
 
-    onSuccess();
-    onClose();
+    if (success) {
+      onSuccess();
+      onClose();
+    }
   };
+
+  useEffect(() => {
+    if (role) {
+      resetErrors();
+      setForm({
+        name: role.name,
+        description: role.description,
+        permissions: role.permissions,
+        status: role.status,
+      });
+    } else {
+      resetErrors();
+      setForm(initialForm);
+    }
+  }, [role, open]);
 
   return (
     <>
@@ -127,11 +138,11 @@ export default function RoleModal({
                 >
                   {permissionsList.map((perm) => (
                     <Checkbox
-                      key={perm}
-                      label={perm}
-                      name={perm}
-                      checked={form.permissions.includes(perm)}
-                      onChange={() => togglePermission(perm)}
+                      key={perm.value}
+                      label={perm.label}
+                      name={perm.value}
+                      checked={form.permissions.includes(perm.value)}
+                      onChange={() => togglePermission(perm.value)}
                     />
                   ))}
                 </div>
@@ -145,8 +156,8 @@ export default function RoleModal({
 
               {/* Status */}
               <Select
-                label="Event Category"
-                name="category"
+                label="is Active?"
+                name="status"
                 value={form.status}
                 onChange={handleChange}
                 options={statusOptions}
@@ -155,12 +166,16 @@ export default function RoleModal({
 
             {/* FOOTER */}
             <div className="px-6 py-4 border-t bg-slate-50 flex justify-end gap-3">
-              <Button variant="outline" onClick={onClose}>
-                Cancel
+              <Button
+                variant="outline"
+                className="text-indigo-500"
+                onClick={() => onClose()}
+              >
+                cancel
               </Button>
 
-              <Button onClick={createRole} loading={loading}>
-                Save Role
+              <Button onClick={handleSubmit} loading={loading}>
+                {role ? "Update Role" : "Create Role"}
               </Button>
             </div>
           </div>

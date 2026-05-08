@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+
 const {
   createRole,
   getRoles,
@@ -11,7 +14,7 @@ const {
 
 router.post("/", createRole);
 
-router.get("/", getRoles);
+router.get("/", authMiddleware, adminMiddleware, getRoles);
 
 router.get("/:id", getRoleById);
 

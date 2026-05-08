@@ -1,23 +1,13 @@
 import { useState } from "react";
 import * as roleApi from "@/api/role.api";
-import { RoleFormType } from "@/types/role";
+import { initialForm, RoleFormType } from "@/types/role";
 import { showError, showSuccess } from "@/lib/toast";
 
 export default function useRoleForm(onSuccess?: () => void) {
-  const [form, setForm] = useState<RoleFormType>({
-    name: "",
-    description: "",
-    permissions: [] as string[],
-    status: "active",
-  });
+  const [form, setForm] = useState<RoleFormType>(initialForm);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
-
-  const setEditData = (data: RoleFormType) => {
-    setForm(data);
-    setErrors({});
-  };
 
   const handleChange = (e: any) => {
     setForm((prev) => ({
@@ -51,11 +41,22 @@ export default function useRoleForm(onSuccess?: () => void) {
   const createRole = async () => {
     if (!validate()) return;
 
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Unauthorized");
+      return;
+    }
+
     setLoading(true);
     resetErrors();
 
     try {
-      const res = await roleApi.createRole(form);
+      const res = await roleApi.createRole(form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       showSuccess("Role created successfully!");
       onSuccess?.(); // close modal / refresh list
@@ -75,11 +76,15 @@ export default function useRoleForm(onSuccess?: () => void) {
   };
 
   const updateRole = async (id: string) => {
+    if (!validate()) return;
+
     setLoading(true);
+    resetErrors();
     try {
       await roleApi.updateRole(id, form);
 
       onSuccess?.();
+      showSuccess("Role updated successfully!");
     } catch (err: any) {
       const data = err?.response?.data;
 
@@ -107,7 +112,6 @@ export default function useRoleForm(onSuccess?: () => void) {
     loading,
     errors,
     resetErrors,
-    setEditData,
     updateRole,
   };
 }

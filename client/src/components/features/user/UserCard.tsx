@@ -1,14 +1,6 @@
+import { UserType } from "@/types/adminUsers.type";
+import { permissionsList } from "@/types/permissionList";
 import { Mail, Shield, MoreVertical, Edit, Trash2 } from "lucide-react";
-
-interface UserType {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  permissions: string[];
-  image?: string;
-  status?: "active" | "inactive" | "suspended";
-}
 
 interface UserCardProps {
   user: UserType;
@@ -55,7 +47,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
             {/* ROLE */}
             <div className="mt-3">
               <span className="px-3 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-600">
-                {user.role}
+                {user.role?.name}
               </span>
             </div>
           </div>
@@ -79,15 +71,24 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
 
       {/* PERMISSIONS */}
       <div className="flex flex-wrap gap-2 mt-5">
-        {user.permissions.map((perm, index) => (
-          <span
-            key={index}
-            className="px-2.5 py-1 text-xs bg-slate-100 text-slate-600 rounded-full flex items-center gap-1"
-          >
-            <Shield size={12} />
-            {perm}
+        {(user.role?.permissions ?? []).length > 0 ? (
+          (user.role?.permissions ?? []).map((perm: string, index: number) => {
+            const permission = permissionsList.find((p) => p.value === perm);
+            return (
+              <span
+                key={index}
+                className="px-2.5 py-1 text-xs bg-slate-100 text-slate-600 rounded-full flex items-center gap-1"
+              >
+                <Shield size={12} />
+                {permission?.label || perm}
+              </span>
+            );
+          })
+        ) : (
+          <span className="text-xs text-slate-400 bg-slate-200 p-1 px-2 rounded-2xl">
+            No permissions
           </span>
-        ))}
+        )}
       </div>
 
       {/* FOOTER */}

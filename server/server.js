@@ -18,6 +18,7 @@ const reservationRoutes = require("./routes/reservationRoutes");
 const testRoutes = require("./routes/testRoutes");
 const razorpayRoutes = require("./routes/razorpayRoutes.js");
 const roleRoutes = require("./routes/roleRoutes.js");
+const adminUsersRoutes = require("./routes/adminUsersRoutes.js");
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", adminUsersRoutes);
 app.use("/api/tickets", ticketRoutes);
 
 app.use("/api/roles", roleRoutes);

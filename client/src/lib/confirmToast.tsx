@@ -6,7 +6,7 @@ export const confirmToast = (message, onConfirm) => {
       <div className="space-y-3">
         <p className="text-sm font-medium">{message}</p>
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2 justify-center">
           <button
             onClick={() => {
               onConfirm();

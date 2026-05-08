@@ -1,3 +1,4 @@
+import { permissionsList } from "@/types/permissionList";
 import { Shield, MoreVertical, Edit, Trash2, UserCog } from "lucide-react";
 
 interface RoleType {
@@ -17,7 +18,7 @@ interface RoleCardProps {
 export default function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
   const statusStyle = {
     active: "bg-green-100 text-green-700",
-    inactive: "bg-slate-100 text-slate-600",
+    inactive: "bg-red-100 text-red-600",
   };
 
   return (
@@ -52,15 +53,18 @@ export default function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
 
       {/* PERMISSIONS */}
       <div className="flex flex-wrap gap-2 mb-5">
-        {role.permissions.map((perm, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 text-xs bg-slate-100 text-slate-600 rounded-full flex items-center gap-1"
-          >
-            <Shield size={12} />
-            {perm}
-          </span>
-        ))}
+        {role.permissions.map((perm, index) => {
+          const permission = permissionsList.find((p) => p.value === perm);
+          return (
+            <span
+              key={index}
+              className="px-3 py-1 text-xs bg-slate-100 text-slate-600 rounded-full flex items-center gap-1"
+            >
+              <Shield size={12} />
+              {permission?.label || perm}
+            </span>
+          );
+        })}
       </div>
 
       {/* FOOTER ACTIONS */}

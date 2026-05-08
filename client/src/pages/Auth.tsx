@@ -6,6 +6,7 @@ import Footer from "@/components/shared/Footer";
 import { useNavigate } from "react-router-dom";
 import Logo from "@/components/shared/Logo";
 import { showError, showSuccess } from "@/lib/toast";
+import OrboeventsLogo from "@/components/shared/LogoIcon";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -197,7 +198,7 @@ export default function Auth() {
       </div>
       {/* <!-- Header (Brand Only) --> */}
       <header className="relative z-10 w-full px-8 py-5 mt-5 flex justify-center items-center">
-        <Logo className="h-24" />
+        <OrboeventsLogo className="h-24" />
       </header>
 
       {/* <!-- Main Login Content --> */}

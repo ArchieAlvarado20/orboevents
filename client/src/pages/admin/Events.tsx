@@ -74,7 +74,10 @@ export default function Events() {
       {/* Header */}
 
       {unauthorized ? (
-        <Unauthorized message="Admin access only!" />
+        <div className="ml-64 sm:m-auto">
+          {" "}
+          <Unauthorized message="Admin access only!" />
+        </div>
       ) : (
         <main
           className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}

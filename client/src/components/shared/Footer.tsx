@@ -1,4 +1,5 @@
 import Logo from "./Logo";
+import OrboeventsLogo from "./LogoIcon";
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             {/* LEFT: Brand + Tagline */}
             <div className="flex flex-col items-center md:items-start gap-1">
-              <Logo className="h-16" />
+              <OrboeventsLogo className="h-16" />
 
               <p className="text-xs text-slate-500 text-center">
                 Modern ticketing system for seamless event management

@@ -41,20 +41,31 @@ exports.getRoles = async (req, res) => {
   try {
     const roles = await Role.find().sort({ createdAt: -1 });
 
-    res.status(200).json(roles);
+    // 🔥 remove "User" role
+    const filteredRoles = roles.filter((role) => role.name !== "User");
+
+    res.status(200).json(filteredRoles);
   } catch (error) {
     res.status(500).json({
       message: error.message,
     });
   }
 };
-
 /**
  * GET SINGLE ROLE
  */
 exports.getRoleById = async (req, res) => {
   try {
-    const role = await Role.findById(req.params.id);
+    const { id } = req.params;
+
+    // 🔥 validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid role ID",
+      });
+    }
+
+    const role = await Role.findById(id);
 
     if (!role) {
       return res.status(404).json({

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import * as roleApi from "@/api/role.api";
-import { RoleFormType } from "@/types/role";
+import { adminUsersApi } from "@/api/adminUsers.api";
+import { UserType } from "@/types/adminUsers.type";
 import axios from "axios";
 
-export default function useRoles() {
-  const [roles, setRoles] = useState<RoleFormType[]>([]);
+export const useAdminUsers = () => {
+  const [users, setUsers] = useState<UserType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [unauthorized, setUnauthorized] = useState(false);
 
-  // FETCH ALL ROLES
-  const fetchRoles = async () => {
+  // 📌 GET USERS
+  const fetchUsers = async () => {
     setLoading(true);
     setError(null);
 
@@ -22,12 +23,13 @@ export default function useRoles() {
     }
 
     try {
-      const res = await roleApi.getRoles({
+      const res = await adminUsersApi.get({
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setRoles(res.data.roles || res.data);
+
+      setUsers(res.data);
     } catch (err: unknown) {
       let message = "Something went wrong!";
 
@@ -45,38 +47,15 @@ export default function useRoles() {
     }
   };
 
-  // CREATE ROLE
-  const createRole = async (data: any) => {
-    try {
-      const res = await roleApi.createRole(data);
-      setRoles((prev) => [res.data.role, ...prev]);
-      return res.data;
-    } catch (err: any) {
-      throw err?.response?.data?.message || "Failed to create role";
-    }
-  };
-
-  // DELETE ROLE
-  const deleteRole = async (id: string) => {
-    try {
-      await roleApi.deleteRole(id);
-      setRoles((prev) => prev.filter((r) => r._id !== id));
-    } catch (err: any) {
-      throw err?.response?.data?.message || "Failed to delete role";
-    }
-  };
-
   useEffect(() => {
-    fetchRoles();
+    fetchUsers();
   }, []);
 
   return {
-    roles,
+    users,
     loading,
     error,
-    fetchRoles,
-    createRole,
-    deleteRole,
     unauthorized,
+    refetch: fetchUsers,
   };
-}
+};
