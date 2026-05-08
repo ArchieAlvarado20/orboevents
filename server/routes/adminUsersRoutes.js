@@ -14,6 +14,6 @@ router.post(
   createUser,
 );
 
-router.get("/admin/users", authMiddleware, adminMiddleware, getUsers);
+router.get("/admin/users", getUsers);
 
 module.exports = router;
