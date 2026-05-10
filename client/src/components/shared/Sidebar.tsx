@@ -1,3 +1,4 @@
+import { handleLogout } from "@/lib/auth";
 import {
   BarChart3,
   LayoutDashboard,
@@ -8,8 +9,11 @@ import {
   Shield,
   ShieldAlert,
   UsersRound,
+  Bell,
+  User,
+  LogOutIcon,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 type SidebarProps = {
   isCollapsed: boolean;
@@ -25,6 +29,7 @@ export default function Sidebar({
   setIsOpen,
 }: SidebarProps) {
   const iconSize = isCollapsed ? "w-5 h-5" : "w-5 h-5";
+  const Navigate = useNavigate();
 
   return (
     <>
@@ -35,11 +40,10 @@ export default function Sidebar({
           onClick={() => setIsOpen(false)}
         />
       )}
-
       {/* Sidebar */}
       <aside
         className={`
-          fixed md:fixed left-0 top-16 z-50
+          fixed md:fixed left-0 top-0 md:top-16 z-50
     h-screen w-64 bg-white border-r border-slate-200 p-4
     overflow-y-auto
     transition-transform duration-300 ease-in-out
@@ -194,6 +198,57 @@ export default function Sidebar({
               Analytics
             </span>
           </NavLink>
+
+          <NavLink
+            to="/admin/profile"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <User
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Profile
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/notification"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <Bell
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              {" "}
+              Notifications
+            </span>
+          </NavLink>
+
+          <button
+            onClick={() => handleLogout(Navigate, "/admin")}
+            className="flex items-center text-sm font-medium rounded-lg transition-all text-red-600 bg-white-50 ustify-center  py-2 gap-3 px-3"
+          >
+            <LogOutIcon
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              {" "}
+              Logout
+            </span>
+          </button>
         </nav>
       </aside>
     </>

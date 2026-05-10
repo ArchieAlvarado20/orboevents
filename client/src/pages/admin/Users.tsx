@@ -1,8 +1,11 @@
 import UserCard from "@/components/features/user/UserCard";
+import UserEditModal from "@/components/features/user/UserEditModal";
 import UserModal from "@/components/features/user/UserModal";
 import Button from "@/components/shared/Button";
 import Unauthorized from "@/components/shared/Unauthorized";
 import { useAdminUsers } from "@/hooks/adminUsersHook/useAdminUsers";
+import { confirmToast } from "@/lib/confirmToast";
+import { UserType } from "@/types/adminUsers.type";
 
 import { List, Menu, Plus, Search } from "lucide-react";
 import { useState } from "react";
@@ -10,14 +13,20 @@ import { useState } from "react";
 export default function Users() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const { users, loading, error, refetch, unauthorized } = useAdminUsers();
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const { users, loading, error, refetch, unauthorized, deleteUser } =
+    useAdminUsers();
 
-  const handleEdit = (user: any) => {
-    console.log("EDIT", user);
+  const handleEdit = (user: UserType) => {
+    setSelectedUser(user);
+    setOpenEditModal(true);
   };
 
-  const handleDelete = (user: any) => {
-    console.log("DELETE", user);
+  const handleDeleteUser = (user: UserType) => {
+    confirmToast("Delete this User?", async () => {
+      await deleteUser(user._id);
+    });
   };
 
   return (
@@ -33,18 +42,35 @@ export default function Users() {
         >
           <UserModal
             open={openModal}
-            onClose={() => setOpenModal(false)}
+            onClose={() => {
+              setOpenModal(false);
+              setSelectedUser(null);
+            }}
             onSuccess={() => {
               refetch();
               setOpenModal(false);
+              setSelectedUser(null);
             }}
           />
 
-          <header className="w-full border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-4 md:px-1 py-2">
+          <UserEditModal
+            open={openEditModal}
+            user={selectedUser}
+            onClose={() => {
+              setOpenEditModal(false);
+              setSelectedUser(null);
+            }}
+            onSuccess={() => {
+              refetch();
+              setOpenEditModal(false);
+              setSelectedUser(null);
+            }}
+          />
+
+          <header className="w-full border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-4 md:px-1 py-2 z-0">
             <div className="flex items-center gap-4">
-              <Menu />
               <h2 className="text-lg font-semibold text-slate-900">
-                Event Overview
+                Users Overview
               </h2>
             </div>
             <Button variant="primary" onClick={() => setOpenModal(true)}>
@@ -102,8 +128,10 @@ export default function Users() {
               <UserCard
                 key={user._id}
                 user={user}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
+                onEdit={() => {
+                  handleEdit(user);
+                }}
+                onDelete={() => handleDeleteUser(user)}
               />
             ))}
           </div>

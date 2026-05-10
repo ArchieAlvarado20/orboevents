@@ -23,9 +23,14 @@ interface EventType {
 interface EventCardProps {
   event: EventType;
   onAddTicket: (event: EventType) => void;
+  onDelete: (event: EventType) => void;
 }
 
-export default function EventCard({ event, onAddTicket }: EventCardProps) {
+export default function EventCard({
+  event,
+  onAddTicket,
+  onDelete,
+}: EventCardProps) {
   const statusStyle = {
     active: "bg-green-100 text-green-700",
     pending: "bg-yellow-100 text-yellow-700",
@@ -103,7 +108,7 @@ export default function EventCard({ event, onAddTicket }: EventCardProps) {
               <Edit size={18} />
             </button>
             <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-              <Trash2Icon size={18} />
+              <Trash2Icon size={18} onClick={() => onDelete(event)} />
             </button>
 
             <button className="p-2  text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">

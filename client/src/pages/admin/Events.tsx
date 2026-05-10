@@ -1,9 +1,12 @@
+import { eventApi } from "@/api/event.api";
 import EventCard from "@/components/features/event/EventCards";
 import EventModal from "@/components/features/event/EventModal";
 import TicketTypeModal from "@/components/features/tickets/TicketTypeModal";
 import Button from "@/components/shared/Button";
 import Unauthorized from "@/components/shared/Unauthorized";
+import { confirmToast } from "@/lib/confirmToast";
 import { getPagination } from "@/lib/pagination";
+import { showError, showSuccess } from "@/lib/toast";
 import axios from "axios";
 import { List, Menu, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -30,6 +33,34 @@ export default function Events() {
   const handleOpenTicketModal = (event: Event) => {
     setSelectedEvent(event);
     setOpenTicketModal(true);
+  };
+
+  const deleteEvent = async (id: string) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Unauthorized");
+      return;
+    }
+
+    try {
+      await eventApi.delete(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Event cancelled successfully");
+      setEvents((prev) => prev.filter((r) => r._id !== id));
+    } catch (err: any) {
+      showError(err?.response?.data?.message || "Failed to delete user");
+    }
+  };
+
+  const handleDeleteEvent = (event: any) => {
+    confirmToast("Cancel this event?", async () => {
+      await deleteEvent(event._id);
+    });
   };
 
   const fetchEvents = async () => {
@@ -86,7 +117,6 @@ export default function Events() {
             {/* <!-- Header --> */}
             <header className="w-full border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-4 md:px-1 py-2">
               <div className="flex items-center gap-4">
-                <Menu />
                 <h2 className="text-lg font-semibold text-slate-900">
                   Event Overview
                 </h2>
@@ -166,6 +196,7 @@ export default function Events() {
                   key={event._id}
                   event={event}
                   onAddTicket={handleOpenTicketModal}
+                  onDelete={() => handleDeleteEvent(event)}
                 />
               ))}
             </div>

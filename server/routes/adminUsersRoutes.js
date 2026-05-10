@@ -1,6 +1,12 @@
 const router = require("express").Router();
 const multer = require("multer");
-const { getUsers, createUser } = require("../controllers/adminUsersController");
+const {
+  getUsers,
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require("../controllers/adminUsersController");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 
@@ -14,6 +20,11 @@ router.post(
   createUser,
 );
 
-router.get("/admin/users", getUsers);
+router.get("/admin/users", authMiddleware, adminMiddleware, getUsers);
 
+router.get("/admin/users/:id", getUserById);
+
+router.patch("/admin/users/:id", upload.single("image"), updateUser);
+
+router.delete("/admin/users/:id", deleteUser);
 module.exports = router;

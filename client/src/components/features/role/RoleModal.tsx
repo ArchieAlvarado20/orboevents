@@ -71,6 +71,7 @@ export default function RoleModal({
     if (role) {
       resetErrors();
       setForm({
+        _id: role._id,
         name: role.name,
         description: role.description,
         permissions: role.permissions,
@@ -87,7 +88,7 @@ export default function RoleModal({
       {open && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed max-h-screen inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
         >
           <div
             ref={modalRef}

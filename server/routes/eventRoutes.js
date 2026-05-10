@@ -5,7 +5,11 @@ const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
-const { getEvents, getEventById } = require("../controllers/eventController");
+const {
+  getEvents,
+  getEventById,
+  deleteEvent,
+} = require("../controllers/eventController");
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
@@ -50,5 +54,12 @@ router.get("/admin/events", authMiddleware, adminMiddleware, getEvents);
 router.get("/events", getEvents);
 
 router.get("/events/:id", getEventById);
+
+router.delete(
+  "/admin/events/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteEvent,
+);
 
 module.exports = router;

@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { adminUsersApi } from "@/api/adminUsers.api";
-import { Phone } from "lucide-react";
-import { userInitialForm, UserType } from "@/types/adminUsers.type";
+import { UserEditType, userInitialEditForm } from "@/types/adminUsers.type";
 import { showError, showSuccess } from "@/lib/toast";
 
-export const useAdminUsersForm = (onSuccess?: () => void) => {
-  const [form, setForm] = useState<UserType>(userInitialForm);
+export const useAdminUsersEditForm = (onSuccess?: () => void) => {
+  const [form, setForm] = useState<UserEditType>(userInitialEditForm);
 
   const [loading, setLoading] = useState(false);
 
@@ -40,14 +39,6 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
       newErrors.email = "Invalid email format";
     }
 
-    if (form.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (form.password !== form.confirmPassword) {
-      newErrors.password = "Passwords do not match";
-    }
-
     if (!form.name) {
       newErrors.name = "Name is required";
     }
@@ -56,17 +47,13 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
       newErrors.email = "Email is required";
     }
 
-    if (!form.password) {
-      newErrors.password = "Password is required";
-    }
-
     if (!form.role) {
       newErrors.role = "Role is required";
     }
 
-    if (!form.image) {
-      newErrors.image = "Image is required";
-    }
+    // if (!form.image) {
+    //   newErrors.image = "Image is required";
+    // }
 
     if (!form.status) {
       newErrors.status = "Status is required";
@@ -89,7 +76,7 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const createUser = async () => {
+  const updateUser = async () => {
     if (!validate()) return;
 
     const token = localStorage.getItem("token");
@@ -108,6 +95,10 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
       Object.entries(form).forEach(([key, value]) => {
         if (value === null || value === undefined) return;
 
+        // optional: skip password if empty
+        if (key === "password" && value === "") return;
+        if (key === "confirmPassword") return;
+
         if (value instanceof File) {
           formData.append(key, value);
         } else {
@@ -115,18 +106,18 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
         }
       });
 
-      await adminUsersApi.create(formData, {
+      await adminUsersApi.update(form._id, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      showSuccess("User Created Succesfully.");
+      showSuccess("User Updated Successfully.");
       onSuccess?.();
     } catch (err: any) {
       const data = err?.response?.data;
 
-      showError(data?.message || "Failed to create user");
+      showError(data?.message || "Failed to update user");
 
       if (data?.message === "Email already exists") {
         setErrors((prev: any) => ({
@@ -143,7 +134,7 @@ export const useAdminUsersForm = (onSuccess?: () => void) => {
     form,
     setForm,
     handleChange,
-    createUser,
+    updateUser,
     resetErrors,
     loading,
     errors,

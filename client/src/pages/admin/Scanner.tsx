@@ -1,3 +1,4 @@
+import ComingSoon from "@/components/shared/ComingSoon";
 import {
   Camera,
   CheckCircle,
@@ -12,10 +13,16 @@ export default function Scanner() {
   return (
     <>
       <main
-        className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
+        className={` flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
       >
+        <div className="max-w-container-max mx-auto">
+          {/* <!-- Page Header --> */}
+          <div className="mb-0 space-y-1">
+            <ComingSoon />
+          </div>
+        </div>
         <div
-          className={`flex-1 justify-center mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
+          className={`hidden flex-1 justify-center mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
         >
           <div className="w-full overflow-hidden h-screen max-w-4xl flex flex-col lg:flex-row gap-8 items-stretch mt-5 min-h-screen">
             {/* <!-- Left: Scanner Viewport Section --> */}

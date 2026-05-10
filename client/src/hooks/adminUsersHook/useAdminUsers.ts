@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { adminUsersApi } from "@/api/adminUsers.api";
 import { UserType } from "@/types/adminUsers.type";
 import axios from "axios";
+import { showError, showSuccess } from "@/lib/toast";
 
 export const useAdminUsers = () => {
   const [users, setUsers] = useState<UserType[]>([]);
@@ -47,12 +48,35 @@ export const useAdminUsers = () => {
     }
   };
 
+  const deleteUser = async (id: string) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Unauthorized");
+      return;
+    }
+
+    try {
+      await adminUsersApi.delete(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("User deleted successfully");
+      setUsers((prev) => prev.filter((r) => r._id !== id));
+    } catch (err: any) {
+      showError(err?.response?.data?.message || "Failed to delete user");
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
 
   return {
     users,
+    deleteUser,
     loading,
     error,
     unauthorized,

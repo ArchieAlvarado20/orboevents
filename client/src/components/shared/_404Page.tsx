@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 export default function _404Page() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex bg-white items-center justify-center  from-slate-50 to-slate-200 p-6">
+    <div className="h-[calc(100vh-4rem)] ml-64 flex bg-white items-center justify-center  from-slate-50 to-slate-200 p-6">
       <div className="text-center max-w-md w-full bg-white  backdrop-blur-xl rounded-3xl shadow-2xl p-10 border border-slate-200 ">
         {/* Icon */}
         <div className="flex justify-center mb-6">

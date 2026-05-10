@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { ImagePlus } from "lucide-react";
 
 export interface FileUploadProps {
-  label?: string;
+  label?: React.ReactNode;
   onChange: (file: File | null) => void;
   value?: File | null;
   accept?: string;

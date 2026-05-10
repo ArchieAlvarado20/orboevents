@@ -25,6 +25,12 @@ const userSchema = new mongoose.Schema(
 
     password: { type: String, required: true, select: false },
 
+    status: {
+      type: String,
+      enum: ["active", "inactive", "suspended", "hold"],
+      default: "active",
+    },
+
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",

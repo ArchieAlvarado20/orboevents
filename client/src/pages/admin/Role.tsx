@@ -69,7 +69,6 @@ export default function Role() {
 
           <header className="w-full border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-4 md:px-1 py-2">
             <div className="flex items-center gap-4">
-              <Menu />
               <h2 className="text-lg font-semibold text-slate-900">
                 Roles & Permission Overview
               </h2>

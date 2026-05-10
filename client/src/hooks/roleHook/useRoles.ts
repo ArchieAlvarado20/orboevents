@@ -45,17 +45,6 @@ export default function useRoles() {
     }
   };
 
-  // CREATE ROLE
-  const createRole = async (data: any) => {
-    try {
-      const res = await roleApi.createRole(data);
-      setRoles((prev) => [res.data.role, ...prev]);
-      return res.data;
-    } catch (err: any) {
-      throw err?.response?.data?.message || "Failed to create role";
-    }
-  };
-
   // DELETE ROLE
   const deleteRole = async (id: string) => {
     try {
@@ -75,7 +64,6 @@ export default function useRoles() {
     loading,
     error,
     fetchRoles,
-    createRole,
     deleteRole,
     unauthorized,
   };

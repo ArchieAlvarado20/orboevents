@@ -1,7 +1,14 @@
 import { toast } from "react-toastify";
 
+let activeToastId = null;
+
 export const confirmToast = (message, onConfirm) => {
-  const toastId = toast(
+  // close existing confirm toast first
+  if (activeToastId) {
+    toast.dismiss(activeToastId);
+  }
+
+  activeToastId = toast(
     ({ closeToast }) => (
       <div className="space-y-3">
         <p className="text-sm font-medium">{message}</p>
@@ -10,7 +17,8 @@ export const confirmToast = (message, onConfirm) => {
           <button
             onClick={() => {
               onConfirm();
-              toast.dismiss(toastId);
+              toast.dismiss(activeToastId);
+              activeToastId = null;
             }}
             className="px-3 py-1 bg-red-500 text-white rounded text-xs"
           >
@@ -18,7 +26,10 @@ export const confirmToast = (message, onConfirm) => {
           </button>
 
           <button
-            onClick={() => toast.dismiss(toastId)}
+            onClick={() => {
+              toast.dismiss(activeToastId);
+              activeToastId = null;
+            }}
             className="px-3 py-1 bg-gray-200 rounded text-xs"
           >
             No
@@ -29,6 +40,9 @@ export const confirmToast = (message, onConfirm) => {
     {
       autoClose: false,
       closeOnClick: false,
+      onClose: () => {
+        activeToastId = null;
+      },
     },
   );
 };

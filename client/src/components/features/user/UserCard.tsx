@@ -1,11 +1,11 @@
-import { UserType } from "@/types/adminUsers.type";
+import { UserCreateType } from "@/types/adminUsers.type";
 import { permissionsList } from "@/types/permissionList";
 import { Mail, Shield, MoreVertical, Edit, Trash2 } from "lucide-react";
 
 interface UserCardProps {
-  user: UserType;
-  onEdit: (user: UserType) => void;
-  onDelete: (user: UserType) => void;
+  user: UserCreateType;
+  onEdit: (user: UserCreateType) => void;
+  onDelete: (user: UserCreateType) => void;
 }
 
 export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
@@ -13,6 +13,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
     active: "bg-green-100 text-green-700",
     inactive: "bg-slate-100 text-slate-600",
     suspended: "bg-red-100 text-red-600",
+    hold: "bg-yellow-100 text-yellow-600",
   };
 
   return (
@@ -24,7 +25,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
           <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
             {user.image ? (
               <img
-                src={user.image}
+                src={user.image || "/images/images.jpg"}
                 alt={user.name}
                 className="w-full h-full object-cover"
               />

@@ -2,33 +2,43 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
-import { useAdminUsersForm } from "@/hooks/adminUsersHook/useAdminUsersForm";
 import * as roleApi from "@/api/role.api";
 import { RoleFormType } from "@/types/role";
-import { UserType } from "@/types/adminUsers.type";
+import { UserEditType, userInitialEditForm } from "@/types/adminUsers.type";
 import UserFileUpload from "@/components/shared/UserFIleUpload";
+import { useAdminUsersEditForm } from "@/hooks/adminUsersHook/useAdminUsersEditForm";
+import FileUpload from "@/components/shared/FileUpload";
 
 interface UserModalProps {
+  user: UserEditType;
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-export default function UserModal({
+export default function UserEditModal({
+  user,
   open,
   onClose,
   onSuccess,
 }: UserModalProps) {
   const modalRef = useRef(null);
 
-  const { form, handleChange, createUser, loading, errors, setForm } =
-    useAdminUsersForm(() => {
-      onSuccess();
-      onClose();
-    });
+  const {
+    form,
+    handleChange,
+    updateUser,
+    loading,
+    errors,
+    setForm,
+    resetErrors,
+  } = useAdminUsersEditForm(() => {
+    onSuccess();
+    onClose();
+  });
 
   const [roles, setRoles] = useState<RoleFormType[]>([]);
-  const [preview, setPreview] = useState<string>("");
+  const [preview, setPreview] = useState("");
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -55,6 +65,23 @@ export default function UserModal({
     fetchRoles();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      resetErrors();
+      setForm({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        status: user.status,
+        role: user.role,
+      });
+    } else {
+      resetErrors();
+      setForm(userInitialEditForm);
+    }
+  }, [user, open]);
+
   const statusOption = [
     { id: "active", value: "active", name: "active" },
     { id: "inacitve", value: "inactive", name: "inactive" },
@@ -62,15 +89,22 @@ export default function UserModal({
     { id: "hold", value: "hold", name: "hold" },
   ];
 
-  const handleImageChange = (file: File) => {
+  const handleImageChange = (file: File | null) => {
+    if (!file) return;
+
     setForm((prev) => ({
       ...prev,
       image: file,
     }));
 
-    // preview uploaded image
     setPreview(URL.createObjectURL(file));
   };
+
+  useEffect(() => {
+    if (user?.image) {
+      setPreview(user?.image);
+    }
+  }, [user]);
 
   return (
     <>
@@ -86,7 +120,7 @@ export default function UserModal({
           >
             {/* HEADER */}
             <div className="px-6 py-4 border-b border-slate-100  flex items-center justify-between sticky top-0 bg-white  z-10">
-              <h3 className="text-xl font-bold text-slate-900">Create User</h3>
+              <h3 className="text-xl font-bold text-slate-900">Edit User</h3>
 
               <button
                 onClick={onClose}
@@ -126,24 +160,6 @@ export default function UserModal({
                 onChange={handleChange}
                 error={errors.email}
                 type="email"
-              />
-
-              <Input
-                label="Password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                error={errors.password}
-                type="password"
-              />
-
-              <Input
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                error={errors.confirmPassword}
               />
 
               {/* PHONE */}
@@ -217,8 +233,8 @@ export default function UserModal({
                 Cancel
               </Button>
 
-              <Button onClick={createUser} loading={loading}>
-                Create User
+              <Button onClick={updateUser} loading={loading}>
+                Update User
               </Button>
             </div>
           </div>

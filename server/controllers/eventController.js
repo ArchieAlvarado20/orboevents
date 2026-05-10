@@ -13,6 +13,11 @@ const getEvents = async (req, res) => {
     if (status) filter.status = status;
     if (location) filter.location = { $regex: location, $options: "i" };
     if (tags) filter.tags = { $in: tags.split(",") }; // ?tags=startup,award
+    if (status) {
+      filter.status = status;
+    } else {
+      filter.status = { $ne: "cancelled" };
+    }
 
     if (search) {
       filter.$or = [
@@ -39,6 +44,7 @@ const getEvents = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id).populate("ticketTypes");
@@ -54,4 +60,27 @@ const getEventById = async (req, res) => {
   }
 };
 
-module.exports = { getEvents, getEventById };
+const deleteEvent = async (req, res) => {
+  try {
+    const foundEvent = await Event.findById(req.params.id);
+
+    if (!foundEvent) {
+      return res.status(404).json({
+        message: "Event not found",
+      });
+    }
+
+    foundEvent.status = "cancelled";
+    await foundEvent.save();
+
+    res.status(200).json({
+      message: "Event cancelled successfully",
+      event: foundEvent,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+module.exports = { getEvents, getEventById, deleteEvent };
