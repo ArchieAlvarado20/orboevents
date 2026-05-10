@@ -1,5 +1,6 @@
 import { Rocket, Clock3 } from "lucide-react";
 import Logo from "./Logo";
+import OrboeventsLogo from "./LogoIcon";
 
 export default function _404Page() {
   return (
@@ -17,7 +18,7 @@ export default function _404Page() {
 
         {/* Subtitle */}
         <p className="text-indigo-600 font-semibold mb-4 flex items-center justify-center gap-2">
-          <Logo className="w-38 h-18 text-indigo-600" />
+          <OrboeventsLogo className="w-38 h-18 text-indigo-600" />
         </p>
 
         {/* Message */}
