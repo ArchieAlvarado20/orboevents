@@ -62,7 +62,7 @@ const getUsers = async (req, res) => {
     }
 
     const users = await User.find({
-      role: { $ne: "69fd6b2ac6d46c35cd84de90" },
+      role: { $ne: userRole._id },
     })
       .select("-password")
       .populate("role");
