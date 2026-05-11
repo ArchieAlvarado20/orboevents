@@ -15,16 +15,16 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
+    const user = req.user;
     const token = jwt.sign(
       {
-        id: req.user._id,
-        email: req.user.email,
-        role: req.user.role,
+        id: user._id,
+        email: user.email,
+        role: user.role?._id?.toString?.() || user.role.toString(),
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" },
     );
-
     // redirect to frontend with token
     res.redirect(`${process.env.CLIENT_URL}/?token=${token}`);
   },
