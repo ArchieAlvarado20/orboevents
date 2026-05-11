@@ -18,6 +18,18 @@ const createUser = async (req, res) => {
       });
     }
 
+    const roleData = await Role.findById(role);
+
+    if (!roleData) {
+      return res.status(400).json({ message: "Invalid role" });
+    }
+
+    if (roleData.name === "Super-Admin") {
+      return res.status(403).json({
+        message: "Cannot assign super admin role",
+      });
+    }
+
     let imageUrl = "";
 
     if (req.file) {
@@ -35,7 +47,7 @@ const createUser = async (req, res) => {
       name,
       email,
       password,
-      role,
+      role: roleData._id,
       phone,
       image: imageUrl,
       status,
