@@ -28,19 +28,7 @@ connectDB()
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "http://localhost:5173",
-        "https://orboevents.vercel.app",
-        "https://orboevents-staging.vercel.app",
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: ["http://localhost:5173", "https://orboevents-staging.vercel.app"],
     credentials: true,
   }),
 );
