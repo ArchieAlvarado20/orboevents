@@ -45,7 +45,7 @@ export default function Sidebar({
       {/* Sidebar */}
       <aside
         className={`
-          fixed md:fixed left-0 top-0   md:top-16 z-50
+          fixed left-0 top-16 z-50
     h-screen w-64 bg-white border-r border-slate-200 p-4
     overflow-y-auto
     transition-transform duration-300 ease-in-out

@@ -17,7 +17,7 @@ export default function Topbar({ user, setIsOpen }: any) {
           onClick={() => setIsOpen(true)}
           className="inline-block md:hidden "
         >
-          <PanelLeft className="w-8 h-8 text-violet-600" />
+          <PanelLeft className="w-8 h-8 text-slate-600" />
         </button>
       </div>
     </header>
