@@ -120,10 +120,22 @@ export default function Transaction() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
-            {/* <!-- Main Featured Ticket --> */}
-            {tickets.length !== 0 ? (
-              tickets.map((ticket) => (
+          {/* <!-- Main Featured Ticket --> */}
+          {tickets.length === 0 ? (
+            <div className="bg-white w-full rounded-3xl p-12 border border-dashed border-slate-200 text-center">
+              <Ticket className="w-12 h-12 text-slate-200 mx-auto mb-4" />
+              <p className="text-slate-500 font-medium">
+                No upcoming events yet
+              </p>
+              <Link to="/events">
+                <button className="mt-4 text-violet-600 font-bold hover:underline">
+                  Continue Browsing
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+              {tickets.map((ticket) => (
                 <div
                   key={ticket._id}
                   className="col-span-6 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
@@ -179,27 +191,15 @@ export default function Transaction() {
                     </div>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="bg-white rounded-3xl p-12 border border-dashed border-slate-200 text-center">
-                <Ticket className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-                <p className="text-slate-500 font-medium">
-                  No upcoming events yet
-                </p>
-                <Link to="/events">
-                  <button className="mt-4 text-violet-600 font-bold hover:underline">
-                    Continue Browsing
-                  </button>
-                </Link>
-              </div>
-            )}
+              ))}
+            </div>
+          )}
 
-            <TicketModal
-              open={open}
-              onClose={() => setOpen(false)}
-              ticket={selectedTicket}
-            />
-          </div>
+          <TicketModal
+            open={open}
+            onClose={() => setOpen(false)}
+            ticket={selectedTicket}
+          />
         </section>
 
         <section className="bg-slate-50 p-2">
