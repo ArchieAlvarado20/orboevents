@@ -21,6 +21,8 @@ export default function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
     inactive: "bg-red-100 text-red-600",
   };
 
+  const isSuperAdmin = role?.name === "Super-Admin";
+
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-md transition group">
       {/* HEADER */}
@@ -68,17 +70,27 @@ export default function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
       </div>
 
       {/* FOOTER ACTIONS */}
-      <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+      <div className="flex justify-end gap-2 pt-5 mt-5 border-t border-slate-100">
         <button
-          onClick={() => onEdit(role)}
-          className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+          onClick={() => !isSuperAdmin && onEdit(role)}
+          disabled={isSuperAdmin}
+          className={`p-2.5 rounded-xl transition ${
+            isSuperAdmin
+              ? "text-slate-300 cursor-not-allowed"
+              : "text-indigo-600 hover:bg-indigo-50"
+          }`}
         >
           <Edit size={18} />
         </button>
 
         <button
-          onClick={() => onDelete(role)}
-          className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          onClick={() => !isSuperAdmin && onDelete(role)}
+          disabled={isSuperAdmin}
+          className={`p-2.5 rounded-xl transition ${
+            isSuperAdmin
+              ? "text-slate-300 cursor-not-allowed"
+              : "text-red-500 hover:bg-red-50"
+          }`}
         >
           <Trash2 size={18} />
         </button>

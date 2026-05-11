@@ -176,7 +176,11 @@ export default function UserModal({
                     </option>
 
                     {roles.map((role) => (
-                      <option key={role._id} value={role._id}>
+                      <option
+                        key={role._id}
+                        value={role._id}
+                        disabled={role.name === "Super-Admin"}
+                      >
                         {role.name}
                       </option>
                     ))}

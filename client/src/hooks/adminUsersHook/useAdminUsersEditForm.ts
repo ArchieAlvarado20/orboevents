@@ -95,9 +95,15 @@ export const useAdminUsersEditForm = (onSuccess?: () => void) => {
       Object.entries(form).forEach(([key, value]) => {
         if (value === null || value === undefined) return;
 
-        // optional: skip password if empty
-        if (key === "password" && value === "") return;
         if (key === "confirmPassword") return;
+
+        if (key === "password" && value === "") return;
+
+        // FIX ROLE
+        if (key === "role" && typeof value === "object") {
+          formData.append("role", value._id);
+          return;
+        }
 
         if (value instanceof File) {
           formData.append(key, value);
@@ -114,19 +120,23 @@ export const useAdminUsersEditForm = (onSuccess?: () => void) => {
 
       showSuccess("User Updated Successfully.");
       onSuccess?.();
+      setLoading(false);
     } catch (err: any) {
-      const data = err?.response?.data;
+      console.log(err);
 
-      showError(data?.message || "Failed to update user");
+      const message =
+        err?.response?.data?.message || err?.message || "Failed to update user";
+      console.log(err.response);
+      console.log(err.response?.data);
+      console.log(err.message);
+      showError(message);
 
-      if (data?.message === "Email already exists") {
+      if (message === "Email already exists") {
         setErrors((prev: any) => ({
           ...prev,
           email: "Email already exists",
         }));
       }
-    } finally {
-      setLoading(false);
     }
   };
 

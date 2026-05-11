@@ -38,7 +38,7 @@ export default function Users() {
         </div>
       ) : (
         <main
-          className={`flex-1 mb-12  p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
+          className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
         >
           <UserModal
             open={openModal}
@@ -47,7 +47,6 @@ export default function Users() {
               setSelectedUser(null);
             }}
             onSuccess={() => {
-              refetch();
               setOpenModal(false);
               setSelectedUser(null);
             }}
@@ -107,7 +106,7 @@ export default function Users() {
         bg-white  text-sm text-slate-900 
         focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 
         transition-all"
-                  placeholder="Search events..."
+                  placeholder="Search users..."
                   type="text"
                 />
               </div>

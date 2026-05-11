@@ -5,7 +5,7 @@ const adminMiddleware = async (req, res, next) => {
     }
 
     // req.user.role should be populated
-    if (req.user.role?.name !== "Admin") {
+    if (req.user.role?.name !== "Super-Admin") {
       return res.status(403).json({ message: "Admin only" });
     }
 

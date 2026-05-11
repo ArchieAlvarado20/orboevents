@@ -107,7 +107,7 @@ export default function Role() {
         bg-white  text-sm text-slate-900 
         focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 
         transition-all"
-                  placeholder="Search events..."
+                  placeholder="Search roles..."
                   type="text"
                 />
               </div>

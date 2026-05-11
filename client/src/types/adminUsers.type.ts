@@ -14,7 +14,6 @@ export interface UserEditType {
   _id: string;
   name: string;
   email: string;
-  image: File | null;
   phone: string;
   role: string;
   status?: "active" | "inactive" | "suspended" | "hold";
@@ -34,7 +33,6 @@ export const userInitialForm = {
 export const userInitialEditForm = {
   name: "",
   email: "",
-  image: null,
   role: "",
   phone: "",
   status: "active",

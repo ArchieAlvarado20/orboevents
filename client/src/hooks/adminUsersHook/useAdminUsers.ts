@@ -45,6 +45,8 @@ export const useAdminUsers = () => {
       }
 
       console.log(message);
+    } finally {
+      setLoading(false);
     }
   };
 

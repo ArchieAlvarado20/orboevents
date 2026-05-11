@@ -39,12 +39,11 @@ exports.createRole = async (req, res) => {
  */
 exports.getRoles = async (req, res) => {
   try {
-    const roles = await Role.find().sort({ createdAt: -1 });
+    const roles = await Role.find({
+      name: { $ne: "User" },
+    }).sort({ createdAt: -1 });
 
-    // 🔥 remove "User" role
-    const filteredRoles = roles.filter((role) => role.name !== "User");
-
-    res.status(200).json(filteredRoles);
+    res.status(200).json(roles);
   } catch (error) {
     res.status(500).json({
       message: error.message,

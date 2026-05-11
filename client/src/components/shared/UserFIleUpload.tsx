@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Camera } from "lucide-react";
+import { showInfo } from "@/lib/toast";
 
 export interface FileUploadProps {
   label?: React.ReactNode;
@@ -9,6 +10,7 @@ export interface FileUploadProps {
   accept?: string;
   error?: string;
   clickNote?: string;
+  disabled?: boolean;
 }
 
 const UserFileUpload: React.FC<FileUploadProps> = ({
@@ -19,13 +21,18 @@ const UserFileUpload: React.FC<FileUploadProps> = ({
   accept = "image/*",
   error,
   clickNote,
+  disabled,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
+    if (disabled) {
+      showInfo("Only users can edit their avatar");
+      return;
+    }
+
     inputRef.current?.click();
   };
-
   const imageSrc = value
     ? URL.createObjectURL(value)
     : preview || "/images/user.jpg";
@@ -39,12 +46,16 @@ const UserFileUpload: React.FC<FileUploadProps> = ({
       {/* Avatar */}
       <div
         onClick={handleClick}
-        className="relative group w-32 h-32 cursor-pointer"
+        className={`relative group w-32 h-32 ${
+          disabled ? "cursor-not-allowed opacity-90" : "cursor-pointer"
+        }`}
       >
         <img
           src={imageSrc}
           alt="Profile"
-          className="w-full h-full rounded-full object-cover border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-105"
+          className={`w-full h-full rounded-full object-cover border-4 border-white shadow-lg transition-transform duration-300 ${
+            !disabled && "group-hover:scale-105"
+          }`}
         />
 
         {/* Dark Overlay */}

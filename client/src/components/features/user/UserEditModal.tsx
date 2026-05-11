@@ -74,7 +74,7 @@ export default function UserEditModal({
         email: user.email,
         phone: user.phone,
         status: user.status,
-        role: user.role,
+        role: user.role?._id,
       });
     } else {
       resetErrors();
@@ -83,10 +83,10 @@ export default function UserEditModal({
   }, [user, open]);
 
   const statusOption = [
-    { id: "active", value: "active", name: "active" },
-    { id: "inacitve", value: "inactive", name: "inactive" },
-    { id: "suspended", value: "suspended", name: "suspended" },
-    { id: "hold", value: "hold", name: "hold" },
+    { id: 1, name: "Active", value: "active" },
+    { id: 2, name: "Inactive", value: "inactive" },
+    { id: 3, name: "Suspended", value: "suspended" },
+    { id: 4, name: "Hold", value: "hold" },
   ];
 
   const handleImageChange = (file: File | null) => {
@@ -106,6 +106,10 @@ export default function UserEditModal({
     }
   }, [user]);
 
+  const isSuperAdmin = user?.role?.name === "Super-Admin";
+
+  const selectableRoles = roles.filter((role) => role.status === "active");
+
   return (
     <>
       {open && (
@@ -116,8 +120,15 @@ export default function UserEditModal({
           <div
             ref={modalRef}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white  w-full max-w-2xl sm:rounded-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            className={`relative bg-white w-full max-w-2xl sm:rounded-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ${
+              isSuperAdmin ? "pointer-events-none opacity-90" : ""
+            }`}
           >
+            {isSuperAdmin && (
+              <div className="bg-red-50 text-red-600 text-sm px-4 py-2 border-b">
+                This Super Admin account is protected and cannot be edited.
+              </div>
+            )}
             {/* HEADER */}
             <div className="px-6 py-4 border-b border-slate-100  flex items-center justify-between sticky top-0 bg-white  z-10">
               <h3 className="text-xl font-bold text-slate-900">Edit User</h3>
@@ -138,8 +149,9 @@ export default function UserEditModal({
                 value={form.image}
                 preview={preview}
                 error={errors.image}
-                clickNote="Click camera icon to change profile"
+                clickNote="Only users can edit their avatar."
                 onChange={handleImageChange}
+                disabled
               />
 
               {/* NAME */}
@@ -183,16 +195,22 @@ export default function UserEditModal({
                     name="role"
                     value={form.role}
                     onChange={handleChange}
-                    className={`w-full border focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all rounded-lg p-2 ${
-                      errors.role ? "border-red-500" : "border-slate-200"
-                    }`}
+                    disabled={isSuperAdmin}
+                    className={`w-full border rounded-lg p-2 outline-none transition-all
+                    ${isSuperAdmin ? "bg-slate-100 cursor-not-allowed" : "focus:border-indigo-500"}
+                    ${errors.role ? "border-red-500" : "border-slate-200"}
+                  `}
                   >
                     <option value="" disabled hidden>
                       Select Role
                     </option>
 
-                    {roles.map((role) => (
-                      <option key={role._id} value={role._id}>
+                    {selectableRoles.map((role) => (
+                      <option
+                        key={role._id}
+                        value={role._id}
+                        disabled={role.name === "Super-Admin"}
+                      >
                         {role.name}
                       </option>
                     ))}
@@ -211,7 +229,11 @@ export default function UserEditModal({
                     name="status"
                     value={form.status}
                     onChange={handleChange}
-                    className="w-full focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all border border-slate-200 rounded-lg p-2"
+                    disabled={isSuperAdmin}
+                    className={`w-full border rounded-lg p-2 outline-none transition-all
+                    ${isSuperAdmin ? "bg-slate-100 cursor-not-allowed" : "focus:border-indigo-500"}
+                    border-slate-200
+                  `}
                   >
                     <option value="" disabled hidden>
                       Select Status

@@ -25,7 +25,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
           <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
             {user.image ? (
               <img
-                src={user.image || "/images/images.jpg"}
+                src={user.image}
                 alt={user.name}
                 className="w-full h-full object-cover"
               />
@@ -37,12 +37,15 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
           </div>
 
           {/* USER INFO */}
-          <div>
-            <h3 className="font-bold text-lg text-slate-900">{user.name}</h3>
+          <div className="min-w-0">
+            <h3 className="font-bold text-lg text-slate-900 wrap-break-words">
+              {user.name}
+            </h3>
 
-            <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
-              <Mail size={14} />
-              {user.email}
+            <div className="flex items-start gap-2 text-sm text-slate-500 mt-1 min-w-0">
+              <Mail size={14} className="shrink-0 mt-0.5" />
+
+              <p className="break-all">{user.email}</p>
             </div>
 
             {/* ROLE */}

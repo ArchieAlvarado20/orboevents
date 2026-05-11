@@ -6,6 +6,7 @@ import MobileBottomNav from "@/components/shared/BottomNav";
 import UserMobileSidebar from "@/components/shared/usersPage/MobileSidebar";
 import { useAuthInit } from "@/hooks/auth/useAuthInit";
 import { showSuccess } from "@/lib/toast";
+import Footer from "@/components/shared/Footer";
 
 export default function AdminLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);

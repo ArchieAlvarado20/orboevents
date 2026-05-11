@@ -12,6 +12,8 @@ import {
   Bell,
   User,
   LogOutIcon,
+  UserCircle2,
+  UserCircle,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -43,7 +45,7 @@ export default function Sidebar({
       {/* Sidebar */}
       <aside
         className={`
-          fixed md:fixed left-0 top-0 md:top-16 z-50
+          fixed md:fixed left-0 top-0   md:top-16 z-50
     h-screen w-64 bg-white border-r border-slate-200 p-4
     overflow-y-auto
     transition-transform duration-300 ease-in-out
@@ -209,7 +211,7 @@ export default function Sidebar({
               } ${isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2"}`
             }
           >
-            <User
+            <UserCircle
               className={`${iconSize} shrink-0 transition-all duration-200`}
             />
 
