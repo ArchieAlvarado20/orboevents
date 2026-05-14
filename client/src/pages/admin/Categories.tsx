@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
-import CategoryCard from "@/components/features/category/categoryCard";
 import { confirmToast } from "@/lib/confirmToast";
 import CategoryModal from "@/components/features/category/CategoryModal";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
