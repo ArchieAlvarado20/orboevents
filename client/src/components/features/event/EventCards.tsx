@@ -5,41 +5,62 @@ import {
   MoreVertical,
   Edit,
   Ticket,
-  Delete,
-  Trash,
   Trash2,
-  Trash2Icon,
+  Building2,
+  IndianRupee,
 } from "lucide-react";
 
-interface EventType {
-  _id: string;
-  name: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-}
+import { EventForm } from "@/types/event";
+import { useEffect, useRef, useState } from "react";
+import { currency } from "@/types/currency.type";
 
 interface EventCardProps {
-  event: EventType;
-  onAddTicket: (event: EventType) => void;
-  onDelete: (event: EventType) => void;
+  event: EventForm;
+  onAddTicket: (event: EventForm) => void;
+  onAddSlot: (event: EventForm) => void;
+  onEdit: (event: EventForm) => void;
+  onDelete: (event: EventForm) => void;
 }
 
 export default function EventCard({
   event,
   onAddTicket,
+  onAddSlot,
+  onEdit,
   onDelete,
 }: EventCardProps) {
-  const statusStyle = {
-    active: "bg-green-100 text-green-700",
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const statusStyle: Record<string, string> = {
+    draft: "bg-slate-100 text-slate-600",
     pending: "bg-yellow-100 text-yellow-700",
-    completed: "bg-gray-100 text-gray-600",
-    cancelled: "bg-red-600 text-yellow-600",
+    active: "bg-green-100 text-green-700",
+    cancelled: "bg-red-100 text-red-700",
+    completed: "bg-blue-100 text-blue-700",
   };
 
+  const categoryName =
+    typeof event.category === "object" ? event.category?.name : event.category;
+
+  const eventTypeName =
+    typeof event.eventType === "object"
+      ? event.eventType?.label
+      : event.eventType;
+
   return (
-    <div className="bg-white  border border-slate-200  rounded-xl overflow-hidden group shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition-shadow">
+    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden group shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
       {/* IMAGE */}
       <div className="h-48 relative overflow-hidden">
         <img
@@ -51,10 +72,10 @@ export default function EventCard({
         <div className="absolute top-4 left-4">
           <span
             className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${
-              statusStyle[event.status || "active"]
+              statusStyle[event.status || "draft"]
             }`}
           >
-            {event.status || "active"}
+            {event.status || "draft"}
           </span>
         </div>
       </div>
@@ -62,59 +83,93 @@ export default function EventCard({
       {/* CONTENT */}
       <div className="p-6">
         {/* HEADER */}
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-lg text-slate-900  leading-tight">
-            {event.name}
-          </h3>
+        <div
+          ref={ref}
+          className=" relative flex  justify-between items-start mb-2"
+        >
+          <div>
+            <h3 className="font-semibold text-lg text-slate-900 line-clamp-1">
+              {event.name}
+            </h3>
 
-          <button className="text-slate-400 hover:text-slate-600 transition-colors">
+            <p className="text-xs text-slate-400 uppercase tracking-wider">
+              {categoryName}
+            </p>
+          </div>
+
+          <button
+            onClick={() => setOpen((p) => !p)}
+            className="text-slate-400 hover:text-slate-600"
+          >
             <MoreVertical size={18} />
           </button>
+          {open && (
+            <div className="absolute right-0 mt-2 w-auto bg-white border border-slate-100 rounded shadow flex flex-col gap-1 p-1 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+              <button
+                onClick={() => onEdit(event)}
+                className="flex uppercase items-center gap-2 px-3 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
+              >
+                <Edit size={18} />
+                Edit Event
+              </button>
+
+              <button
+                onClick={() => onDelete(event)}
+                className="flex uppercase items-center gap-2 px-3 py-2 text-red-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
+              >
+                <Trash2 size={18} />
+                Cancel Event
+              </button>
+
+              <button
+                onClick={() => onAddTicket(event)}
+                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-700 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+              >
+                <Ticket size={18} />
+                Add Tickets
+              </button>
+
+              <button
+                onClick={() => onAddSlot(event)}
+                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-700 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+              >
+                <Calendar size={18} />
+                {event?.eventType?.name ?? "Add Slot"}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* INFO */}
-        <div className="space-y-2 mb-6">
+        <div className="space-y-2 mb-5">
           <div className="flex items-center gap-2 text-slate-500 text-sm">
             <Calendar size={16} />
-            <span>
-              <FormattedDate date={event.date} />
-            </span>
+            <span>{eventTypeName}</span>
           </div>
 
           <div className="flex items-center gap-2 text-slate-500 text-sm">
             <MapPin size={16} />
-            <span>{event.location}</span>
+            <span>{event.location || "No location"}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-slate-500 text-sm">
+            <Building2 size={16} />
+            <span>{event.venue || "No venue"}</span>
           </div>
         </div>
 
         {/* FOOTER */}
-        <div className="pt-4 border-t border-slate-100  flex items-center justify-between">
-          {/* AVATARS (placeholder) */}
-          <div className="flex -space-x-2">
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
-              A
-            </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
-              B
-            </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">
-              +99
-            </div>
+        <div className="flex-row lg:flex pt-4 border-t border-slate-100 font-bold items-center justify-between">
+          <div className="text-xs text-slate-400">
+            Total Capacity: {event.capacity || 0}
+          </div>
+
+          <div className="flex text-xs text-violet-600">
+            <IndianRupee size={14} />
+            {event.basePrice ? `${event.basePrice}` : "Free Event"}
           </div>
 
           {/* ACTIONS */}
-          <div className="flex gap-2">
-            <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-              <Edit size={18} />
-            </button>
-            <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-              <Trash2Icon size={18} onClick={() => onDelete(event)} />
-            </button>
-
-            <button className="p-2  text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">
-              <Ticket size={18} onClick={() => onAddTicket(event)} />
-            </button>
-          </div>
         </div>
       </div>
     </div>

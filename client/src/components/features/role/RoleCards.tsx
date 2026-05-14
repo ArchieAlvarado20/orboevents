@@ -29,10 +29,12 @@ export default function RoleCard({ role, onEdit, onDelete }: RoleCardProps) {
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-center gap-2">
           <UserCog className="text-indigo-600" size={20} />
-          <h3 className="font-semibold text-lg text-slate-900">{role.name}</h3>
+          <h3 className="font-semibold text-lg text-slate-900 line-clamp-1">
+            {role.name}
+          </h3>
         </div>
 
-        <button className="text-slate-400 hover:text-slate-600 transition-colors">
+        <button className="hidden text-slate-400 hover:text-slate-600 transition-colors">
           <MoreVertical size={18} />
         </button>
       </div>

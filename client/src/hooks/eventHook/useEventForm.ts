@@ -1,185 +1,352 @@
 import { useState } from "react";
 import { eventApi } from "@/api/event.api";
-import { showSuccess, showError } from "@/lib/toast";
-
-export interface EventForm {
-  name: string;
-  description: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location: string;
-  capacity: string;
-  price: string;
-  image: File | null;
-  category: string;
-  status: string;
-
-  organizerName: string;
-  contactNumber: string;
-  tags: string; // or string[]
-  dressCode: string;
-}
+import { showError, showSuccess } from "@/lib/toast";
+import { EventForm, EventInitialForm } from "@/types/event";
 
 export default function useEventForm(onSuccess?: () => void) {
+  const [form, setForm] = useState<EventForm>(EventInitialForm);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const initialForm: EventForm = {
-    name: "",
-    description: "",
-    date: "",
-    startTime: "",
-    endTime: "",
-    location: "",
-    capacity: "",
-    price: "",
-    image: null,
-    category: "Public Event",
-    status: "active",
-
-    organizerName: "",
-    contactNumber: "",
-    tags: "",
-    dressCode: "",
-  };
-
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof EventForm, string>>
-  >({});
-
-  const resetErrors = () => {
+  const resetForm = () => {
+    setForm(EventInitialForm);
     setErrors({});
   };
 
-  const [form, setForm] = useState<EventForm>(initialForm);
-
-  // 🔹 handle input change
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    const { name, value, type, files } = e.target as HTMLInputElement;
+    const { name, value } = e.target;
 
-    const valueToUse = type === "file" ? (files?.[0] ?? null) : value;
+    setForm((prev) => {
+      // =========================
+      // ORGANIZER FIELDS
+      // =========================
+      if (name.startsWith("organizer.")) {
+        const field = name.split(".")[1];
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: valueToUse,
-    }));
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
-
-    const checked = (e.target as HTMLInputElement).checked;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  // 🔹 validation
-  const validate = () => {
-    const newErrors: typeof errors = {};
-
-    if (!form.name) newErrors.name = "Required";
-    if (!form.location) newErrors.location = "Required";
-    if (!form.startTime) newErrors.startTime = "Required";
-    if (!form.endTime) newErrors.endTime = "Required";
-    if (!form.description) newErrors.description = "Required";
-    if (!form.capacity) newErrors.capacity = "Required";
-    if (!form.price) newErrors.price = "Required";
-    if (!form.image) newErrors.image = "Required";
-    if (!form.organizerName) newErrors.organizerName = "Required";
-    if (!form.dressCode) newErrors.dressCode = "Required";
-    if (!form.tags) newErrors.tags = "Required";
-
-    if (!form.date) {
-      newErrors.date = "Date is required";
-    } else {
-      const today = new Date();
-      const selectedDate = new Date(form.date);
-
-      // remove time para fair comparison
-      today.setHours(0, 0, 0, 0);
-
-      if (selectedDate < today) {
-        newErrors.date = "Date must be in the future";
+        return {
+          ...prev,
+          organizer: {
+            ...prev.organizer,
+            [field]: value,
+          },
+        };
       }
-    }
 
-    if (!form.contactNumber) {
-      newErrors.contactNumber = "Required";
-    } else if (!/^\+?[\d\s\\-]{7,15}$/.test(form.contactNumber)) {
-      newErrors.contactNumber = "Invalid contact number";
-    }
+      // =========================
+      // NUMBER FIELDS
+      // =========================
+      if (name === "basePrice" || name === "capacity") {
+        return {
+          ...prev,
+          [name]: value === "" ? 0 : Number(value),
+        };
+      }
 
-    setErrors(newErrors);
+      // =========================
+      // TAGS
+      // =========================
+      if (name === "tags") {
+        return {
+          ...prev,
+          tags: value
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+        };
+      }
 
-    return Object.keys(newErrors).length === 0;
+      // =========================
+      // DEFAULT
+      // =========================
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   };
+  // =========================
+  // VALIDATE
+  // =========================
+  const validate = () => {
+    const err: Record<string, string> = {};
 
-  // 🔹 submit
+    // =========================
+    // BASIC INFO
+    // =========================
+    if (!form.name?.trim()) {
+      err.name = "Event name is required";
+    }
+
+    if (!form.description?.trim()) {
+      err.description = "Description is required";
+    }
+
+    // =========================
+    // CATEGORY / EVENT TYPE
+    // =========================
+    if (!form.category) {
+      err.category = "Category is required";
+    }
+
+    if (!form.eventType) {
+      err.eventType = "Event type is required";
+    }
+
+    if (!form.image && !form._id) {
+      err.image = "Image is required";
+    }
+    // =========================
+    // ORGANIZER (NESTED OBJECT)
+    // =========================
+    if (!form.organizer?.name?.trim()) {
+      err.organizer_name = "Organizer name is required";
+    }
+
+    if (!form.organizer?.email?.trim()) {
+      err.organizer_email = "Organizer email is required";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (
+      form.organizer?.email &&
+      !emailRegex.test(form.organizer?.email?.trim())
+    ) {
+      err.organizer_email = "Invalid email format";
+    }
+
+    if (!form.organizer?.phone?.trim()) {
+      err.organizer_phone = "Organizer phone is required";
+    }
+
+    if (!form.organizer?.company?.trim()) {
+      err.organizer_company = "Organizer company is required";
+    }
+
+    // =========================
+    // LOCATION
+    // =========================
+    if (!form.location?.trim()) {
+      err.location = "Location is required";
+    }
+
+    if (!form.venue?.trim()) {
+      err.venue = "Venue is required";
+    }
+
+    // =========================
+    // NUMBERS (IMPORTANT FIX FOR YOUR ERRORS)
+    // =========================
+    if (form.basePrice == null) {
+      err.basePrice = "Base price is required";
+    } else if (form.basePrice < 0) {
+      err.basePrice = "Base price cannot be negative";
+    }
+
+    if (form.capacity == null) {
+      err.capacity = "Capacity is required";
+    } else if (form.capacity <= 0) {
+      err.capacity = "Capacity must be greater than 0";
+    }
+
+    // =========================
+    // TAGS (OPTIONAL BUT CLEAN VALIDATION)
+    // =========================
+    if (form.tags && !Array.isArray(form.tags)) {
+      err.tags = "Tags must be an array";
+    }
+
+    if (form.tags === null) {
+      err.tags = "Tags is required";
+    }
+
+    // =========================
+    // STATUS (FIX FOR YOUR ENUM ERROR)
+    // =========================
+    const allowedStatus = [
+      "draft",
+      "pending",
+      "active",
+      "cancelled",
+      "completed",
+    ];
+
+    if (!form.status) {
+      err.status = "Status is required";
+    } else if (!allowedStatus.includes(form.status)) {
+      err.status = "Invalid status value";
+    }
+
+    setErrors(err);
+
+    return Object.keys(err).length === 0;
+  };
+  // =========================
+  // CREATE
+  // =========================
   const createEvent = async () => {
     if (!validate()) return;
 
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("Unauthorized");
-      return;
-    }
-
-    setLoading(true);
-
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Unauthorized");
+        return;
+      }
+
+      setLoading(true);
+
       const formData = new FormData();
 
-      Object.entries(form).forEach(([key, value]) => {
-        if (value === null || value === undefined) return;
+      // =========================
+      // BASIC FIELDS
+      // =========================
+      formData.append("name", form.name);
+      formData.append("description", form.description);
+      formData.append("category", form.category);
+      formData.append("eventType", form.eventType);
+      formData.append("location", form.location);
+      formData.append("venue", form.venue);
+      formData.append("basePrice", String(form.basePrice));
+      formData.append("capacity", String(form.capacity));
+      formData.append("status", form.status);
 
-        if (value instanceof File) {
-          formData.append(key, value);
-        } else {
-          formData.append(key, String(value));
-        }
-      });
+      // =========================
+      // IMAGE
+      // =========================
+      if (form.image instanceof File) {
+        formData.append("image", form.image);
+      }
 
-      const res = await eventApi.create(formData, {
+      // =========================
+      // ARRAY FIELDS
+      // =========================
+      formData.append("tags", JSON.stringify(form.tags));
+
+      // =========================
+      // OBJECT FIELDS
+      // =========================
+      formData.append("organizer", JSON.stringify(form.organizer));
+
+      // =========================
+      // API CALL
+      // =========================
+      await eventApi.create(formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log(res.data);
-
-      setForm(initialForm);
-
-      showSuccess("Event created successfully!");
+      showSuccess("Event created successfully");
       onSuccess?.();
-    } catch (err: unknown) {
-      let message = "Failed to create event";
 
-      if (err instanceof Error) {
-        message = err.message;
-      }
-
-      showError(message);
+      return true;
+    } catch (err: any) {
+      showError(err.response?.data?.message || "Failed to create event");
+      return false;
     } finally {
       setLoading(false);
     }
   };
 
+  // =========================
+  // UPDATE
+  // =========================
+  const updateEvent = async (id: string) => {
+    if (!validate()) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Unauthorized");
+        return;
+      }
+
+      setLoading(true);
+
+      const formData = new FormData();
+
+      Object.entries(form).forEach(([key, value]) => {
+        // IMAGE
+        if (key === "image" && value instanceof File) {
+          formData.append("image", value);
+          return;
+        }
+
+        // ARRAYS (tags)
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+          return;
+        }
+
+        // OBJECTS (organizer, schedule)
+        if (typeof value === "object" && value !== null) {
+          formData.append(key, JSON.stringify(value));
+          return;
+        }
+
+        // EVERYTHING ELSE (IMPORTANT FIX)
+        formData.append(key, String(value ?? ""));
+      });
+
+      await eventApi.update(id, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Event updated successfully");
+      onSuccess?.();
+
+      return true;
+    } catch (err: any) {
+      showError(err.response?.data?.message || "Failed to update event");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // =========================
+  // SET EDIT DATA
+  // =========================
+  const setEditData = (event: EventForm) => {
+    setForm({
+      _id: event._id,
+      name: event.name,
+      description: event.description,
+
+      category: event.category,
+      eventType: event.eventType,
+
+      organizer: event.organizer || EventInitialForm.organizer,
+
+      location: event.location,
+      venue: event.venue,
+
+      basePrice: event.basePrice,
+      capacity: event.capacity,
+
+      status: event.status,
+
+      tags: event.tags || [],
+    });
+  };
+
   return {
     form,
     setForm,
-    handleChange,
-    createEvent,
-    loading,
     errors,
-    resetErrors,
+    loading,
+    createEvent,
+    updateEvent,
+    setEditData,
+    handleChange,
+    resetForm,
   };
 }

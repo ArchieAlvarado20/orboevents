@@ -1,14 +1,18 @@
-// eventSchema.js
 const mongoose = require("mongoose");
 
 const eventSchema = new mongoose.Schema(
   {
-    // 🟨 BASIC INFO
-    name: { type: String, required: true },
+    // BASIC INFO
+    name: {
+      type: String,
+      required: true,
+    },
+
     description: String,
+
     image: String,
 
-    // 🟦 RELATIONSHIPS (NEW STRUCTURE)
+    // RELATIONS
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
@@ -21,60 +25,52 @@ const eventSchema = new mongoose.Schema(
       required: true,
     },
 
-    // 🟪 SCHEDULE (flexible based on EventType)
-    schedule: {
-      startDate: Date,
-      endDate: Date, // for multi-day
-
-      date: Date, // for single-day fallback
-
-      startTime: String, // "06:00 PM"
-      endTime: String,
-    },
-
-    // 📍 LOCATION
-    location: String,
-
-    // 👥 CAPACITY
-    capacity: { type: Number, default: 0 },
-
-    // 💰 BASE PRICE (fallback only)
-    basePrice: { type: Number, default: 0 },
-
-    // 🏷 ORGANIZER INFO
+    // ORGANIZER INFO
     organizer: {
       name: String,
-      contactNumber: String,
+      email: String,
+      phone: String,
+      company: String,
     },
 
-    // 🔖 TAGS / SEARCH
+    // WHO CREATED EVENT IN SYSTEM
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    // LOCATION
+    location: String,
+
+    venue: String,
+
+    // DISPLAY PRICE
+    basePrice: {
+      type: Number,
+      default: 0,
+    },
+
+    // TOTAL CAPACITY
+    capacity: {
+      type: Number,
+      default: 0,
+    },
+
+    // TAGS
     tags: [String],
 
-    // ⚙️ RULES (computed from EventType but override possible)
-    rules: {
-      allowWalkin: { type: Boolean, default: true },
-      requiresApproval: { type: Boolean, default: false },
-    },
-
-    // 📊 STATUS
+    // STATUS
     status: {
       type: String,
       enum: ["draft", "pending", "active", "cancelled", "completed"],
       default: "draft",
     },
 
-    // 🎟 RELATIONSHIPS
+    // TICKETS
     ticketTypes: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "TicketType",
-      },
-    ],
-
-    slots: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Slot",
       },
     ],
   },

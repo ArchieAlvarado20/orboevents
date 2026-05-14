@@ -14,6 +14,10 @@ import {
   LogOutIcon,
   UserCircle2,
   UserCircle,
+  ChartNoAxesGanttIcon,
+  CassetteTape,
+  Music,
+  Calendar1Icon,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -88,6 +92,42 @@ export default function Sidebar({
 
             <span className={`${isCollapsed ? "hidden" : "inline"}`}>
               Dashboard
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/categories"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-1 py-1" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <Music
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Event Categories
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/event-types"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-1 py-1" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <Calendar1Icon
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Event Types
             </span>
           </NavLink>
 

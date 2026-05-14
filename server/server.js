@@ -19,6 +19,9 @@ const testRoutes = require("./routes/testRoutes");
 const razorpayRoutes = require("./routes/razorpayRoutes.js");
 const roleRoutes = require("./routes/roleRoutes.js");
 const adminUsersRoutes = require("./routes/adminUsersRoutes.js");
+const categoryRoutes = require("./routes/categoryRoutes");
+const eventTypeRoutes = require("./routes/eventTypeRoutes");
+const slotRoutes = require("./routes/slotRoutes");
 
 const app = express();
 
@@ -56,6 +59,11 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/roles", roleRoutes);
 
 app.use("/api", eventRoutes);
+
+app.use("/api/categories", categoryRoutes);
+
+app.use("/api/event-types", eventTypeRoutes);
+app.use("/api", slotRoutes);
 
 app.use("/api/razorpay", razorpayRoutes);
 

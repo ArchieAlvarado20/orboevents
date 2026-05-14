@@ -1,28 +1,41 @@
 import React, { useRef } from "react";
 import { ImagePlus } from "lucide-react";
+import { showInfo } from "@/lib/toast";
 
 export interface FileUploadProps {
   label?: React.ReactNode;
   onChange: (file: File | null) => void;
   value?: File | null;
+  preview: string;
   accept?: string;
   error?: string;
-  clickNote: string;
+  clickNote?: string;
+  disabled?: boolean;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({
   label,
   onChange,
   value,
+  preview,
   accept = "image/*",
   error,
   clickNote,
+  disabled,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
+    if (disabled) {
+      showInfo("Only users can edit their avatar");
+      return;
+    }
+
     inputRef.current?.click();
   };
+  const imageSrc = value
+    ? URL.createObjectURL(value)
+    : preview || "/images/user.jpg";
 
   return (
     <div className="w-full">
@@ -43,7 +56,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       >
         {value ? (
           <img
-            src={URL.createObjectURL(value)}
+            src={imageSrc}
             alt="preview"
             className="h-full object-cover rounded-xl"
           />

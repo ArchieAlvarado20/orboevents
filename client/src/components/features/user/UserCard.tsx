@@ -16,6 +16,8 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
     hold: "bg-yellow-100 text-yellow-600",
   };
 
+  const isSuperAdmin = user.role?.name === "Super-Admin";
+
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-xl transition duration-300 group">
       {/* HEADER */}
@@ -30,7 +32,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-xl font-bold text-slate-500">
+              <div className="w-full h-full flex items-center justify-center text-xl font-bold text-slate-500 line-clamp-1">
                 {user.name.charAt(0).toUpperCase()}
               </div>
             )}
@@ -105,8 +107,13 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
         </button>
 
         <button
-          onClick={() => onDelete(user)}
-          className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition"
+          onClick={() => !isSuperAdmin && onDelete(user)}
+          disabled={isSuperAdmin}
+          className={`p-2.5 rounded-xl transition ${
+            isSuperAdmin
+              ? "text-slate-300 cursor-not-allowed"
+              : "text-red-500 hover:bg-red-50"
+          }`}
         >
           <Trash2 size={18} />
         </button>

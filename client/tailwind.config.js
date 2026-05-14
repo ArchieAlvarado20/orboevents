@@ -10,3 +10,33 @@ export default {
     },
   },
 };
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        fadeIn: {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
+
+        fadeOut: {
+          from: {
+            opacity: "1",
+          },
+          to: {
+            opacity: "0",
+          },
+        },
+      },
+
+      animation: {
+        fadeIn: "fadeIn 0.2s ease",
+        fadeOut: "fadeOut 0.2s ease",
+      },
+    },
+  },
+};

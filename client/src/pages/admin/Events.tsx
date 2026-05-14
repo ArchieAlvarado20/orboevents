@@ -1,59 +1,59 @@
 import { eventApi } from "@/api/event.api";
 import EventCard from "@/components/features/event/EventCards";
 import EventModal from "@/components/features/event/EventModal";
+import SlotBulkModal from "@/components/features/slot/slotBulkModal";
+import SlotModal from "@/components/features/slot/SlotModal";
+
 import TicketTypeModal from "@/components/features/tickets/TicketTypeModal";
 import Button from "@/components/shared/Button";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import Unauthorized from "@/components/shared/Unauthorized";
+import { useEvent } from "@/hooks/eventHook/useEvent";
 import { confirmToast } from "@/lib/confirmToast";
 import { getPagination } from "@/lib/pagination";
 import { showError, showSuccess } from "@/lib/toast";
+import { EventForm } from "@/types/event";
+import { EventTypeFormData } from "@/types/eventTypes.type";
 import axios from "axios";
 import { List, Menu, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface Event {
-  _id: string;
-  name: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-}
-
 export default function Events() {
   const [openModal, setOpenModal] = useState(false);
   const [openTicketModal, setOpenTicketModal] = useState(false);
+  const [openSlotModal, setOpenSlotModal] = useState(false);
+  const [openBulkSlotModal, setOpenBulkSlotModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [events, setEvents] = useState<Event[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [unauthorized, setUnauthorized] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const handleOpenTicketModal = (event: Event) => {
+  const { events, loading, unauthorized, fetchEvents, deleteEvent } =
+    useEvent();
+
+  const handleOpenTicketModal = (event: EventForm) => {
     setSelectedEvent(event);
     setOpenTicketModal(true);
   };
 
-  const deleteEvent = async (id: string) => {
-    const token = localStorage.getItem("token");
+  const handleOpenSlotModal = (event: EventForm) => {
+    setSelectedEvent(event);
+    setOpenSlotModal(true);
+  };
 
-    if (!token) {
-      alert("Unauthorized");
-      return;
-    }
+  if (loading) {
+    return <TransparentSpinner />;
+  }
 
-    try {
-      await eventApi.delete(id, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  const handleAddSlot = (event: EventForm) => {
+    setSelectedEvent(event);
 
-      showSuccess("Event cancelled successfully");
-      setEvents((prev) => prev.filter((r) => r._id !== id));
-    } catch (err: any) {
-      showError(err?.response?.data?.message || "Failed to delete user");
+    const type = event?.eventType?.name;
+
+    if (type === "single-day") {
+      setOpenSlotModal(true);
+    } else {
+      setOpenBulkSlotModal(true);
     }
   };
 
@@ -63,42 +63,10 @@ export default function Events() {
     });
   };
 
-  const fetchEvents = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/admin/events?page=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      setEvents(res.data.events || []);
-      setTotalPages(res.data.totalPages || 1);
-      console.log(res.data);
-    } catch (err: unknown) {
-      let message = "Something went wrong!";
-
-      if (axios.isAxiosError(err)) {
-        message = err.response?.data?.message || message;
-
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          setUnauthorized(true);
-        }
-      } else if (err instanceof Error) {
-        message = err.message;
-      }
-
-      console.log(message);
-    }
+  const handleEditEvent = (event: EventForm) => {
+    setSelectedEvent(event);
+    setOpenModal(true);
   };
-
-  useEffect(() => {
-    fetchEvents();
-  }, [page]);
 
   return (
     <>
@@ -130,10 +98,15 @@ export default function Events() {
             {/* ADD EVENT MODAL */}
             <EventModal
               open={openModal}
-              onClose={() => setOpenModal(false)}
+              event={selectedEvent}
+              onClose={() => {
+                setOpenModal(false);
+                setSelectedEvent(null);
+              }}
               onSuccess={() => {
                 fetchEvents();
                 setOpenModal(false);
+                setSelectedEvent(null);
               }}
             />
 
@@ -148,6 +121,32 @@ export default function Events() {
                 }}
               />
             )}
+
+            <SlotModal
+              open={openSlotModal}
+              event={selectedEvent}
+              onClose={() => {
+                setOpenSlotModal(false);
+                setSelectedEvent(null);
+              }}
+              onSuccess={() => {
+                setOpenSlotModal(false);
+                setSelectedEvent(null);
+              }}
+            />
+
+            <SlotBulkModal
+              open={openBulkSlotModal}
+              event={selectedEvent}
+              onClose={() => {
+                setOpenBulkSlotModal(false);
+                setSelectedEvent(null);
+              }}
+              onSuccess={() => {
+                setOpenBulkSlotModal(false);
+                setSelectedEvent(null);
+              }}
+            />
 
             <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md-w-50">
               {/* FILTERS */}
@@ -195,7 +194,9 @@ export default function Events() {
                 <EventCard
                   key={event._id}
                   event={event}
-                  onAddTicket={handleOpenTicketModal}
+                  onAddTicket={() => handleOpenTicketModal(event)}
+                  onAddSlot={() => handleAddSlot(event)}
+                  onEdit={() => handleEditEvent(event)}
                   onDelete={() => handleDeleteEvent(event)}
                 />
               ))}

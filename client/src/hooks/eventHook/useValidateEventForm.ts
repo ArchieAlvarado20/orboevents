@@ -1,5 +1,5 @@
 // forms/event/event.validation.ts
-import { EventForm } from "./useEvent.types";
+import { EventForm } from "./useEvent";
 
 export type EventErrors = Partial<Record<keyof EventForm, string>>;
 

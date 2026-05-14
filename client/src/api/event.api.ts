@@ -10,7 +10,8 @@ export const eventApi = {
 
   getByEvent: (eventId: string) => axios.get(`${API}/${eventId}`),
 
-  update: (id: string, data: unknown) => axios.put(`${API}/${id}`, data),
+  update: (id: string, data: unknown, config?: AxiosRequestConfig) =>
+    axios.put(`${API}/${id}`, data, config),
 
   delete: (id: string, config?: AxiosRequestConfig) =>
     axios.delete(`${API}/${id}`, config),

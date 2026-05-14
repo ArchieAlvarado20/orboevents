@@ -1,29 +1,27 @@
+const mongoose = require("mongoose");
+
 const eventTypeSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      enum: ["single-day", "multi-day", "time-slot"],
       required: true,
+      unique: true,
     },
 
-    label: String, // "Single Day Event", "Time Slot Event"
+    label: String,
 
-    // 🧠 UI BEHAVIOR FLAGS
     uiConfig: {
-      showDateRange: { type: Boolean, default: false },
-      showSingleDate: { type: Boolean, default: true },
-
-      showTimeSlots: { type: Boolean, default: false },
-      requireSlots: { type: Boolean, default: false },
-
-      allowMultiDaySelection: { type: Boolean, default: false },
+      showDate: Boolean,
+      showDateRange: Boolean,
+      showSlots: Boolean,
     },
 
-    // ⚙️ RULE ENGINE
-    rules: {
-      requiresCapacityPerSlot: { type: Boolean, default: false },
-      maxTicketsPerBooking: { type: Number, default: 1 },
-      enforceSchedule: { type: Boolean, default: true },
+    description: String,
+
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
     },
   },
   { timestamps: true },

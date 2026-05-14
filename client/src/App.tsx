@@ -5,10 +5,13 @@ import Auth from "./pages/Auth";
 import Events from "./pages/admin/Events";
 import QRScanner from "./components/QRScanner";
 import QRImageScanner from "./components/QRimage";
+import Test from "./pages/admin/test";
+import CreateTest from "./pages/admin/testCreate";
 import Analytics from "./pages/admin/Analytics";
 import Ticket from "./pages/admin/Tickets";
 import LandingPage from "./pages/user/LandingPage";
 import Category from "./pages/user/Category";
+
 import UserEvents from "./pages/user/UserEvents";
 import UserTickets from "./pages/user/UserTickets";
 
@@ -27,12 +30,16 @@ import SmartTicketingLanding from "./pages/user/main";
 import DigitalTicketMockup from "./pages/user/mobile";
 import Role from "./pages/admin/Role";
 import Users from "./pages/admin/Users";
+import Categories from "./pages/admin/Categories";
+import EventType from "./pages/admin/EventType";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
       <ToastProvider />
+      <Toaster position="top-center" />
+      <ScrollToTop />
       <Routes>
         {/* Public */}
 
@@ -62,6 +69,8 @@ function App() {
           <Route path="tickets" element={<Ticket />} />
           <Route path="scanner" element={<Scanner />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="event-types" element={<EventType />} />
         </Route>
       </Routes>
     </BrowserRouter>

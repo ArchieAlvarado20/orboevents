@@ -1,86 +1,250 @@
 const Event = require("../models/Event");
+const EventType = require("../models/EventType");
+const Slot = require("../models/Slot");
+const uploadImage = require("../utils/uploadImage");
 
+// ==============================
+// CREATE EVENT
+// ==============================
+const createEvent = async (req, res) => {
+  try {
+    let imageUrl = "";
+
+    if (req.file) {
+      imageUrl = await uploadImage(req.file);
+    }
+
+    const event = await Event.create({
+      ...req.body,
+      image: imageUrl,
+      createdBy: req.user?._id || null,
+    });
+
+    return res.status(201).json({
+      message: "Event created successfully",
+      event,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+// ==============================
+// GET ALL EVENTS
+// ==============================
 const getEvents = async (req, res) => {
   try {
-    const { category, search, page = 1, status, tags, location } = req.query;
+    const {
+      category,
+      eventType,
+      search,
+      page = 1,
+      status,
+      tags,
+      location,
+    } = req.query;
 
     const limit = 12;
     const skip = (page - 1) * limit;
 
     const filter = {};
 
-    if (category) filter.category = category;
-    if (status) filter.status = status;
-    if (location) filter.location = { $regex: location, $options: "i" };
-    if (tags) filter.tags = { $in: tags.split(",") }; // ?tags=startup,award
+    // CATEGORY FILTER
+    if (category) {
+      filter.category = category;
+    }
+
+    // EVENT TYPE FILTER
+    if (eventType) {
+      filter.eventType = eventType;
+    }
+
+    // STATUS FILTER
     if (status) {
       filter.status = status;
     } else {
-      filter.status = { $ne: "cancelled" };
+      filter.status = {
+        $ne: "cancelled",
+      };
     }
 
+    // LOCATION FILTER
+    if (location) {
+      filter.location = {
+        $regex: location,
+        $options: "i",
+      };
+    }
+
+    // TAGS FILTER
+    if (tags) {
+      filter.tags = {
+        $in: tags.split(","),
+      };
+    }
+
+    // SEARCH
     if (search) {
       filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } },
-        { organizerName: { $regex: search, $options: "i" } },
+        {
+          name: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          "organizer.name": {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          venue: {
+            $regex: search,
+            $options: "i",
+          },
+        },
       ];
     }
 
     const events = await Event.find(filter)
+      .populate("category")
+      .populate("eventType")
+      .populate("ticketTypes")
+      // .populate("slot")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
     const total = await Event.countDocuments(filter);
 
-    res.json({
+    res.status(200).json({
       events,
       total,
       totalPages: Math.ceil(total / limit),
       currentPage: Number(page),
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("GET EVENTS ERROR:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
 
+// ==============================
+// GET SINGLE EVENT
+// ==============================
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id).populate("ticketTypes");
+    const event = await Event.findById(req.params.id)
+      .populate("category")
+      .populate("eventType")
+      .populate("ticketTypes")
+      .populate("slots")
+      .populate("createdBy", "name email");
 
     if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    res.json(event);
-  } catch (err) {
-    console.error("GET EVENT ERROR:", err);
-    res.status(500).json({ message: err.message });
-  }
-};
-
-const deleteEvent = async (req, res) => {
-  try {
-    const foundEvent = await Event.findById(req.params.id);
-
-    if (!foundEvent) {
       return res.status(404).json({
         message: "Event not found",
       });
     }
 
-    foundEvent.status = "cancelled";
-    await foundEvent.save();
+    res.status(200).json(event);
+  } catch (err) {
+    console.error("GET EVENT ERROR:", err);
 
-    res.status(200).json({
-      message: "Event cancelled successfully",
-      event: foundEvent,
-    });
-  } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: err.message,
     });
   }
 };
-module.exports = { getEvents, getEventById, deleteEvent };
+
+// ==============================
+// UPDATE EVENT
+// ==============================
+const updateEvent = async (req, res) => {
+  try {
+    let imageUrl = "";
+
+    if (req.file) {
+      imageUrl = await uploadImage(req.file);
+    }
+
+    const updateData = {
+      ...req.body,
+    };
+
+    // replace image only if uploaded
+    if (imageUrl) {
+      updateData.image = imageUrl;
+    }
+
+    const event = await Event.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        message: "Event not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Event updated successfully",
+      event,
+    });
+  } catch (err) {
+    console.error("UPDATE EVENT ERROR:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+// ==============================
+// DELETE EVENT (SOFT DELETE)
+// ==============================
+const deleteEvent = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({
+        message: "Event not found",
+      });
+    }
+
+    event.status = "cancelled";
+
+    await event.save();
+
+    res.status(200).json({
+      message: "Event cancelled successfully",
+      event,
+    });
+  } catch (err) {
+    console.error("DELETE EVENT ERROR:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+module.exports = {
+  createEvent,
+  getEvents,
+  getEventById,
+  updateEvent,
+  deleteEvent,
+};

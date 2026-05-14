@@ -1,23 +1,52 @@
-export interface Event {
+export interface EventForm {
   _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  startTime?: string;
-  endTime?: string;
-  status?: "active" | "pending" | "completed";
+  name: string;
   description: string;
-  price?: number;
-  accessLevel: string;
-  color: string;
-  ticketTypes?: {
-    _id: string;
+  image?: File | string | null;
+
+  category: string;
+  eventType: string;
+
+  organizer: {
     name: string;
-    price: number;
-    description?: string;
-    accessLevel: string;
-    color: string;
-    privileges?: [string];
-  }[];
+    email: string;
+    phone: string;
+    company: string;
+  };
+
+  location: string;
+  venue: string;
+
+  basePrice: number;
+  capacity: number;
+
+  status: "draft" | "pending" | "active" | "cancelled" | "completed";
+
+  tags: string[];
 }
+
+export const EventInitialForm = {
+  name: "",
+  description: "",
+  image: "",
+
+  category: "",
+  eventType: "",
+
+  organizer: {
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+  },
+
+  location: "",
+  venue: "",
+
+  basePrice: null,
+  capacity: null,
+
+  status: "active",
+
+  tags: [],
+};
