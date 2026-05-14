@@ -18,6 +18,7 @@ import { confirmToast } from "@/lib/confirmToast";
 import CategoryModal from "@/components/features/category/CategoryModal";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { CategoryType } from "@/types/categoryIcon.type";
+import CategoryCard from "@/components/features/category/CategoryCard";
 
 export default function Categories() {
   const [isCollapsed, setIsCollapsed] = useState(false);
