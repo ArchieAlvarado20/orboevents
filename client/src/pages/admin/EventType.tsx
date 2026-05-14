@@ -1,5 +1,4 @@
 import Unauthorized from "@/components/shared/Unauthorized";
-import { useCategory } from "@/hooks/category/useCategory";
 import Button from "@/components/shared/Button";
 import {
   Calendar,
@@ -14,15 +13,14 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
-import CategoryCard from "@/components/features/category/categoryCard";
+
 import { confirmToast } from "@/lib/confirmToast";
-import CategoryModal from "@/components/features/category/CategoryModal";
+
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import { CategoryType } from "@/types/categoryIcon.type";
-import EventTypeCard from "@/components/features/event-types/eventTypesCard";
 import { useEventType } from "@/hooks/eventType/useEventType";
 import { EventTypeFormData } from "@/types/eventTypes.type";
 import EventTypeModal from "@/components/features/event-types/EventTypesModal";
+import EventTypeCard from "@/components/features/event-types/EventTypesCard";
 
 export default function EventType() {
   const [isCollapsed, setIsCollapsed] = useState(false);
