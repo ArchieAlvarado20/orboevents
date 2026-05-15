@@ -192,7 +192,7 @@ export default function Auth() {
   }, []);
   return (
     <>
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none ">
         <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl"></div>
       </div>
@@ -203,7 +203,7 @@ export default function Auth() {
 
       {/* <!-- Main Login Content --> */}
       <main className="relative z-10 flex-grow flex items-center justify-center px-4 pb-20">
-        <div className="w-full max-w-[440px] bg-white border border-slate-200 shadow-sm rounded-xl p-8 lg:p-10">
+        <div className="w-full max-w-[440px] bg-white border border-slate-200 rounded-xl p-8 lg:p-10 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
           {/* <!-- Header Section --> */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold mb-2 text-slate-900">

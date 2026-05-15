@@ -352,8 +352,8 @@ export default function EventModal({
                   onChange={handleChange}
                   options={[
                     { label: "Draft", value: "draft" },
-                    { label: "Active", value: "active" },
                     { label: "Pending", value: "pending" },
+                    { label: "Published", value: "published" },
                     { label: "Cancelled", value: "cancelled" },
                     { label: "Completed", value: "completed" },
                   ]}

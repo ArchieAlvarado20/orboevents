@@ -47,7 +47,10 @@ export const useEvent = () => {
 
       setEvents(res.data.events || res.data);
     } catch (err: any) {
-      showError(err.response?.data?.message || "Failed to fetch events");
+      console.log(err.response?.data?.message || "Failed to fetch events");
+      if (err.response?.status === 403) {
+        setUnauthorized(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -75,8 +78,10 @@ export const useEvent = () => {
 
       showSuccess("Event Cancelled Successfully");
     } catch (err: any) {
-      showError(err.response?.data?.message || "Failed to delete event");
-      setUnauthorized(true);
+      console.log(err.response?.data?.message || "Failed to delete event");
+      if (err.response?.status === 403) {
+        setUnauthorized(true);
+      }
     }
   };
 

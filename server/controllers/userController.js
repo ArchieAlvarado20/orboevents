@@ -58,7 +58,7 @@ const registerUser = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
 
     // 🔥 DEFAULT ROLE (User)
-    const defaultRole = await Role.findOne({ name: "User" });
+    const defaultRole = await Role.findOne({ accessLevel: "user" });
 
     if (!defaultRole) {
       return res.status(500).json({

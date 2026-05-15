@@ -29,6 +29,11 @@ export default function RoleModal({
     { label: "Inactive", value: "inactive" },
   ];
 
+  const accessLevel = [
+    { label: "Admin", value: "admin" },
+    { label: "Staff", value: "staff" },
+  ];
+
   const togglePermission = (perm: string) => {
     setForm((prev) => ({
       ...prev,
@@ -76,6 +81,7 @@ export default function RoleModal({
         description: role.description,
         permissions: role.permissions,
         status: role.status,
+        accessLevel: role.accessLevel,
       });
     } else {
       resetErrors();
@@ -124,6 +130,15 @@ export default function RoleModal({
                 value={form.description}
                 onChange={handleChange}
                 error={errors.description}
+              />
+
+              {/* Status */}
+              <Select
+                label="Access Level"
+                name="accessLevel"
+                value={form.accessLevel}
+                onChange={handleChange}
+                options={accessLevel}
               />
 
               {/* Permissions */}

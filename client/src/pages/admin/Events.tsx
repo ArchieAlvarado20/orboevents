@@ -1,9 +1,7 @@
-import { eventApi } from "@/api/event.api";
 import EventCard from "@/components/features/event/EventCards";
 import EventModal from "@/components/features/event/EventModal";
 import SlotBulkModal from "@/components/features/slot/slotBulkModal";
 import SlotModal from "@/components/features/slot/SlotModal";
-
 import TicketTypeModal from "@/components/features/tickets/TicketTypeModal";
 import Button from "@/components/shared/Button";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
@@ -11,13 +9,9 @@ import Unauthorized from "@/components/shared/Unauthorized";
 import { useEvent } from "@/hooks/eventHook/useEvent";
 import { confirmToast } from "@/lib/confirmToast";
 import { getPagination } from "@/lib/pagination";
-import { showError, showSuccess } from "@/lib/toast";
 import { EventForm } from "@/types/event";
-import { EventTypeFormData } from "@/types/eventTypes.type";
-import axios from "axios";
 import { List, Menu, Plus, Search } from "lucide-react";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 export default function Events() {
   const [openModal, setOpenModal] = useState(false);
   const [openTicketModal, setOpenTicketModal] = useState(false);
@@ -68,10 +62,11 @@ export default function Events() {
       {/* Header */}
 
       {unauthorized ? (
-        <div className="ml-64 sm:m-auto">
-          {" "}
-          <Unauthorized message="Admin access only!" />
-        </div>
+        <>
+          <div className="ml-64 sm:m-auto">
+            <Unauthorized message="Admin access only!" />
+          </div>
+        </>
       ) : (
         <main
           className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}

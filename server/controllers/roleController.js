@@ -5,7 +5,7 @@ const Role = require("../models/Role");
  */
 exports.createRole = async (req, res) => {
   try {
-    const { name, description, permissions, scopeType } = req.body;
+    const { name, description, permissions, accessLevel } = req.body;
 
     // check existing role
     const existingRole = await Role.findOne({ name });
@@ -20,7 +20,7 @@ exports.createRole = async (req, res) => {
       name,
       description,
       permissions,
-      scopeType,
+      accessLevel,
     });
 
     res.status(201).json({
@@ -85,7 +85,7 @@ exports.getRoleById = async (req, res) => {
  */
 exports.updateRole = async (req, res) => {
   try {
-    const { name, description, permissions, status, scopeType } = req.body;
+    const { name, description, permissions, status, accessLevel } = req.body;
 
     const role = await Role.findById(req.params.id);
 
@@ -99,7 +99,7 @@ exports.updateRole = async (req, res) => {
     role.description = description || role.description;
     role.permissions = permissions || role.permissions;
     role.status = status || role.status;
-    role.scopeType = scopeType || role.scopeType;
+    role.accessLevel = accessLevel || role.accessLevel;
 
     await role.save();
 

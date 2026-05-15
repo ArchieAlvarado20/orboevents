@@ -11,10 +11,17 @@ const {
   updateRole,
   deleteRole,
 } = require("../controllers/roleController");
+const permissionMiddleware = require("../middleware/permissionMiddleware");
 
 router.post("/", createRole);
 
-router.get("/", authMiddleware, adminMiddleware, getRoles);
+router.get(
+  "/",
+  authMiddleware,
+  adminMiddleware,
+  permissionMiddleware("MANAGE_ROLES"),
+  getRoles,
+);
 
 router.get("/:id", getRoleById);
 

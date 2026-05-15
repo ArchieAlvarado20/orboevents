@@ -33,6 +33,17 @@ const createSlots = async (req, res) => {
       });
     }
 
+    const existing = await Slot.findOne({
+      event: eventId,
+      name,
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        message: "Slot name already exists for this event",
+      });
+    }
+
     const slot = await Slot.create({
       event: eventId,
       name,
@@ -59,6 +70,17 @@ const createBulkSlots = async (req, res) => {
     if (!Array.isArray(slots) || slots.length === 0) {
       return res.status(400).json({
         message: "Slots are required",
+      });
+    }
+
+    const existing = await Slot.findOne({
+      event: eventId,
+      name,
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        message: "Slot name already exists for this event",
       });
     }
 

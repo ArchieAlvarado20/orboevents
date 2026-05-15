@@ -6,6 +6,7 @@ export interface RoleFormType {
   description: string;
   permissions: string[];
   status: RoleStatus;
+  accessLevel?: "super" | "admin" | "staff" | "user";
 }
 
 export const initialForm = {
@@ -13,4 +14,5 @@ export const initialForm = {
   description: "",
   permissions: [],
   status: "active" as RoleStatus,
+  accessLevel: "",
 };

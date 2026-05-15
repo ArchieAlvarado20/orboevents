@@ -96,10 +96,7 @@ export default function useTicketTypeForm(
       onSuccess?.();
       console.log(res.data);
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Failed to create ticket";
-
-      showError(message);
+      showError(err.response?.data?.message || "Failed to create Ticket-type");
     } finally {
       setLoading(false);
     }

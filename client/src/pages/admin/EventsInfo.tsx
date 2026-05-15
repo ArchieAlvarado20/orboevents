@@ -74,6 +74,42 @@ export default function EventInfoPage() {
 
   const fetchData = async () => {
     if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const [eventRes, ticketRes, slotRes] = await Promise.all([
+        eventApi.getByEvent(id, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        ticketTypeApi.getByEvent(id, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        slotApi.getByEvent(id, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+
+      setEvent(eventRes.data);
+      setTicketType(ticketRes.data);
+      setSlots(slotRes.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  const approveTicketType = async (id: string) => {
+    if (!id) return;
+
     setLoading(true);
 
     try {
@@ -84,66 +120,29 @@ export default function EventInfoPage() {
         return;
       }
 
-      const eventRes = await eventApi.getByEvent(id, {
-        headers: { Authorization: `Bearer ${token}` },
+      await ticketTypeApi.approveTicketType(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      setEvent(eventRes.data);
-    } catch (err) {
-      console.error("Event failed", err);
-      showError("Failed to load event");
+      showSuccess("Ticket type approved successfully");
+
+      fetchData?.(); // refresh list optional
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to approve ticket type");
+    } finally {
+      setLoading(false);
     }
-
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        showError("Unauthorized");
-        return;
-      }
-
-      const slotRes = await slotApi.getByEvent(id, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setSlots(slotRes.data);
-    } catch (err) {
-      console.error("Event failed", err);
-      showError("Failed to load slots");
-    }
-
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        showError("Unauthorized");
-        return;
-      }
-
-      const ticketTypeRes = await ticketTypeApi.getByEvent(id, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setTicketType(ticketTypeRes.data);
-
-      console.log(ticketTypeRes.data);
-    } catch (err) {
-      console.error("Ticket failed", err);
-      showError("Failed to load tickets");
-    }
-
-    setLoading(false);
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
 
   if (loading) return <TransparentSpinner />;
   if (!event) return <p className="p-6">Event not found</p>;
 
   return (
-    <div className="max-w-5xl mx-auto p-4 space-y-8">
+    <div className="max-w-5xl mx-auto p-0 sm:p-4 space-y-8">
       {openTicketModal && event && (
         <TicketTypeModal
           open={openTicketModal}
@@ -194,7 +193,7 @@ export default function EventInfoPage() {
       />
 
       {/* ================= EVENT HEADER ================= */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+      <div className="bg-white sm:rounded-2xl border border-slate-200 overflow-hidden shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
         {/* Image */}
         <div className="h-56 bg-slate-100">
           <img
@@ -221,7 +220,7 @@ export default function EventInfoPage() {
         </div>
 
         {/* ================= TICKET TYPES ================= */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
             <Ticket size={18} />
             Ticket Types
@@ -230,7 +229,7 @@ export default function EventInfoPage() {
           {ticketType.length === 0 ? (
             <p className="text-sm text-slate-500">No tickets yet</p>
           ) : (
-            <div className="grid sm:grid-cols-2 gap-3">
+            <div className="grid sm:grid-cols-3 gap-3">
               {ticketType.map((t) => (
                 <div
                   key={t._id}
@@ -253,6 +252,26 @@ export default function EventInfoPage() {
                     <span>₱ {t.price}</span>
                     <span>Qty: {t.quantityTotal}</span>
                   </div>
+                  {t.status === "pending" ? (
+                    <Button
+                      variant="warning"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                      onClick={() =>
+                        confirmToast("Approve this ticket?", () =>
+                          approveTicketType(t._id),
+                        )
+                      }
+                    >
+                      For Approval
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="gradient"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                    >
+                      Published
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
@@ -260,7 +279,7 @@ export default function EventInfoPage() {
         </div>
 
         {/* ================= SLOTS ================= */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
             <Layers size={18} />
             Event Slots
@@ -291,7 +310,7 @@ export default function EventInfoPage() {
         </div>
 
         {/* ================= ACTIONS ================= */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
             <Button
               variant="outline"
@@ -301,7 +320,7 @@ export default function EventInfoPage() {
               Back
             </Button>
             <Button
-              className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition bg-red-600 text-slate-600 hover:bg-red-700"
+              variant="destructiveOutline"
               onClick={() =>
                 confirmToast("Cancel this event?", () => deleteEvent(event._id))
               }
@@ -316,14 +335,14 @@ export default function EventInfoPage() {
               Edit Event
             </Button>
             <Button
-              variant="primary"
+              variant="cyan"
               className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"
               onClick={() => handleAddSlot(event)}
             >
               Add Schedule
             </Button>
             <Button
-              variant="primary"
+              variant="success"
               className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"
               onClick={() => handleOpenTicketModal(event)}
             >

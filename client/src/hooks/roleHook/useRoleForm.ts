@@ -33,6 +33,10 @@ export default function useRoleForm(onSuccess?: () => void) {
       newErrors.permissions = "Select at least 1 permission";
     }
 
+    if (!form.accessLevel) {
+      newErrors.accessLevel = "Access Level is Required";
+    }
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;

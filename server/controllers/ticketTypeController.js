@@ -7,7 +7,7 @@ const getTicketTypesByEvent = async (req, res) => {
     const tickets = await TicketType.find({
       eventId: req.params.eventId, // ✔ FIXED
       isActive: true,
-      status: "pending", // or remove for debug
+      status: ["pending", "published"], // or remove for debug
     }).sort({ createdAt: 1 });
 
     return res.json(tickets);
@@ -86,6 +86,40 @@ const updateTicketType = async (req, res) => {
   }
 };
 
+const approveTicketType = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const approved = await TicketType.findByIdAndUpdate(
+      id,
+      {
+        status: "published",
+
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!approved) {
+      return res.status(404).json({
+        message: "Ticket type not found",
+      });
+    }
+
+    res.json({
+      message: "Ticket type approved successfully",
+      ticketType: approved,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 const deleteTicketType = async (req, res) => {
   try {
     const { id } = req.params;
@@ -111,4 +145,5 @@ module.exports = {
   getTicketTypesByEvent,
   updateTicketType,
   deleteTicketType,
+  approveTicketType,
 };

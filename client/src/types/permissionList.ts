@@ -1,8 +1,11 @@
 export const permissionsList = [
-  { value: "MANAGE_USERS", label: "Manage Users" },
   { value: "MANAGE_EVENT", label: "Manage Event" },
-  { value: "MANAGE_TICKETTYPE", label: "Manage TicketTypes" },
-  { value: "MANAGE_ROLES", label: "Manage Roles" },
+  { value: "APPROVE_EVENT", label: "Approve Event" },
+  { value: "MANAGE_USERS", label: "Manage Users" },
+  { value: "MANAGE_TICKETTYPE", label: "Manage Tickets" },
+  { value: "APPROVE_TICKETTYPES", label: "Approve Tickets" },
   { value: "MANAGE_SCANNERS", label: "Manage Scanners" },
-  { value: "SCAN_TICKET", label: "Scan Tickets" },
+  { value: "MANAGE_SLOTS", label: "Manage Schedule" },
+  { value: "APPROVE_SCHEDULE", label: "Approve Schedule" },
+  { value: "MANAGE_ROLES", label: "Manage Roles" },
 ];

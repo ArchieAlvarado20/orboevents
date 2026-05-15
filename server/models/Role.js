@@ -31,10 +31,10 @@ const roleSchema = new mongoose.Schema(
     },
 
     // Optional scope support
-    scopeType: {
+    accessLevel: {
       type: String,
-      enum: ["global", "event", "gate"],
-      default: "global",
+      enum: ["super", "admin", "staff", "user"],
+      default: "admin",
     },
   },
   {

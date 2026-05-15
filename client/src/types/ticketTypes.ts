@@ -11,6 +11,8 @@ export type TicketTypeForm = {
   color?: string;
 
   eventId?: string;
+
+  status?: string;
 };
 
 export const initialTicketTypeForm = {
