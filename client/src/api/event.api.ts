@@ -8,7 +8,8 @@ export const eventApi = {
   create: (data: unknown, config?: AxiosRequestConfig) =>
     axios.post(API, data, config),
 
-  getByEvent: (eventId: string) => axios.get(`${API}/${eventId}`),
+  getByEvent: (eventId: string, config?: AxiosRequestConfig) =>
+    axios.get(`${API}/${eventId}`, config),
 
   update: (id: string, data: unknown, config?: AxiosRequestConfig) =>
     axios.put(`${API}/${id}`, data, config),

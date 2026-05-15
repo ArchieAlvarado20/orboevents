@@ -8,11 +8,13 @@ import {
   Trash2,
   Building2,
   IndianRupee,
+  Eye,
 } from "lucide-react";
 
 import { EventForm } from "@/types/event";
 import { useEffect, useRef, useState } from "react";
 import { currency } from "@/types/currency.type";
+import { useNavigate } from "react-router-dom";
 
 interface EventCardProps {
   event: EventForm;
@@ -31,6 +33,7 @@ export default function EventCard({
 }: EventCardProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -106,8 +109,16 @@ export default function EventCard({
           {open && (
             <div className="absolute right-0 mt-2 w-auto bg-white border border-slate-100 rounded shadow flex flex-col gap-1 p-1 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
               <button
+                onClick={() => navigate(`${event._id}`)}
+                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
+              >
+                <Eye size={18} />
+                Explore Event
+              </button>
+
+              <button
                 onClick={() => onEdit(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
+                className="hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
               >
                 <Edit size={18} />
                 Edit Event
@@ -115,7 +126,7 @@ export default function EventCard({
 
               <button
                 onClick={() => onDelete(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-red-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
+                className="hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
               >
                 <Trash2 size={18} />
                 Cancel Event
@@ -123,7 +134,7 @@ export default function EventCard({
 
               <button
                 onClick={() => onAddTicket(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-700 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
               >
                 <Ticket size={18} />
                 Add Tickets
@@ -131,7 +142,7 @@ export default function EventCard({
 
               <button
                 onClick={() => onAddSlot(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-700 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
               >
                 <Calendar size={18} />
                 {event?.eventType?.name ?? "Add Slot"}

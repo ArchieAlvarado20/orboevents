@@ -13,8 +13,6 @@ const ticketTypeSchema = new mongoose.Schema(
       required: true,
     },
 
-    capacity: Number, // total across all ticket types
-
     description: String,
 
     price: {
@@ -37,11 +35,6 @@ const ticketTypeSchema = new mongoose.Schema(
       default: 0,
     },
 
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-
     accessLevel: {
       type: String,
       enum: ["vip", "media", "general", "speaker", "staff"],
@@ -50,12 +43,28 @@ const ticketTypeSchema = new mongoose.Schema(
 
     privileges: [String],
 
-    requiresApproval: {
-      type: Boolean,
-      default: false,
+    color: String,
+
+    // 🔥 NEW: Approval workflow
+    status: {
+      type: String,
+      enum: ["draft", "pending", "rejected", "published"],
+      default: "draft",
     },
 
-    color: String,
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    approvedAt: Date,
+
+    rejectionReason: String,
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

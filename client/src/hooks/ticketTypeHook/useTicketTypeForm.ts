@@ -1,41 +1,17 @@
 import { useState } from "react";
 import { ticketTypeApi } from "@/api/ticketType.api";
 import { showError, showSuccess } from "@/lib/toast";
-
-type TicketTypeForm = {
-  name: string;
-  description?: string;
-
-  price: number | string;
-  quantityTotal: number | string;
-
-  privileges?: string;
-
-  accessLevel?: "vip" | "media" | "general" | "speaker" | "staff";
-
-  color?: string;
-
-  requiresApproval: boolean;
-
-  eventId?: string;
-};
+import {
+  accessLevelColorMap,
+  initialTicketTypeForm,
+  TicketTypeForm,
+} from "@/types/ticketTypes";
 
 export default function useTicketTypeForm(
   eventId: string,
   onSuccess?: () => void,
 ) {
   const [loading, setLoading] = useState(false);
-
-  const initialForm: TicketTypeForm = {
-    name: "",
-    description: "",
-    price: "",
-    quantityTotal: "",
-    privileges: "",
-    accessLevel: "vip",
-    color: "green",
-    requiresApproval: false,
-  };
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof TicketTypeForm, string>>
@@ -45,7 +21,7 @@ export default function useTicketTypeForm(
     setErrors({});
   };
 
-  const [form, setForm] = useState<TicketTypeForm>(initialForm);
+  const [form, setForm] = useState<TicketTypeForm>(initialTicketTypeForm);
 
   // 🔹 handle input change
   const handleChange = (
@@ -53,25 +29,17 @@ export default function useTicketTypeForm(
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    const { name, value, type, files } = e.target as HTMLInputElement;
-
-    const valueToUse = type === "file" ? (files?.[0] ?? null) : value;
+    const target = e.target as HTMLInputElement;
+    const { name, type, value, checked } = target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: valueToUse,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
     setErrors((prev) => ({
       ...prev,
       [name]: "",
-    }));
-
-    const checked = (e.target as HTMLInputElement).checked;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -97,16 +65,22 @@ export default function useTicketTypeForm(
 
     try {
       const payload = {
-        ...form,
+        eventId,
 
-        eventId: eventId,
+        name: form.name,
+        description: form.description,
 
         price: Number(form.price),
         quantityTotal: Number(form.quantityTotal),
 
+        accessLevel: form.accessLevel,
+        color: accessLevelColorMap[form.accessLevel ?? "general"],
+
         privileges: form.privileges
           ? form.privileges.split(",").map((p) => p.trim())
           : [],
+
+        status: "pending",
       };
 
       const res = await ticketTypeApi.create(payload, {
@@ -115,12 +89,12 @@ export default function useTicketTypeForm(
         },
       });
 
-      console.log(res.data);
+      setForm(initialTicketTypeForm);
 
-      setForm(initialForm);
+      showSuccess("Ticket submitted for approval");
 
-      showSuccess("Ticket created successfully!");
       onSuccess?.();
+      console.log(res.data);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to create ticket";

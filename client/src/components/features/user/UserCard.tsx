@@ -59,7 +59,7 @@ export default function UserCard({ user, onEdit, onDelete }: UserCardProps) {
           </div>
         </div>
 
-        <button className="text-slate-400 hover:text-slate-600">
+        <button className="hidden text-slate-400 hover:text-slate-600">
           <MoreVertical size={18} />
         </button>
       </div>

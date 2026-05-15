@@ -8,9 +8,16 @@ const {
   deleteSlot,
   createBulkSlots,
 } = require("../controllers/slotController");
+const adminMiddleware = require("../middleware/adminMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
 
 // GET EVENT SLOTS
-router.get("/events/:eventId/slots", getSlotsByEvent);
+router.get(
+  "/events/:eventId/slots",
+  authMiddleware,
+  adminMiddleware,
+  getSlotsByEvent,
+);
 
 // CREATE SLOTS
 router.post("/events/:eventId/slots", createSlots);

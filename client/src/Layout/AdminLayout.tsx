@@ -23,6 +23,7 @@ export default function AdminLayout() {
   return (
     <div className="flex">
       <Sidebar
+        user={user}
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
         isOpen={isOpen}

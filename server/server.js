@@ -45,7 +45,6 @@ app.use(express.json());
 
 // now safe to use app
 app.use(passport.initialize());
-app.use("/api/ticket-types", ticketTypeRoutes);
 
 app.use("/api/reservations", reservationRoutes);
 
@@ -59,7 +58,7 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/roles", roleRoutes);
 
 app.use("/api", eventRoutes);
-
+app.use("/api", ticketTypeRoutes);
 app.use("/api/categories", categoryRoutes);
 
 app.use("/api/event-types", eventTypeRoutes);

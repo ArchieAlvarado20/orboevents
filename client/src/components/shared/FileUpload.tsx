@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             : "border-slate-200  hover:border-indigo-400 cursor-pointer"
         }`}
       >
-        {value ? (
+        {preview ? (
           <img
             src={imageSrc}
             alt="preview"

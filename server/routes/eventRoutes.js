@@ -23,6 +23,8 @@ router.get("/events/:id", getEventById);
 // ADMIN
 router.get("/admin/events", authMiddleware, adminMiddleware, getEvents);
 
+router.get("/admin/events/:id", authMiddleware, adminMiddleware, getEventById);
+
 router.post(
   "/admin/events",
   authMiddleware,

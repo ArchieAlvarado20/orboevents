@@ -33,6 +33,7 @@ import Users from "./pages/admin/Users";
 import Categories from "./pages/admin/Categories";
 import EventType from "./pages/admin/EventType";
 import { Toaster } from "react-hot-toast";
+import EventInfoPage from "./pages/admin/EventsInfo";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="categories" element={<Categories />} />
           <Route path="event-types" element={<EventType />} />
+          <Route path="events/:id" element={<EventInfoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

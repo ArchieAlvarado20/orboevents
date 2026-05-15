@@ -16,6 +16,11 @@ const createEvent = async (req, res) => {
 
     const event = await Event.create({
       ...req.body,
+
+      organizer: req.body.organizer ? JSON.parse(req.body.organizer) : {},
+
+      tags: req.body.tags ? JSON.parse(req.body.tags) : [],
+
       image: imageUrl,
       createdBy: req.user?._id || null,
     });
@@ -145,24 +150,24 @@ const getEvents = async (req, res) => {
 // ==============================
 const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
-      .populate("category")
-      .populate("eventType")
-      .populate("ticketTypes")
-      .populate("slots")
-      .populate("createdBy", "name email");
+    const { id } = req.params;
 
-    if (!event) {
-      return res.status(404).json({
-        message: "Event not found",
-      });
+    if (!id) {
+      return res.status(400).json({ message: "Missing event id" });
     }
 
-    res.status(200).json(event);
+    const event = await Event.findById(id)
+      .populate("category")
+      .populate("eventType");
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    return res.json(event);
   } catch (err) {
     console.error("GET EVENT ERROR:", err);
-
-    res.status(500).json({
+    return res.status(500).json({
       message: err.message,
     });
   }

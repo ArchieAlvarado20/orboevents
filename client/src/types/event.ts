@@ -20,7 +20,7 @@ export interface EventForm {
   basePrice: number;
   capacity: number;
 
-  status: "draft" | "pending" | "active" | "cancelled" | "completed";
+  status: "draft" | "pending" | "published" | "cancelled" | "completed";
 
   tags: string[];
 }

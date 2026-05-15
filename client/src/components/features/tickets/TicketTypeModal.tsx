@@ -2,25 +2,15 @@ import Input from "@/components/shared/Input";
 import Textarea from "@/components/shared/TextAria";
 import Select from "@/components/shared/Select";
 import Button from "@/components/shared/Button";
-import { MoreVertical, X } from "lucide-react";
+import { MoreVertical, TicketCheckIcon, X } from "lucide-react";
 import Checkbox from "@/components/shared/Checkbox";
 import { useRef } from "react";
 import useTicketTypeForm from "@/hooks/ticketTypeHook/useTicketTypeForm";
-
-export type EventType = {
-  _id: string;
-  name: string;
-  description: string;
-  date: string;
-  location: string;
-  capacity: number;
-  image?: string;
-  status: "draft" | "active" | "cancelled" | "completed";
-  color: "green" | "red" | "blue";
-};
+import { EventForm } from "@/types/event";
+import { accessLevelColorMap } from "@/types/ticketTypes";
 
 type TicketTypeModalProps = {
-  event: EventType;
+  event: EventForm;
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -35,9 +25,10 @@ export default function TicketTypeModal({
   const modalRef = useRef(null);
 
   const statusStyle = {
-    active: "bg-green-100 text-green-700",
+    draft: "bg-gray-100 text-gray-600",
     pending: "bg-yellow-100 text-yellow-700",
-    completed: "bg-gray-100 text-gray-600",
+    published: "bg-green-100 text-green-700",
+    rejected: "bg-red-100 text-red-700",
   };
 
   const accessLevelOptions = [
@@ -87,13 +78,24 @@ export default function TicketTypeModal({
               />
 
               {/* STATUS */}
-              <div className="absolute top-4 left-4">
-                <span
-                  className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${
-                    statusStyle["active"]
-                  }`}
-                >
-                  {event.status || "active"}
+              <span
+                className={`px-3 py-1 text-xs font-bold rounded-full uppercase ${
+                  event.status === "published"
+                    ? "bg-green-100 text-green-700"
+                    : event.status === "pending"
+                      ? "bg-yellow-100 text-yellow-700"
+                      : event.status === "cancelled"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {event.status}
+              </span>
+
+              <div className="text-sm text-slate-500 mt-2">
+                Status Preview:{" "}
+                <span className="font-semibold">
+                  {form.requiresApproval ? "PENDING APPROVAL" : "PUBLISHED"}
                 </span>
               </div>
             </div>
@@ -170,7 +172,7 @@ export default function TicketTypeModal({
                 error={errors.privileges}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Checkbox
                   label="Requires Approval"
                   name="requiresApproval"
@@ -183,27 +185,19 @@ export default function TicketTypeModal({
                   }
                   description="Tickets must be approved by admin before confirmation"
                 />
+              </div>
 
-                <div className="flex gap-3">
-                  <div className="block text-sm font-semibold text-slate-700  mb-2">
-                    <span>Ticket Badge Color: </span>
-                  </div>
-                  {[
-                    { name: "green", label: "#17a105" },
-                    { name: "yellow", label: "#bdad04" },
-                    { name: "red", label: "#990202" },
-                  ].map((c) => (
-                    <button
-                      key={c.name}
-                      type="button"
-                      onClick={() => setForm({ ...form, color: c.name })}
-                      className={`w-10 h-10 rounded-lg  flex items-center justify-center ${
-                        form.color === c.name ? "ring-2 ring-indigo-500" : ""
-                      }`}
-                      style={{ backgroundColor: c.label }}
-                    ></button>
-                  ))}
+              <div className="flex gap-3">
+                <div className="block text-sm font-semibold text-slate-700  mb-2">
+                  <span>Ticket Badge Color: </span>
                 </div>
+                <span
+                  style={{
+                    color: accessLevelColorMap[form.accessLevel ?? "general"],
+                  }}
+                >
+                  <TicketCheckIcon size={24} />
+                </span>
               </div>
 
               {/* <!-- Footer --> */}

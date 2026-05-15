@@ -184,6 +184,7 @@ export default function useEventForm(onSuccess?: () => void) {
 
     return Object.keys(err).length === 0;
   };
+
   // =========================
   // CREATE
   // =========================
@@ -272,26 +273,30 @@ export default function useEventForm(onSuccess?: () => void) {
       const formData = new FormData();
 
       Object.entries(form).forEach(([key, value]) => {
-        // IMAGE
-        if (key === "image" && value instanceof File) {
-          formData.append("image", value);
+        // 1. IMAGE
+        if (key === "image") {
+          if (value instanceof File) {
+            formData.append("image", value);
+          }
           return;
         }
 
-        // ARRAYS (tags)
+        // 2. ARRAYS (tags)
         if (Array.isArray(value)) {
           formData.append(key, JSON.stringify(value));
           return;
         }
 
-        // OBJECTS (organizer, schedule)
-        if (typeof value === "object" && value !== null) {
+        // 3. OBJECTS (organizer, schedule)
+        if (value && typeof value === "object") {
           formData.append(key, JSON.stringify(value));
           return;
         }
 
-        // EVERYTHING ELSE (IMPORTANT FIX)
-        formData.append(key, String(value ?? ""));
+        // 4. PRIMITIVES (safe conversion)
+        if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
       });
 
       await eventApi.update(id, formData, {
@@ -318,13 +323,29 @@ export default function useEventForm(onSuccess?: () => void) {
   const setEditData = (event: EventForm) => {
     setForm({
       _id: event._id,
+
       name: event.name,
       description: event.description,
 
-      category: event.category,
-      eventType: event.eventType,
+      category:
+        typeof event.category === "object"
+          ? event.category._id
+          : event.category,
 
-      organizer: event.organizer || EventInitialForm.organizer,
+      eventType:
+        typeof event.eventType === "object"
+          ? event.eventType._id
+          : event.eventType,
+
+      organizer:
+        typeof event.organizer === "string"
+          ? JSON.parse(event.organizer)
+          : event.organizer || {
+              name: "",
+              email: "",
+              phone: "",
+              company: "",
+            },
 
       location: event.location,
       venue: event.venue,
@@ -334,7 +355,10 @@ export default function useEventForm(onSuccess?: () => void) {
 
       status: event.status,
 
-      tags: event.tags || [],
+      tags:
+        typeof event.tags === "string"
+          ? JSON.parse(event.tags)
+          : event.tags || "",
     });
   };
 

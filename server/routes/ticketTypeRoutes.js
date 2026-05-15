@@ -7,10 +7,18 @@ const {
   updateTicketType,
   deleteTicketType,
 } = require("../controllers/ticketTypeController");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
-router.post("/", createTicketType);
-router.get("/:eventId", getTicketTypesByEvent);
-router.put("/:id", updateTicketType);
-router.delete("/:id", deleteTicketType);
+router.post("/ticket-types/", createTicketType);
+router.get(
+  "/events/:eventId/ticket-types",
+  authMiddleware,
+  adminMiddleware,
+  getTicketTypesByEvent,
+);
+
+router.put("/ticket-types/:id", updateTicketType);
+router.patch("/ticket-types/:id/delete", deleteTicketType);
 
 module.exports = router;

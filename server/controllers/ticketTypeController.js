@@ -1,4 +1,21 @@
 const TicketType = require("../models/TicketType");
+const Event = require("../models/Event");
+
+// 📄 GET Ticket Types by Event
+const getTicketTypesByEvent = async (req, res) => {
+  try {
+    const tickets = await TicketType.find({
+      eventId: req.params.eventId, // ✔ FIXED
+      isActive: true,
+      status: "pending", // or remove for debug
+    }).sort({ createdAt: 1 });
+
+    return res.json(tickets);
+  } catch (err) {
+    console.error("GET TICKETS ERROR:", err);
+    return res.status(500).json({ message: err.message });
+  }
+};
 
 // ➕ CREATE Ticket Type
 const createTicketType = async (req, res) => {
@@ -11,7 +28,6 @@ const createTicketType = async (req, res) => {
       quantityTotal,
       accessLevel,
       privileges,
-      requiresApproval,
       color,
     } = req.body;
 
@@ -35,35 +51,13 @@ const createTicketType = async (req, res) => {
       quantityTotal,
       accessLevel,
       privileges,
-      requiresApproval,
       color,
+
+      status: "pending",
     });
 
     res.status(201).json(ticket);
   } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// 📄 GET Ticket Types by Event
-const getTicketTypesByEvent = async (req, res) => {
-  try {
-    const { eventId } = req.params;
-
-    const tickets = await TicketType.find({
-      eventId,
-      isActive: true, // 🔥 optional filter
-    });
-
-    if (!tickets || tickets.length === 0) {
-      return res.status(404).json({
-        message: "No ticket types found for this event",
-      });
-    }
-
-    res.json(tickets);
-  } catch (err) {
-    console.error("GET TICKETS ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -73,9 +67,14 @@ const updateTicketType = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updated = await TicketType.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const updated = await TicketType.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        status: "pending",
+      },
+      { new: true },
+    );
 
     if (!updated) {
       return res.status(404).json({ message: "Ticket type not found" });
@@ -91,7 +90,11 @@ const deleteTicketType = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deleted = await TicketType.findByIdAndDelete(id);
+    const deleted = await TicketType.findByIdAndUpdate(
+      id,
+      { isActive: false },
+      { new: true },
+    );
 
     if (!deleted) {
       return res.status(404).json({ message: "Ticket type not found" });

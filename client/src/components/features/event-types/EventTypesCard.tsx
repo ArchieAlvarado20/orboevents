@@ -91,7 +91,7 @@ export default function EventTypeCard({
       </div>
 
       {/* UI CONFIG PREVIEW */}
-      <div className="space-y-2 mb-5 text-sm text-slate-600">
+      <div className="hidden space-y-2 mb-5 text-sm text-slate-600">
         <div className="flex items-center gap-2">
           <span className="text-slate-400">Date:</span>
           {eventType.uiConfig.showDate ? "Enabled" : "Disabled"}

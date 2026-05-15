@@ -1,14 +1,19 @@
 import axios, { type AxiosRequestConfig } from "axios";
 
-const API = `${import.meta.env.VITE_API_URL}/api/ticket-types`;
+const API = `${import.meta.env.VITE_API_URL}/api`;
 
 export const ticketTypeApi = {
+  // CREATE
   create: (data: unknown, config?: AxiosRequestConfig) =>
-    axios.post(API, data, config),
+    axios.post(`${API}/ticket-types`, data, config),
 
-  getByEvent: (eventId: string) => axios.get(`${API}/${eventId}`),
+  // GET by event
+  getByEvent: (eventId: string, config?: AxiosRequestConfig) =>
+    axios.get(`${API}/events/${eventId}/ticket-types`, config),
 
+  // UPDATE (resets to pending in backend)
   update: (id: string, data: unknown) => axios.put(`${API}/${id}`, data),
 
-  delete: (id: string) => axios.delete(`${API}/${id}`),
+  // SOFT DELETE (FIXED)
+  delete: (id: string) => axios.patch(`${API}/${id}/delete`),
 };

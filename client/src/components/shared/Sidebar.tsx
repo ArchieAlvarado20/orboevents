@@ -1,4 +1,5 @@
 import { handleLogout } from "@/lib/auth";
+import { UserType } from "@/types/adminUsers.type";
 import {
   BarChart3,
   LayoutDashboard,
@@ -26,9 +27,11 @@ type SidebarProps = {
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  user: UserType;
 };
 
 export default function Sidebar({
+  user,
   isCollapsed,
   setIsCollapsed,
   isOpen,
@@ -58,11 +61,11 @@ export default function Sidebar({
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-2">
+        <div className="hidden flex items-center justify-between mb-2">
           <p
             className={`text-md uppercase font-semibold text-slate-900 ${isCollapsed ? "hidden" : "inline"}`}
           >
-            Administrator
+            {user?.role}
           </p>
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -152,7 +155,7 @@ export default function Sidebar({
           <NavLink
             to="/admin/tickets"
             className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
+              `hidden flex items-center text-sm font-medium rounded-lg transition-all ${
                 isActive
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-slate-600 hover:bg-slate-100"
@@ -206,7 +209,7 @@ export default function Sidebar({
           <NavLink
             to="/admin/scanner"
             className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
+              `hidden flex items-center text-sm font-medium rounded-lg transition-all ${
                 isActive
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-slate-600 hover:bg-slate-100"
@@ -225,7 +228,7 @@ export default function Sidebar({
           <NavLink
             to="/admin/analytics"
             className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
+              `hidden flex items-center text-sm font-medium rounded-lg transition-all ${
                 isActive
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-slate-600 hover:bg-slate-100"
@@ -244,7 +247,7 @@ export default function Sidebar({
           <NavLink
             to="/admin/profile"
             className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
+              `hidden flex items-center text-sm font-medium rounded-lg transition-all ${
                 isActive
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-slate-600 hover:bg-slate-100"
@@ -263,7 +266,7 @@ export default function Sidebar({
           <NavLink
             to="/admin/notification"
             className={({ isActive }) =>
-              `flex items-center text-sm font-medium rounded-lg transition-all ${
+              `hidden flex items-center text-sm font-medium rounded-lg transition-all ${
                 isActive
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-slate-600 hover:bg-slate-100"

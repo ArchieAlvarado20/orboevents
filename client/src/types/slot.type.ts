@@ -1,4 +1,5 @@
 export type SlotFormType = {
+  _id: string;
   name: string;
   date: string;
   startTime: string;

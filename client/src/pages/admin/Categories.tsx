@@ -85,7 +85,7 @@ export default function Categories() {
             </Button>
           </header>
 
-          <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md-w-50">
+          <section className="hidden flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md-w-50">
             {/* FILTERS */}
             <div className="inline-flex flex-wrap p-1 bg-white  border border-slate-200  rounded-xl">
               <button className="px-4 py-2 text-sm font-medium rounded-lg bg-slate-100  text-indigo-600 ">

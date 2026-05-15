@@ -13,6 +13,7 @@ import { useEventType } from "@/hooks/eventType/useEventType";
 import { EventForm, EventInitialForm } from "@/types/event";
 import { error } from "console";
 import { currency } from "@/types/currency.type";
+import UserFileUpload from "@/components/shared/UserFIleUpload";
 
 interface EventModalProps {
   open: boolean;
@@ -46,33 +47,8 @@ export default function EventModal({
     onClose();
   });
 
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState<string>("");
   const [showAdvanced, setShowAdvanced] = useState(false);
-
-  const handleSubmit = async () => {
-    let success = false;
-
-    if (event) {
-      success = await updateEvent(event._id);
-    } else {
-      success = await createEvent();
-    }
-
-    if (success) {
-      onSuccess();
-      onClose();
-    }
-    setShowAdvanced(true);
-  };
-
-  useEffect(() => {
-    if (event) {
-      setEditData(event);
-    } else {
-      setForm(EventInitialForm);
-      resetForm();
-    }
-  }, [event, open]);
 
   const handleImageChange = (file: File | null) => {
     if (!file) return;
@@ -87,9 +63,36 @@ export default function EventModal({
 
   useEffect(() => {
     if (event?.image) {
-      setPreview(event.image);
+      setPreview(event?.image);
     }
   }, [event]);
+
+  const handleSubmit = async () => {
+    // STEP 1 → go next
+    if (!showAdvanced) {
+      setShowAdvanced(true);
+      return;
+    }
+
+    // STEP 2 → submit
+    const success = event ? await updateEvent(event._id) : await createEvent();
+
+    if (success) {
+      onSuccess?.();
+      onClose();
+    } else {
+      setShowAdvanced(false);
+    }
+  };
+
+  useEffect(() => {
+    if (event) {
+      setEditData(event);
+    } else {
+      setForm(EventInitialForm);
+      resetForm();
+    }
+  }, [event, open]);
 
   const EVENT_TYPE_LABELS: Record<string, string> = {
     "single-day": "Single Day Event",
@@ -97,8 +100,6 @@ export default function EventModal({
     "time-slot": "Time Slot Event",
     recurring: "Recurring Event",
   };
-
-  const selectedEventType = eventTypes.find((e) => e._id === form.eventType);
 
   return (
     <>
@@ -376,7 +377,11 @@ export default function EventModal({
               </Button>
 
               <Button onClick={handleSubmit} loading={loading}>
-                {event ? "Update Event" : "Create Event"}
+                {!showAdvanced
+                  ? "Next"
+                  : event
+                    ? "Update Event"
+                    : "Create Event"}
               </Button>
             </div>
           </div>

@@ -54,7 +54,7 @@ export default function CategoryCard({
           </div>
         </div>
 
-        <button className="text-slate-400 hover:text-slate-600 transition-colors">
+        <button className="hidden text-slate-400 hover:text-slate-600 transition-colors">
           <MoreVertical size={18} />
         </button>
       </div>

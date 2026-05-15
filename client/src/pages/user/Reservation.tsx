@@ -215,77 +215,7 @@ export default function Reservation() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Cart Items List */}
           <div className="lg:col-span-2 space-y-6">
-            {reservations.length !== 0 ? (
-              reservations.map((r: any) => (
-                <div
-                  key={r._id}
-                  className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedReservations.some((s) => s._id === r._id)}
-                    onChange={() => toggleReservation(r)}
-                    className="w-5 h-5"
-                  />
-                  <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
-                    <img
-                      src={r.eventId?.image || "/images/images.jpg"}
-                      alt={r.eventId?.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex justify-between rs-start">
-                      <div>
-                        <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
-                          {r.eventId?.name}
-                        </h3>
-                        <p className="text-sm text-slate-500 font-medium mb-1">
-                          <FormattedDate date={r.eventId?.date} />
-                        </p>
-                        <p className="text-xs text-slate-400">
-                          {r.eventId?.location}
-                        </p>
-                        <p className="text-xl mt-2 font-bold mb-1  transition-colors">
-                          ₹ {r.totalAmount.toFixed(2)}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() =>
-                          confirmToast("Cancel this reservation?", () => {
-                            cancelReservation(r._id);
-                          })
-                        }
-                        className="p-2 text-slate-300 hover:text-pink-500  rounded-xl transition-all"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                    <div className="hidden flex items-center justify-between mt-4">
-                      <div className="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-100">
-                        <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all">
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="w-10 text-center font-bold text-sm">
-                          {r.quantity}
-                        </span>
-                        <button
-                          className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all"
-                          onClick={() =>
-                            showInfo("For now only one ticket per event only!")
-                          }
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="text-2xl font-black text-violet-600"></div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
+            {reservations.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 border border-dashed border-slate-200 text-center">
                 <Calendar className="w-12 h-12 text-slate-200 mx-auto mb-4" />
                 <p className="text-slate-500 font-medium">
@@ -297,6 +227,83 @@ export default function Reservation() {
                   </button>
                 </Link>
               </div>
+            ) : (
+              <>
+                {" "}
+                {reservations.map((r: any) => (
+                  <div
+                    key={r._id}
+                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedReservations.some(
+                        (s) => s._id === r._id,
+                      )}
+                      onChange={() => toggleReservation(r)}
+                      className="w-5 h-5"
+                    />
+                    <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
+                      <img
+                        src={r.eventId?.image || "/images/images.jpg"}
+                        alt={r.eventId?.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div className="flex justify-between rs-start">
+                        <div>
+                          <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
+                            {r.eventId?.name}
+                          </h3>
+                          <p className="text-sm text-slate-500 font-medium mb-1">
+                            <FormattedDate date={r.eventId?.date} />
+                          </p>
+                          <p className="text-xs text-slate-400">
+                            {r.eventId?.location}
+                          </p>
+                          <p className="text-xl mt-2 font-bold mb-1  transition-colors">
+                            ₹ {r.totalAmount.toFixed(2)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() =>
+                            confirmToast("Cancel this reservation?", () => {
+                              cancelReservation(r._id);
+                            })
+                          }
+                          className="p-2 text-slate-300 hover:text-pink-500  rounded-xl transition-all"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      <div className="hidden flex items-center justify-between mt-4">
+                        <div className="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-100">
+                          <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all">
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="w-10 text-center font-bold text-sm">
+                            {r.quantity}
+                          </span>
+                          <button
+                            className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all"
+                            onClick={() =>
+                              showInfo(
+                                "For now only one ticket per event only!",
+                              )
+                            }
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <div className="text-2xl font-black text-violet-600"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
             <Link to="/events">
               <button className="flex items-center gap-2 text-slate-500 font-bold text-sm hover:text-violet-600 transition-colors group">
