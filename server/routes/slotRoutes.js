@@ -7,9 +7,12 @@ const {
   createSlots,
   deleteSlot,
   createBulkSlots,
+  approveSlot,
+  cancelSlot,
 } = require("../controllers/slotController");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
+const permissionMiddleware = require("../middleware/permissionMiddleware");
 
 // GET EVENT SLOTS
 router.get(
@@ -17,6 +20,22 @@ router.get(
   authMiddleware,
   adminMiddleware,
   getSlotsByEvent,
+);
+
+router.patch(
+  "/slots/:id/approve",
+  authMiddleware,
+  adminMiddleware,
+  permissionMiddleware("APPROVE_SLOTS"),
+  approveSlot,
+);
+
+router.patch(
+  "/slots/:id/cancel",
+  authMiddleware,
+  adminMiddleware,
+  permissionMiddleware("APPROVE_SLOTS"),
+  cancelSlot,
 );
 
 // CREATE SLOTS

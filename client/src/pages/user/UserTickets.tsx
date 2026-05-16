@@ -1,4 +1,5 @@
 import api from "@/api/interceptor.api";
+import { userEventApi } from "@/api/userEvent.api";
 import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
@@ -34,9 +35,7 @@ export default function UserTickets() {
       setLoading(true);
 
       try {
-        const eventRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/events/${id}`,
-        );
+        const eventRes = await userEventApi.getByEventID(id);
         setEvent(eventRes.data);
       } catch (err) {
         console.error("Event failed", err);
@@ -125,12 +124,16 @@ export default function UserTickets() {
                   src={event.image || "/images/images.jpg"}
                 />
                 <span className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                  {event.status || "active"}
+                  {event.location}
                 </span>
               </div>
               <div className="md:w-1/2 p-8 flex flex-col justify-center">
                 <h1 className="text-3xl font-bold text-slate-900 mb-4 leading-tight">
                   {event.name}
+                </h1>
+
+                <h1 className="text-md font-light text-slate-900 mb-4 leading-tight">
+                  {event.description}
                 </h1>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-slate-600">
@@ -139,13 +142,7 @@ export default function UserTickets() {
                       data-lucide="calendar"
                     ></i>
                     <span className="text-sm font-medium">
-                      {new Date(event.date).toLocaleDateString("en-US", {
-                        timeZone: "UTC",
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
+                      {event.location}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-slate-600">

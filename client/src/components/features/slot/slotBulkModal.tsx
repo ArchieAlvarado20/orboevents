@@ -137,6 +137,7 @@ export default function SlotBulkModal({
                         updateSlot(index, "date", e.target.value)
                       }
                       error={errors[index]?.date}
+                      min={new Date().toISOString().split("T")[0]}
                     />
 
                     <Input

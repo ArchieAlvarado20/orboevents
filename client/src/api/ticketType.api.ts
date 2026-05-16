@@ -14,6 +14,9 @@ export const ticketTypeApi = {
   approveTicketType: (id: string, config?: AxiosRequestConfig) =>
     axios.patch(`${API}/ticket-types/${id}/approve`, {}, config),
 
+  calcelTicketType: (id: string, config?: AxiosRequestConfig) =>
+    axios.patch(`${API}/ticket-types/${id}/cancel`, {}, config),
+
   // UPDATE (resets to pending in backend)
   update: (id: string, data: unknown) => axios.put(`${API}/${id}`, data),
 

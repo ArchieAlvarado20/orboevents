@@ -1,26 +1,16 @@
+import { EventForm } from "@/types/event";
 import FormattedDate from "@/utils/dateLongFormat";
 import { CalendarDays, MapPin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-interface Event {
-  _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-  description: string;
-  price?: number;
-}
-
 interface EventCardProps {
-  event: Event;
+  event: EventForm;
 }
 
 export default function UserEventCard2({ event }: EventCardProps) {
   const navigate = useNavigate();
 
-  const handleBookNow = (event: any) => {
+  const handleBookNow = (event: EventForm) => {
     navigate(`/tickets/${event._id}`);
   };
 
@@ -53,7 +43,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
           <div className="flex flex-col gap-2 text-xs mb-3">
             <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <CalendarDays className="w-4 h-4 text-indigo-500" />
-              <FormattedDate date={event.date} />
+              {event.location}
             </div>
             <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <MapPin className="w-4 h-4 text-indigo-500" />
@@ -71,7 +61,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
                 Starting from
               </span>
               <span className="font-headline font-bold text-violet-600 text-xl">
-                ₹ {event.price}
+                ₹ {event.basePrice}
               </span>
             </div>
 

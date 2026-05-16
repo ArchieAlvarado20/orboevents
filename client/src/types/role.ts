@@ -1,18 +1,23 @@
 export type RoleStatus = "active" | "inactive";
 
 export interface RoleFormType {
-  _id: string;
+  _id?: string;
+
   name: string;
+
   description: string;
+
   permissions: string[];
+
   status: RoleStatus;
-  accessLevel?: "super" | "admin" | "staff" | "user";
+
+  accessLevel: "super" | "admin" | "staff";
 }
 
-export const initialForm = {
+export const initialForm: RoleFormType = {
   name: "",
   description: "",
-  permissions: [],
-  status: "active" as RoleStatus,
-  accessLevel: "",
+  permissions: [] as string[],
+  status: "active",
+  accessLevel: "admin",
 };

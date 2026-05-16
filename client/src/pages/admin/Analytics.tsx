@@ -1,6 +1,6 @@
 import MobileBottomNav from "@/components/shared/BottomNav";
 import ComingSoon from "@/components/shared/ComingSoon";
-import Sidebar from "@/components/shared/Sidebar";
+import Sidebar from "@/components/shared/SidebarAdmin";
 import Topbar from "@/components/shared/Topbar";
 import { useState } from "react";
 

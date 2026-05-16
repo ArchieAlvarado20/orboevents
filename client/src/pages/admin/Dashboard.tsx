@@ -1,4 +1,4 @@
-import Sidebar from "@/components/shared/Sidebar";
+import Sidebar from "@/components/shared/SidebarAdmin";
 import { StatsCard } from "@/components/shared/StatCard";
 import {
   Blocks,
@@ -16,7 +16,6 @@ import { useState } from "react";
 export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log(user.name);
 
   return (
     <>

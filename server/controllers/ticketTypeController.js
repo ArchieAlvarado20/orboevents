@@ -120,6 +120,40 @@ const approveTicketType = async (req, res) => {
   }
 };
 
+const cancelTicketType = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const cancelled = await TicketType.findByIdAndUpdate(
+      id,
+      {
+        status: "cancelled",
+
+        cancelledBy: req.user._id,
+        cancelledAt: new Date(),
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!cancelled) {
+      return res.status(404).json({
+        message: "Ticket type not found",
+      });
+    }
+
+    res.json({
+      message: "Ticket type cancelled successfully",
+      ticketType: cancelled,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 const deleteTicketType = async (req, res) => {
   try {
     const { id } = req.params;
@@ -146,4 +180,5 @@ module.exports = {
   updateTicketType,
   deleteTicketType,
   approveTicketType,
+  cancelTicketType,
 };

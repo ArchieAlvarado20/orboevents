@@ -1,19 +1,9 @@
+import { EventForm } from "@/types/event";
 import { MapPin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-interface Event {
-  _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-  description: string;
-  price?: number;
-}
-
 interface EventCardProps {
-  event: Event;
+  event: EventForm;
 }
 
 export default function UserEventCard({ event }: EventCardProps) {
@@ -34,10 +24,7 @@ export default function UserEventCard({ event }: EventCardProps) {
 
         {/* Date Badge */}
         <div className="absolute top-4 right-4 bg-violet-600 text-white px-4 py-2 rounded-2xl font-bold text-xs shadow-lg">
-          {new Date(event.date).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })}
+          {event.location}
         </div>
       </div>
 
@@ -60,7 +47,7 @@ export default function UserEventCard({ event }: EventCardProps) {
         {/* Footer */}
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-violet-600">
-            ₹ {event.price}
+            ₹ {event.basePrice}
           </span>
 
           <button

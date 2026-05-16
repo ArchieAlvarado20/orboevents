@@ -14,6 +14,12 @@ export const slotApi = {
   bulkCreate: (eventId: string, data: unknown, config?: AxiosRequestConfig) =>
     axios.post(`${API}/events/${eventId}/slots/bulk`, data, config),
 
+  approveSlots: (id: string, config?: AxiosRequestConfig) =>
+    axios.patch(`${API}/slots/${id}/approve`, {}, config),
+
+  calcelSlots: (id: string, config?: AxiosRequestConfig) =>
+    axios.patch(`${API}/slots/${id}/cancel`, {}, config),
+
   // DELETE SLOT
   delete: (slotId: string, config?: AxiosRequestConfig) =>
     axios.delete(`${API}/slots/${slotId}`, config),

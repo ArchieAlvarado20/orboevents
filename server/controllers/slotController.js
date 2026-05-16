@@ -8,6 +8,7 @@ const getSlotsByEvent = async (req, res) => {
   try {
     const slots = await Slot.find({
       event: req.params.eventId,
+      status: ["published", "pending"],
     }).sort({ date: 1 });
 
     res.json(slots);
@@ -51,6 +52,8 @@ const createSlots = async (req, res) => {
       startTime,
       endTime,
       capacity,
+
+      status: "pending",
     });
 
     res.status(201).json(slot);
@@ -72,16 +75,17 @@ const createBulkSlots = async (req, res) => {
         message: "Slots are required",
       });
     }
-
-    const existing = await Slot.findOne({
-      event: eventId,
-      name,
-    });
-
-    if (existing) {
-      return res.status(400).json({
-        message: "Slot name already exists for this event",
+    for (const slot of slots) {
+      const existing = await Slot.findOne({
+        event: eventId,
+        name: slot.name,
       });
+
+      if (existing) {
+        return res.status(400).json({
+          message: `Slot name already exists: ${slot.name}`,
+        });
+      }
     }
 
     // VALIDATE ALL
@@ -102,6 +106,8 @@ const createBulkSlots = async (req, res) => {
       endTime: slot.endTime,
 
       capacity: Number(slot.capacity) || 0,
+
+      status: "pending",
     }));
 
     const createdSlots = await Slot.insertMany(payload);
@@ -109,6 +115,70 @@ const createBulkSlots = async (req, res) => {
     res.status(201).json({
       message: "Slots created successfully",
       slots: createdSlots,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+const approveSlot = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const approved = await Slot.findByIdAndUpdate(
+      id,
+      {
+        status: "published",
+
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (!approved) {
+      return res.status(404).json({
+        message: "Slot not found",
+      });
+    }
+
+    res.json({
+      message: "Slot approved successfully",
+      slot: approved,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+const cancelSlot = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const cancelled = await Slot.findByIdAndUpdate(
+      id,
+      {
+        status: "cancelled",
+
+        cancelledBy: req.user._id,
+        cancelledAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (!cancelled) {
+      return res.status(404).json({
+        message: "Slot not found",
+      });
+    }
+
+    res.json({
+      message: "Slot cancelled successfully",
+      slot: cancelled,
     });
   } catch (err) {
     res.status(500).json({
@@ -145,4 +215,6 @@ module.exports = {
   createSlots,
   deleteSlot,
   createBulkSlots,
+  approveSlot,
+  cancelSlot,
 };

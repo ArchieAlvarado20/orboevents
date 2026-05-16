@@ -32,7 +32,7 @@ export default function Users() {
   return (
     <>
       {unauthorized ? (
-        <div className="ml-64 sm:m-auto">
+        <div className="md:ml-64 sm:m-auto">
           {" "}
           <Unauthorized message="Admin access only!" />
         </div>

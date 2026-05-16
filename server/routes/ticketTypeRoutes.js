@@ -7,6 +7,7 @@ const {
   updateTicketType,
   deleteTicketType,
   approveTicketType,
+  cancelTicketType,
 } = require("../controllers/ticketTypeController");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
@@ -26,6 +27,14 @@ router.patch(
   adminMiddleware,
   permissionMiddleware("APPROVE_TICKETTYPES"),
   approveTicketType,
+);
+
+router.patch(
+  "/ticket-types/:id/cancel",
+  authMiddleware,
+  adminMiddleware,
+  permissionMiddleware("APPROVE_TICKETTYPES"),
+  cancelTicketType,
 );
 
 router.put("/ticket-types/:id", updateTicketType);

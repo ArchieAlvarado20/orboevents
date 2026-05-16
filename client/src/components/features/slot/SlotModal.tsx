@@ -127,6 +127,7 @@ export default function SlotModal({
                   value={form.date}
                   onChange={handleChange}
                   error={errors.date}
+                  min={new Date().toISOString().split("T")[0]}
                 />
 
                 <Input

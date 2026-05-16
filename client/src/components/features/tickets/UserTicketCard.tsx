@@ -1,22 +1,17 @@
+import { TicketTypeForm } from "@/types/ticketTypes";
 import { Ticket } from "lucide-react";
 import { useState } from "react";
 
 type TicketCardProps = {
-  name: string;
-  accessLevel: string;
-  description?: string;
-  price: number;
+  ticketType: TicketTypeForm;
   onSelect: () => void;
-  color?: "green" | "yellow" | "red";
+  color: string;
 };
 
 export default function UserTicketCard({
-  name,
-  accessLevel,
-  description,
-  price,
+  ticketType,
   onSelect,
-  color = "green",
+  color,
 }: TicketCardProps) {
   const [loading, setLoading] = useState(false);
   const colorMap = {
@@ -45,7 +40,7 @@ export default function UserTicketCard({
         className="absolute -top-3 left-1/2 -translate-x-1/2 text-center bg-indigo-600 w-45 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider"
         style={{ backgroundColor: colorHex }}
       >
-        {accessLevel}{" "}
+        {ticketType.accessLevel}{" "}
       </span>
 
       <div>
@@ -53,15 +48,18 @@ export default function UserTicketCard({
           <Ticket className="w-10 h-10" style={{ color: colorHex }} />
         </div>
 
-        <h3 className="font-bold text-lg"> {name || "Regular Ticket"}</h3>
+        <h3 className="font-bold text-lg">
+          {" "}
+          {ticketType.name || "Regular Ticket"}
+        </h3>
 
-        <p className="text-xs text-slate-500 mb-4">{description}</p>
+        <p className="text-xs text-slate-500 mb-4">{ticketType.description}</p>
 
         <p
           className="text-2xl font-bold"
           // style={{ color: colorHex }}
         >
-          ₹{price.toFixed(2)}
+          ₹{ticketType.price}
         </p>
       </div>
 

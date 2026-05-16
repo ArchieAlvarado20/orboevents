@@ -1,3 +1,4 @@
+import { userEventApi } from "@/api/userEvent.api";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
 import { showError, showSuccess } from "@/lib/toast";
 import { Event } from "@/types/event";
@@ -12,9 +13,7 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/events`,
-        );
+        const res = await userEventApi.get();
 
         const events = res.data.events || [];
         setEvents(events.slice(0, 6));

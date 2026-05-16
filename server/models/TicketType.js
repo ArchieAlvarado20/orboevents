@@ -48,8 +48,8 @@ const ticketTypeSchema = new mongoose.Schema(
     // 🔥 NEW: Approval workflow
     status: {
       type: String,
-      enum: ["draft", "pending", "rejected", "published"],
-      default: "draft",
+      enum: ["pending", "cancelled", "published"],
+      default: "pending",
     },
 
     approvedBy: {

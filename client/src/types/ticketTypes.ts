@@ -12,7 +12,7 @@ export type TicketTypeForm = {
 
   eventId?: string;
 
-  status?: string;
+  status?: "draft" | "pending" | "cancelled" | "published";
 };
 
 export const initialTicketTypeForm = {

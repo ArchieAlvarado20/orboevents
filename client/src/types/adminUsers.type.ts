@@ -1,3 +1,5 @@
+import { RoleFormType } from "./role";
+
 export interface UserType {
   _id: string;
   name: string;
@@ -6,7 +8,7 @@ export interface UserType {
   phone: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  role: RoleFormType | string;
   status?: "active" | "inactive" | "suspended" | "hold";
 }
 
@@ -15,7 +17,7 @@ export interface UserEditType {
   name: string;
   email: string;
   phone: string;
-  role: string;
+  role: RoleFormType | string;
   status?: "active" | "inactive" | "suspended" | "hold";
 }
 
@@ -25,7 +27,7 @@ export const userInitialForm = {
   password: "",
   confirmPassword: "",
   image: null,
-  role: "",
+  role: "user",
   phone: "",
   status: "active",
 };
@@ -33,7 +35,7 @@ export const userInitialForm = {
 export const userInitialEditForm = {
   name: "",
   email: "",
-  role: "",
+  role: "user",
   phone: "",
   status: "active",
 };

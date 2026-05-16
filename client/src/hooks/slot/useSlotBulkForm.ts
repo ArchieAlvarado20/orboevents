@@ -81,6 +81,16 @@ export default function useSlotBulkForm(
 
       if (!slot.date) {
         slotErrors.date = "Date is required";
+      } else {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const slotDate = new Date(slot.date);
+        slotDate.setHours(0, 0, 0, 0);
+
+        if (slotDate < today) {
+          slotErrors.date = "Date must be today or in the future";
+        }
       }
 
       if (!slot.startTime) {

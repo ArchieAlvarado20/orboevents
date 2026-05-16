@@ -53,7 +53,7 @@ router.delete(
   "/admin/events/:id",
   authMiddleware,
   adminMiddleware,
-  permissionMiddleware(["MANAGE_EVENT"]),
+  permissionMiddleware(["APPROVE_EVENT"]),
   deleteEvent,
 );
 

@@ -5,7 +5,14 @@ import { ticketTypeApi } from "@/api/ticketType.api";
 import { slotApi } from "@/api/slot.api"; // assume meron ka
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import Button from "@/components/shared/Button";
-import { Calendar, MapPin, Ticket, Layers } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Ticket,
+  Layers,
+  Currency,
+  Trash2,
+} from "lucide-react";
 import { EventForm } from "@/types/event";
 import { TicketTypeForm } from "@/types/ticketTypes";
 import { SlotFormType } from "@/types/slot.type";
@@ -15,6 +22,9 @@ import SlotModal from "@/components/features/slot/SlotModal";
 import SlotBulkModal from "@/components/features/slot/slotBulkModal";
 import EventModal from "@/components/features/event/EventModal";
 import { confirmToast } from "@/lib/confirmToast";
+import FormattedDate from "@/utils/dateLongFormat";
+import { formatTime } from "@/utils/timeLongFormat";
+import { currency } from "@/types/currency.type";
 
 export default function EventInfoPage() {
   const { id } = useParams();
@@ -138,11 +148,103 @@ export default function EventInfoPage() {
     }
   };
 
+  const cancelTicketType = async (id: string) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showError("Unauthorized");
+        return;
+      }
+
+      await ticketTypeApi.calcelTicketType(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Ticket type cancelled successfully");
+
+      fetchData?.(); // refresh list optional
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to cancel ticket type");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const approveSlot = async (id: string) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showError("Unauthorized");
+        return;
+      }
+
+      await slotApi.approveSlots(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Slot approved successfully");
+
+      fetchData?.();
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to approve slot");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const cancelSlot = async (id: string) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showError("Unauthorized");
+        return;
+      }
+
+      await slotApi.calcelSlots(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Slot cancelled successfully");
+
+      fetchData?.();
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to cancel slot");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) return <TransparentSpinner />;
-  if (!event) return <p className="p-6">Event not found</p>;
+  if (!event) return <TransparentSpinner />;
 
   return (
-    <div className="max-w-5xl mx-auto p-0 sm:p-4 space-y-8">
+    <div className="max-w-full md:ml-64 md:py-10 md:px-10  xl:px-20">
       {openTicketModal && event && (
         <TicketTypeModal
           open={openTicketModal}
@@ -229,27 +331,45 @@ export default function EventInfoPage() {
           {ticketType.length === 0 ? (
             <p className="text-sm text-slate-500">No tickets yet</p>
           ) : (
-            <div className="grid sm:grid-cols-3 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
               {ticketType.map((t) => (
                 <div
                   key={t._id}
                   className="p-4 border border-slate-200 rounded-xl hover:shadow-sm transition "
                 >
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-semibold text-slate-900">{t.name}</h3>
+                  <div className="flex flex-col md:flex-row justify-between items-center">
+                    <div className="flex justify-between items-center w-full">
+                      <h3 className="font-bold text-lg text-slate-900">
+                        {t.name}
+                      </h3>
 
-                    <span
-                      className="text-xs uppercase text-slate-200 px-2 py-1 rounded-md"
-                      style={{ background: t.color || "#e5e7eb" }}
-                    >
-                      {t.accessLevel}
-                    </span>
+                      <span
+                        className="text-xs uppercase text-red-400 px-2 py-1 rounded-md"
+                        onClick={() =>
+                          confirmToast("Cancel this ticket?", () =>
+                            cancelTicketType(t._id),
+                          )
+                        }
+                      >
+                        <Trash2 size={16} />
+                      </span>
+                    </div>
                   </div>
+                  <span
+                    className="text-xs uppercase text-slate-200 px-2 py-1 rounded-md"
+                    style={{ background: t.color || "#e5e7eb" }}
+                  >
+                    {t.accessLevel}
+                  </span>
 
-                  <p className="text-sm text-slate-500 mt-1">{t.description}</p>
+                  <p className="text-sm font-medium text-slate-700 mt-1">
+                    {t.description}
+                  </p>
 
                   <div className="mt-2 flex justify-between text-sm">
-                    <span>₱ {t.price}</span>
+                    <span>
+                      {currency.rupees} {t.price}
+                    </span>
                     <span>Qty: {t.quantityTotal}</span>
                   </div>
                   {t.status === "pending" ? (
@@ -282,27 +402,65 @@ export default function EventInfoPage() {
         <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
             <Layers size={18} />
-            Event Slots
+            Event Slots <p className="uppercase">({event.eventType.name})</p>
           </div>
 
           {slots.length === 0 ? (
             <p className="text-sm text-slate-500">No slots available</p>
           ) : (
-            <div className="grid sm:grid-cols-3 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
               {slots.map((s) => (
                 <div
                   key={s._id}
                   className="p-4 border rounded-xl border-slate-200"
                 >
-                  <p className="font-medium text-slate-900">{s.name}</p>
+                  <div className="flex justify-between items-center w-full">
+                    <p className="font-bold text-lg text-slate-900">{s.name}</p>
+
+                    <span
+                      className="text-xs uppercase text-red-400 px-2 py-1 rounded-md"
+                      onClick={() =>
+                        confirmToast("Cancel this Schedule?", () =>
+                          cancelSlot(s._id),
+                        )
+                      }
+                    >
+                      <Trash2 size={16} />
+                    </span>
+                  </div>
+
+                  <FormattedDate
+                    date={s.date}
+                    className="text-sm font-medium"
+                  />
 
                   <p className="text-sm text-slate-500">
-                    {s.startTime} - {s.endTime}
+                    {formatTime(s.startTime)} - {formatTime(s.endTime)}
                   </p>
 
                   <div className="text-xs mt-2 text-slate-500">
                     Capacity: {s.capacity}
                   </div>
+                  {s.status === "pending" ? (
+                    <Button
+                      variant="warning"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                      onClick={() =>
+                        confirmToast("Approve this schedule?", () =>
+                          approveSlot(s._id),
+                        )
+                      }
+                    >
+                      For Approval
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="gradient"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                    >
+                      Published
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>
@@ -311,7 +469,7 @@ export default function EventInfoPage() {
 
         {/* ================= ACTIONS ================= */}
         <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
             <Button
               variant="outline"
               className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"

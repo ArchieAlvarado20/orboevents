@@ -30,7 +30,7 @@ type SidebarProps = {
   user: UserType;
 };
 
-export default function Sidebar({
+export default function SidebarAdmin({
   user,
   isCollapsed,
   setIsCollapsed,
