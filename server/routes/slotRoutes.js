@@ -14,6 +14,9 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 const permissionMiddleware = require("../middleware/permissionMiddleware");
 
+// PUBLIC
+router.get("/events/:eventId/public/slots", getSlotsByEvent);
+
 // GET EVENT SLOTS
 router.get(
   "/events/:eventId/slots",

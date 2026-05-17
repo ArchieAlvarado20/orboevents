@@ -112,29 +112,29 @@ export default function EventCard({
                 onClick={() => navigate(`${event._id}`)}
                 className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
               >
-                <Eye size={18} />
+                <Eye size={18} className="text-green-600" />
                 Explore Event
               </button>
 
               <button
                 onClick={() => onEdit(event)}
-                className="hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
+                className=" flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
               >
-                <Edit size={18} />
+                <Edit size={18} className="text-blue-600" />
                 Edit Event
               </button>
 
               <button
                 onClick={() => onDelete(event)}
-                className="hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
+                className=" flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
               >
-                <Trash2 size={18} />
+                <Trash2 size={18} className="text-red-600" />
                 Cancel Event
               </button>
 
               <button
                 onClick={() => onAddTicket(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+                className="hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
               >
                 <Ticket size={18} />
                 Add Tickets
@@ -142,7 +142,7 @@ export default function EventCard({
 
               <button
                 onClick={() => onAddSlot(event)}
-                className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
+                className=" hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
               >
                 <Calendar size={18} />
                 {event?.eventType?.name ?? "Add Slot"}

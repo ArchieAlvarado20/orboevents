@@ -1,44 +1,38 @@
 import api from "@/api/interceptor.api";
 import { slotApi } from "@/api/slot.api";
-import { ticketTypeApi } from "@/api/ticketType.api";
 import { userEventApi } from "@/api/userEvent.api";
+import NoSlotsAvailable from "@/components/features/slot/NoSlotsAvailable";
 import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import { showError, showInfo, showSuccess } from "@/lib/toast";
-import { Event } from "@/types/event";
+import SlotCard from "@/components/shared/usersPage/SlotCard";
+import { showError, showInfo, showSuccess } from "@/lib/hotToast";
+import { EventForm } from "@/types/event";
+import { SlotFormType } from "@/types/slot.type";
 import { TicketTypeForm } from "@/types/ticketTypes";
-
-import { formatTime } from "@/utils/timeLongFormat";
-import axios from "axios";
 import {
   ArrowRight,
   Calendar,
-  ChevronDown,
-  ChevronLeft,
   MapPin,
-  Notebook,
   ShieldCheck,
   ShoppingCart,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-export default function UserTickets() {
+export default function UserSlots() {
   const { id } = useParams();
-  const [event, setEvent] = useState<Event | null>(null);
-  const [tickets, setTickets] = useState<TicketTypeForm[]>([]);
+  const [event, setEvent] = useState<EventForm | null>(null);
   const [slots, setSlots] = useState<SlotFormType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [selectedSlot, setSelectedSlot] = useState<any>(null);
   const navigate = useNavigate();
 
-  const total = selectedTicket?.price || 0;
-
-  const handleSelectTicket = (ticket: any) => {
-    setSelectedTicket(ticket);
+  const handleSelectSlot = (slot: any) => {
+    setSelectedSlot(slot);
   };
 
   useEffect(() => {
@@ -56,22 +50,14 @@ export default function UserTickets() {
       }
 
       try {
-        const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id);
-        setTickets(ticketRes.data || []);
-        console.log(ticketRes.data);
-      } catch (err: unknown) {
-        console.error("Tickets failed", err);
-        setTickets([]);
-      }
+        const slotsRes = await slotApi.getByEventPublic(id);
 
-      // try {
-      //   const slotsRes = await slotApi.getByEvent(id);
-      //   setSlots(slotsRes.data || []);
-      //   console.log(slotsRes.data);
-      // } catch (err) {
-      //   console.error("Slots failed", err);
-      //   setSlots([]);
-      // }
+        setSlots(slotsRes.data || []);
+        console.log(slotsRes.data);
+      } catch (err) {
+        console.error("Slots failed", err);
+        setSlots([]);
+      }
 
       setLoading(false);
     };
@@ -90,43 +76,6 @@ export default function UserTickets() {
   if (!event) {
     return <div className="text-center py-10">Event not found</div>;
   }
-
-  const handleReserve = async () => {
-    if (!selectedTicket || !event) return;
-
-    try {
-      const res = await api.post(
-        "/api/reservations",
-        {
-          eventId: event._id,
-          ticketTypeId: selectedTicket._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-
-      console.log("Reservation success:", res.data);
-      showSuccess("Ticket Reserved!");
-      navigate("/reservation");
-    } catch (error: any) {
-      console.log(error.response?.data || error.message);
-      showError(error.response?.data?.message || "Reservation failed");
-    }
-  };
-
-  // setTimeout(() => {
-  //   const el = document.getElementById("selectedTicket");
-
-  //   if (el) {
-  //     el.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "center",
-  //     });
-  //   }
-  // }, 50);
 
   return (
     <>
@@ -176,9 +125,9 @@ export default function UserTickets() {
                   Prices include all taxes
                 </span>
               </div>
-              {!tickets.length ? (
+              {!slots.length ? (
                 <div className="flex items-center justify-center min-h-[300px]">
-                  <NoTicketsAvailable />
+                  <NoSlotsAvailable />
                 </div>
               ) : (
                 <div className="flex mx-auto">
@@ -205,13 +154,14 @@ export default function UserTickets() {
                 </div> */}
                     {/* <!-- General - Selected --> */}
 
-                    {tickets.map((ticket) => (
-                      <UserTicketCard
-                        key={ticket._id}
-                        ticketType={ticket}
+                    {slots.map((slot) => (
+                      <SlotCard
+                        key={slot._id}
+                        slots={slot}
+                        event={event}
                         onSelect={() => {
-                          handleSelectTicket(ticket);
-                          showInfo(`You select ${ticket.name} ticket`);
+                          handleSelectSlot(slot);
+                          showInfo(`You select ${slot.name} slot`);
                         }}
                       />
                     ))}
@@ -299,144 +249,10 @@ export default function UserTickets() {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                      Expiry Date
-                    </label>
-                    <input
-                      className="w-full bg-slate-100 border-none rounded-xl py-4 px-6 text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500 transition-all"
-                      placeholder="MM / YY"
-                      type="text"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                      CVV
-                    </label>
-                    <input
-                      className="w-full bg-slate-100 border-none rounded-xl py-4 px-6 text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500 transition-all"
-                      type="password"
-                      value="***"
-                    />
-                  </div>
-                </div>
               </div>
             </section>
             {/* <!-- END: PaymentSection --> */}
           </div>
-          {/* <!-- END: ContentArea --> */}
-          {/* <!-- BEGIN: Sidebar --> */}
-          <aside className="lg:col-span-4 space-y-6">
-            {/* <!-- BEGIN: OrderSummary --> */}
-            <div
-              id="selectedTicket"
-              className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100"
-            >
-              <div className="bg-indigo-700 text-white p-6 text-center">
-                <h3 className="text-lg font-bold">Order Summary</h3>
-              </div>
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <p className="font-bold text-slate-900">
-                      {selectedTicket?.name || "No ticket selected"}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      {selectedTicket?.privileges?.length
-                        ? selectedTicket.privileges.join(", ")
-                        : "No privileges"}
-                    </p>
-                  </div>
-                  <p className="font-bold text-slate-900">
-                    ₹{selectedTicket?.price.toFixed(2) || "0.00"}
-                  </p>
-                </div>
-                <div className="space-y-3 py-6 border-y border-slate-100">
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Subtotal</span>
-                    <span className="font-medium text-slate-900">
-                      ₹{selectedTicket?.price.toFixed(2) || "0.00"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Service Fee</span>
-                    <span className="font-medium text-slate-900">₹0.00</span>
-                  </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Tax (GST 0%)</span>
-                    <span className="font-medium text-slate-900">₹0.00</span>
-                  </div>
-                </div>
-                <div className="hidden items-center gap-2 mt-6">
-                  <input
-                    className="grow bg-slate-100 border-none rounded-lg text-sm px-4 py-2.5"
-                    placeholder="Promo code"
-                    type="text"
-                  />
-                  <button className="px-5 py-2.5 bg-indigo-100 text-indigo-700 font-bold rounded-lg text-sm hover:bg-indigo-200 transition-colors">
-                    Apply
-                  </button>
-                </div>
-                <div className="flex justify-between items-center mt-10 mb-8">
-                  <span className="text-xl font-bold text-slate-900">
-                    Total Amount
-                  </span>
-                  <span className="text-4xl font-black text-indigo-600">
-                    ₹{total.toFixed(2)}
-                  </span>
-                </div>
-
-                <button
-                  onClick={handleReserve}
-                  disabled={!selectedTicket}
-                  className={`w-full font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg group
-                      ${
-                        selectedTicket
-                          ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
-                      }
-                    `}
-                >
-                  <span>Reserve Ticket</span>
-                  <ArrowRight />
-                  <ShoppingCart className="w-6 h-6" />
-                </button>
-
-                <p className="text-[10px] text-center text-slate-400 mt-6 leading-relaxed">
-                  By clicking Complete Payment, you agree to the
-                  <br />
-                  <a className="text-indigo-600 underline" href="#">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a className="text-indigo-600 underline" href="#">
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
-              </div>
-            </div>
-
-            {/* <!-- END: OrderSummary --> */}
-            {/* <!-- BEGIN: SecurityBadge --> */}
-            <div className="bg-white rounded-2xl p-5 border border-slate-100  shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex items-start gap-4">
-              <div className="p-2.5 bg-green-50 rounded-full">
-                <ShieldCheck className="w-5 h-5 text-green-500" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-slate-800">
-                  SSL Encrypted Payment
-                </h4>
-                <p className="text-[11px] text-slate-500 leading-tight mt-1">
-                  Your personal data is protected by industry-standard
-                  encryption.
-                </p>
-              </div>
-            </div>
-            {/* <!-- END: SecurityBadge --> */}
-          </aside>
-          {/* <!-- END: Sidebar --> */}
         </div>
       </main>
     </>

@@ -11,7 +11,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
   const navigate = useNavigate();
 
   const handleBookNow = (event: EventForm) => {
-    navigate(`/tickets/${event._id}`);
+    navigate(`/slots/${event._id}`);
   };
 
   return (

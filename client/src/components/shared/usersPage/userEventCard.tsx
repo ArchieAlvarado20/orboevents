@@ -10,7 +10,7 @@ export default function UserEventCard({ event }: EventCardProps) {
   const navigate = useNavigate();
 
   const handleBookNow = (event: any) => {
-    navigate(`/tickets/${event._id}`);
+    navigate(`/slots/${event._id}`);
   };
   return (
     <div className="bg-white rounded-4xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] hover:shadow-xl transition-shadow group">

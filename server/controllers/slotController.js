@@ -8,11 +8,12 @@ const getSlotsByEvent = async (req, res) => {
   try {
     const slots = await Slot.find({
       event: req.params.eventId,
-      status: ["published", "pending"],
+      status: { $in: ["published", "pending"] },
     }).sort({ date: 1 });
 
     res.json(slots);
   } catch (err) {
+    console.error(err);
     res.status(500).json({
       message: err.message,
     });

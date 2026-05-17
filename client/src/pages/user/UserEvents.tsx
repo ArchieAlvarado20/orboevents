@@ -7,6 +7,7 @@ import { Music, FlaskConical } from "lucide-react";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import { getPagination } from "@/lib/pagination";
 import BackButton from "@/components/shared/BackButton";
+import EventCarousel from "@/components/shared/usersPage/EventCarousel";
 
 interface Event {
   _id: string;
@@ -89,32 +90,16 @@ export default function UserEvents() {
       <main className="pt-24 pb-20 grow">
         {/* <!-- Hero Section --> */}
         <section className="max-w-7xl mx-auto sm:px-6 mb-12" id="top">
-          <div className="relative sm:rounded-[2rem] overflow-hidden h-[320px] flex items-center p-12 group">
-            <img
-              alt="Art &amp; Culture"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiXHFQ8-N_kqnHo42KDjJpPe7J7Vdhsqi6xBgss6k5Rd5p2DHm0uZ9aQ_Cz-YloaiZpE-7_HzgUDw4BLbKnhHACB3OUTQ3fZK6YkHyNSoMUnCUpORgAYm2PnzDnkItwTisVbRoSB2JDH2k3Haak1JC7EpByh5_EawmTwtFH5nLduNpZ5j7A-LaPmQEc9LkgdsTcKmbG1hVAFHz0RR966zh2GeZkXrCPbtwVPH2DUtgtd7KdZtY6lyYQqbrBxRnKiTxhdqdvvy9RUs"
-            />
-            <BackButton />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/40 to-transparent"></div>
-            <div className="relative z-10 max-w-2xl">
-              <nav className="flex items-center gap-2 text-white/70 font-semibold text-sm mb-4">
-                <span>Explore</span>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-white">Art &amp; Culture</span>
-              </nav>
-              <h1 className="text-white font-headline text-5xl font-extrabold mb-4">
-                Art &amp; Culture
-              </h1>
-              <p className="text-white/80 text-lg">
-                Immerse yourself in creativity. Discover local exhibitions,
-                heritage tours, and cultural dialogues happening this month.
-              </p>
-            </div>
-          </div>
+          <EventCarousel
+            images={[
+              "https://picsum.photos/800/400?1",
+              "https://picsum.photos/800/400?2",
+              "https://picsum.photos/800/400?3",
+            ]}
+          />
         </section>
         {/* <!-- Filters & Sort --> */}
-        <section className="max-w-7xl mx-auto px-6 mb-2">
+        <section className="hidden max-w-7xl mx-auto px-6 mb-2">
           <div className="flex flex-wrap items-center justify-between gap-4 py-2">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
               {categoryOptions.map((cat, index) => {
@@ -128,7 +113,7 @@ export default function UserEvents() {
                 );
               })}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="hidden flex items-center gap-3">
               <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl font-semibold text-sm text-gray-900 hover:shadow-sm transition-all">
                 <Filter className="w-4 h-4" />
                 Filter

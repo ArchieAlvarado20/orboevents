@@ -26,7 +26,7 @@ export default function UserTicketCard({
 
   return (
     <div
-      className="bg-white max-w-70 p-6 rounded-2xl border-2 border-indigo-500 flex flex-col justify-between relative shadow-lg shadow-indigo-100"
+      className="bg-white max-w-70 p-6 rounded-2xl border-2 border-indigo-500 flex flex-col justify-between relative shadow-lg shadow-indigo-100 min-w-60"
       style={{ borderColor: colorHex, boxShadow: `0 4px 15px ${colorHex}33` }}
     >
       <span

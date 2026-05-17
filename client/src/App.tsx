@@ -34,6 +34,7 @@ import Categories from "./pages/admin/Categories";
 import EventType from "./pages/admin/EventType";
 import { Toaster } from "react-hot-toast";
 import EventInfoPage from "./pages/admin/EventsInfo";
+import UserSlots from "./pages/user/UserSlots";
 
 function App() {
   return (
@@ -50,7 +51,8 @@ function App() {
           <Route index element={<SmartTicketingLanding />} />
           <Route path="category" element={<Category />} />
           <Route path="events" element={<UserEvents />} />
-          <Route path="tickets/:id" element={<UserTickets />} />
+          <Route path="tickets/:id/slots/:slotId" element={<UserTickets />} />
+          <Route path="slots/:id" element={<UserSlots />} />
           <Route path="organizer" element={<Organizer />} />
           <Route path="about" element={<About />} />
           <Route path="scanner" element={<QRScanner />} />

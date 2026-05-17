@@ -1,5 +1,6 @@
 import EventCard from "@/components/features/event/EventCards";
 import EventModal from "@/components/features/event/EventModal";
+import NoEventsAvailable from "@/components/features/event/NoEventsAvailable";
 import SlotBulkModal from "@/components/features/slot/slotBulkModal";
 import SlotModal from "@/components/features/slot/SlotModal";
 import TicketTypeModal from "@/components/features/tickets/TicketTypeModal";
@@ -10,7 +11,7 @@ import { useEvent } from "@/hooks/eventHook/useEvent";
 import { confirmToast } from "@/lib/confirmToast";
 import { getPagination } from "@/lib/pagination";
 import { EventForm } from "@/types/event";
-import { List, Menu, Plus, Search } from "lucide-react";
+import { Calendar, List, Menu, Plus, Search } from "lucide-react";
 import { useState } from "react";
 export default function Events() {
   const [openModal, setOpenModal] = useState(false);
@@ -31,6 +32,10 @@ export default function Events() {
   };
 
   if (loading) {
+    return <TransparentSpinner />;
+  }
+
+  if (!events) {
     return <TransparentSpinner />;
   }
 
@@ -179,18 +184,23 @@ export default function Events() {
                 </button>
               </div>
             </section>
-            <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 gap-6">
-              {events?.map((event) => (
-                <EventCard
-                  key={event._id}
-                  event={event}
-                  onAddTicket={() => handleOpenTicketModal(event)}
-                  onAddSlot={() => handleAddSlot(event)}
-                  onEdit={() => handleEditEvent(event)}
-                  onDelete={() => handleDeleteEvent(event)}
-                />
-              ))}
-            </div>
+            {events.length === 0 ? (
+              <NoEventsAvailable />
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 gap-6">
+                {events?.map((event) => (
+                  <EventCard
+                    key={event._id}
+                    event={event}
+                    onAddTicket={() => handleOpenTicketModal(event)}
+                    onAddSlot={() => handleAddSlot(event)}
+                    onEdit={() => handleEditEvent(event)}
+                    onDelete={() => handleDeleteEvent(event)}
+                  />
+                ))}
+              </div>
+            )}
+
             <div className="flex items-center gap-2 mt-6 flex-wrap justify-center">
               {/* First */}
               <button
