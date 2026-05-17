@@ -27,7 +27,7 @@ export const userInitialForm = {
   password: "",
   confirmPassword: "",
   image: null,
-  role: "user",
+  role: "",
   phone: "",
   status: "active",
 };
@@ -35,7 +35,7 @@ export const userInitialForm = {
 export const userInitialEditForm = {
   name: "",
   email: "",
-  role: "user",
+  role: "",
   phone: "",
   status: "active",
 };

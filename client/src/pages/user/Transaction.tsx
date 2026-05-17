@@ -144,13 +144,6 @@ export default function Transaction() {
                     <img src={ticket.eventId?.image || "/images/events.jpg"} />
                     <div className="absolute top-4 left-4 bg-violet-600 py-1   border border-violet-600  px-4  rounded-2xl shadow-lg">
                       <p className="font-bold text-white  border-violet-600 text-center leading-tight text-sm">
-                        {new Date(ticket.eventId.date).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
                         <br />
                       </p>
                     </div>

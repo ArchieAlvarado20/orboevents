@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Music, FlaskConical } from "lucide-react";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import { getPagination } from "@/lib/pagination";
+import BackButton from "@/components/shared/BackButton";
 
 interface Event {
   _id: string;
@@ -72,17 +73,29 @@ export default function UserEvents() {
 
     fetchEvents();
   }, [page]);
+
+  setTimeout(() => {
+    const el = document.getElementById("top");
+
+    if (el) {
+      el.scrollIntoView({
+        block: "center",
+      });
+    }
+  }, 50);
+
   return (
     <>
-      <main className="pt-24 pb-20 grow mt-5">
+      <main className="pt-24 pb-20 grow">
         {/* <!-- Hero Section --> */}
-        <section className="max-w-7xl mx-auto px-6 mb-12">
-          <div className="relative rounded-[2rem] overflow-hidden h-[320px] flex items-center p-12 group">
+        <section className="max-w-7xl mx-auto sm:px-6 mb-12" id="top">
+          <div className="relative sm:rounded-[2rem] overflow-hidden h-[320px] flex items-center p-12 group">
             <img
               alt="Art &amp; Culture"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiXHFQ8-N_kqnHo42KDjJpPe7J7Vdhsqi6xBgss6k5Rd5p2DHm0uZ9aQ_Cz-YloaiZpE-7_HzgUDw4BLbKnhHACB3OUTQ3fZK6YkHyNSoMUnCUpORgAYm2PnzDnkItwTisVbRoSB2JDH2k3Haak1JC7EpByh5_EawmTwtFH5nLduNpZ5j7A-LaPmQEc9LkgdsTcKmbG1hVAFHz0RR966zh2GeZkXrCPbtwVPH2DUtgtd7KdZtY6lyYQqbrBxRnKiTxhdqdvvy9RUs"
             />
+            <BackButton />
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/40 to-transparent"></div>
             <div className="relative z-10 max-w-2xl">
               <nav className="flex items-center gap-2 text-white/70 font-semibold text-sm mb-4">

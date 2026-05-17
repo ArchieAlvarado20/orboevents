@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 
 type BackButtonProps = {
   fallback?: string;
@@ -25,9 +25,9 @@ export default function BackButton({
   return (
     <button
       onClick={handleBack}
-      className={`flex items-center gap-2 p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition ${className}`}
+      className={`absolute top-4 left-4  text-white text-xs z-40 font-bold px-3 py-1 rounded-full uppercase tracking-widest ${className}`}
     >
-      <ArrowLeft className="w-5 h-5" />
+      <ChevronLeft size={24} />
       {label && <span className="text-sm">{label}</span>}
     </button>
   );

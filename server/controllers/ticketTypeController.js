@@ -5,15 +5,18 @@ const Event = require("../models/Event");
 const getTicketTypesByEvent = async (req, res) => {
   try {
     const tickets = await TicketType.find({
-      eventId: req.params.eventId, // ✔ FIXED
+      eventId: req.params.eventId,
       isActive: true,
-      status: ["pending", "published"], // or remove for debug
+      status: { $in: ["pending", "published"] },
     }).sort({ createdAt: 1 });
 
     return res.json(tickets);
   } catch (err) {
     console.error("GET TICKETS ERROR:", err);
-    return res.status(500).json({ message: err.message });
+
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 };
 

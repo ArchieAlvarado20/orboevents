@@ -25,11 +25,24 @@ export default function LandingPage() {
     fetchEvents();
   }, []);
 
+  setTimeout(() => {
+    const el = document.getElementById("top");
+
+    if (el) {
+      el.scrollIntoView({
+        block: "center",
+      });
+    }
+  }, 50);
+
   return (
     <>
       <main>
         <section className="relative mt-10 min-h-[800px] flex items-center py-20 px-6 overflow-hidden bg-white">
-          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div
+            className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+            id="top"
+          >
             <div className="z-10">
               <span className="inline-block px-4 py-1.5 bg-pink-100 text-pink-700 text-sm font-semibold rounded-full mb-6">
                 #1 Event Discovery Platform

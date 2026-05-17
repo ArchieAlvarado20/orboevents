@@ -5,22 +5,15 @@ import { useState } from "react";
 type TicketCardProps = {
   ticketType: TicketTypeForm;
   onSelect: () => void;
-  color: string;
 };
 
 export default function UserTicketCard({
   ticketType,
   onSelect,
-  color,
 }: TicketCardProps) {
   const [loading, setLoading] = useState(false);
-  const colorMap = {
-    green: "#77fc84",
-    yellow: "#fae173",
-    red: "#e01039",
-  };
 
-  const colorHex = colorMap[color];
+  const colorHex = [ticketType?.color];
 
   const handleClick = async () => {
     try {
@@ -42,7 +35,7 @@ export default function UserTicketCard({
       >
         {ticketType.accessLevel}{" "}
       </span>
-
+      {name}
       <div>
         <div className="w-10 h-10 bg-transparent rounded-lg flex items-center justify-center mb-4">
           <Ticket className="w-10 h-10" style={{ color: colorHex }} />

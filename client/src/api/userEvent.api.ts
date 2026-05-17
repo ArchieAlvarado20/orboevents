@@ -8,7 +8,7 @@ export const userEventApi = {
   create: (data: unknown, config?: AxiosRequestConfig) =>
     axios.post(API, data, config),
 
-  getByEventID: (eventId: string) => axios.get(`${API}/${eventId}`),
+  getByEventID: (eventId: string) => axios.get(`${API}/${eventId}/public`),
 
   update: (id: string, data: unknown) => axios.put(`${API}/${id}`, data),
 

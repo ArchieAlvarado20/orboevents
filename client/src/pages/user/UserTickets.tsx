@@ -1,4 +1,6 @@
 import api from "@/api/interceptor.api";
+import { slotApi } from "@/api/slot.api";
+import { ticketTypeApi } from "@/api/ticketType.api";
 import { userEventApi } from "@/api/userEvent.api";
 import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable";
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
@@ -6,17 +8,28 @@ import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { showError, showInfo, showSuccess } from "@/lib/toast";
 import { Event } from "@/types/event";
+import { TicketTypeForm } from "@/types/ticketTypes";
 
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
-import { ArrowRight, ShieldCheck, ShoppingCart } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  ChevronDown,
+  ChevronLeft,
+  MapPin,
+  Notebook,
+  ShieldCheck,
+  ShoppingCart,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function UserTickets() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<TicketTypeForm[]>([]);
+  const [slots, setSlots] = useState<SlotFormType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
@@ -43,14 +56,22 @@ export default function UserTickets() {
       }
 
       try {
-        const ticketRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/ticket-types/${id}`,
-        );
+        const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id);
         setTickets(ticketRes.data || []);
-      } catch (err) {
+        console.log(ticketRes.data);
+      } catch (err: unknown) {
         console.error("Tickets failed", err);
-        setTickets([]); // fallback, NOT crash UI
+        setTickets([]);
       }
+
+      // try {
+      //   const slotsRes = await slotApi.getByEvent(id);
+      //   setSlots(slotsRes.data || []);
+      //   console.log(slotsRes.data);
+      // } catch (err) {
+      //   console.error("Slots failed", err);
+      //   setSlots([]);
+      // }
 
       setLoading(false);
     };
@@ -96,86 +117,59 @@ export default function UserTickets() {
     }
   };
 
-  setTimeout(() => {
-    const el = document.getElementById("selectedTicket");
+  // setTimeout(() => {
+  //   const el = document.getElementById("selectedTicket");
 
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }, 50);
+  //   if (el) {
+  //     el.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "center",
+  //     });
+  //   }
+  // }, 50);
 
   return (
     <>
-      <main className="max-w-7xl mt-20 mx-auto px-4 py-8">
-        <BackButton />
+      <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8">
         <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
-            <section className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100">
+            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100">
               <div className="md:w-1/2 relative">
                 <img
                   alt="Holi Festival Event"
                   className="w-full h-full object-cover"
                   src={event.image || "/images/images.jpg"}
                 />
-                <span className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                  {event.location}
-                </span>
+                <BackButton className="mt-2" />
               </div>
-              <div className="md:w-1/2 p-8 flex flex-col justify-center">
-                <h1 className="text-3xl font-bold text-slate-900 mb-4 leading-tight">
+              {/* Event Info */}
+              <div className="p-5 space-y-3">
+                <h1 className="text-2xl font-bold text-slate-900">
                   {event.name}
                 </h1>
 
-                <h1 className="text-md font-light text-slate-900 mb-4 leading-tight">
-                  {event.description}
-                </h1>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-slate-600">
-                    <i
-                      className="w-5 h-5 text-indigo-500"
-                      data-lucide="calendar"
-                    ></i>
-                    <span className="text-sm font-medium">
-                      {event.location}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-600">
-                    <i
-                      className="w-5 h-5 text-indigo-500"
-                      data-lucide="clock"
-                    ></i>
-                    <span className="text-sm font-medium">
-                      {formatTime(event.startTime || "")} -{" "}
-                      {formatTime(event.endTime || "")}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-600">
-                    <i
-                      className="w-5 h-5 text-indigo-500"
-                      data-lucide="map-pin"
-                    ></i>
-                    <span className="text-sm font-medium">
-                      {event.location || "Location not specified"}
-                    </span>
-                  </div>
+                <p className="text-slate-600 text-sm">{event.description}</p>
+
+                <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <MapPin size={14} /> {event.location}
+                  </span>
+
+                  <span className="flex items-center gap-1">
+                    <Calendar size={14} /> {event.basePrice}
+                  </span>
                 </div>
               </div>
             </section>
             {/* <!-- END: EventSummaryCard --> */}
             {/* <!-- BEGIN: TicketSelection --> */}
             <section>
-              <div className="flex flex-col md:flex-row justify-between md:items-end gap-2 mb-6">
+              <div className="flex flex-col px-5 md:flex-row justify-between md:items-end gap-2 mb-6">
                 <h2 className="text-xl font-bold text-slate-800">
                   Select Your Experience
-                  <p className="text-xs text-gray-500 mt-1">
-                    Note: One ticket per person per event only.
-                  </p>
                 </h2>
 
                 <span className="text-indigo-600 text-sm font-medium">
@@ -187,9 +181,10 @@ export default function UserTickets() {
                   <NoTicketsAvailable />
                 </div>
               ) : (
-                <div className="grid px-5 sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-                  {/* <!-- Early Bird - Sold Out --> */}
-                  {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
+                <div className="flex mx-auto">
+                  <div className="grid mx-auto sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-full">
+                    {/* <!-- Early Bird - Sold Out --> */}
+                    {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">
                     Sold Out
                   </span>
@@ -208,26 +203,19 @@ export default function UserTickets() {
                     <i className="w-5 h-5" data-lucide="slash"></i>
                   </div>
                 </div> */}
-                  {/* <!-- General - Selected --> */}
+                    {/* <!-- General - Selected --> */}
 
-                  {tickets.map((ticket) => (
-                    <UserTicketCard
-                      key={ticket._id}
-                      name={ticket.name}
-                      accessLevel={ticket.accessLevel}
-                      description={ticket.description}
-                      price={ticket.price}
-                      color={
-                        ticket.color
-                          ? (ticket.color as "green" | "yellow" | "red")
-                          : "green"
-                      }
-                      onSelect={() => {
-                        handleSelectTicket(ticket);
-                        showInfo(`You select ${ticket.name} ticket`);
-                      }}
-                    />
-                  ))}
+                    {tickets.map((ticket) => (
+                      <UserTicketCard
+                        key={ticket._id}
+                        ticketType={ticket}
+                        onSelect={() => {
+                          handleSelectTicket(ticket);
+                          showInfo(`You select ${ticket.name} ticket`);
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </section>
@@ -343,7 +331,7 @@ export default function UserTickets() {
             {/* <!-- BEGIN: OrderSummary --> */}
             <div
               id="selectedTicket"
-              className="bg-white rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100"
+              className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow  border border-slate-100"
             >
               <div className="bg-indigo-700 text-white p-6 text-center">
                 <h3 className="text-lg font-bold">Order Summary</h3>
@@ -403,12 +391,12 @@ export default function UserTickets() {
                   onClick={handleReserve}
                   disabled={!selectedTicket}
                   className={`w-full font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all transform active:scale-[0.98] shadow-lg group
-    ${
-      selectedTicket
-        ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
-        : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
-    }
-  `}
+                      ${
+                        selectedTicket
+                          ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
+                          : "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+                      }
+                    `}
                 >
                   <span>Reserve Ticket</span>
                   <ArrowRight />

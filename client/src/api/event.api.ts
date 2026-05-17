@@ -11,6 +11,8 @@ export const eventApi = {
   getByEvent: (eventId: string, config?: AxiosRequestConfig) =>
     axios.get(`${API}/${eventId}`, config),
 
+  getByUserEvent: (eventId: string) => axios.get(`${API}/${eventId}/public`),
+
   update: (id: string, data: unknown, config?: AxiosRequestConfig) =>
     axios.put(`${API}/${id}`, data, config),
 

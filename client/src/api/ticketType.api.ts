@@ -11,6 +11,9 @@ export const ticketTypeApi = {
   getByEvent: (eventId: string, config?: AxiosRequestConfig) =>
     axios.get(`${API}/events/${eventId}/ticket-types`, config),
 
+  getTicketTypesByEvent: (eventId: string) =>
+    axios.get(`${API}/events/${eventId}/public/ticket-types`),
+
   approveTicketType: (id: string, config?: AxiosRequestConfig) =>
     axios.patch(`${API}/ticket-types/${id}/approve`, {}, config),
 

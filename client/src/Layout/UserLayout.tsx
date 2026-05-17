@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Topbar from "@/components/shared/usersPage/topbar";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import { useAuthInit } from "@/hooks/auth/useAuthInit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { showSuccess } from "@/lib/toast";
 import UserMobileSidebar from "@/components/shared/usersPage/MobileSidebar";
 
@@ -17,6 +17,7 @@ export default function UserLayout() {
     showSuccess: (msg: string) => showSuccess(msg),
     showError: (msg: string) => console.log(msg),
   });
+
   return (
     <div className="flex-1 w-full">
       <div className="flex-1">

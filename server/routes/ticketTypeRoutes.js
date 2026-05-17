@@ -13,11 +13,20 @@ const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const permissionMiddleware = require("../middleware/permissionMiddleware");
 
-router.post("/ticket-types/", createTicketType);
+//PUBLIC
+router.get("/events/:eventId/public/ticket-types", getTicketTypesByEvent);
+
+router.post(
+  "/ticket-types/",
+  authMiddleware,
+  adminMiddleware,
+  createTicketType,
+);
 router.get(
   "/events/:eventId/ticket-types",
   authMiddleware,
   adminMiddleware,
+  permissionMiddleware("MANAGE_TICKETTYPES"),
   getTicketTypesByEvent,
 );
 

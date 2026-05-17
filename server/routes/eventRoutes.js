@@ -19,7 +19,7 @@ const upload = multer({ dest: "uploads/" });
 
 // PUBLIC
 router.get("/events", getEvents);
-router.get("/events/:id", getEventById);
+router.get("/events/:id/public", getEventById);
 
 // ADMIN
 router.get(

@@ -12,6 +12,10 @@ import {
   Layers,
   Currency,
   Trash2,
+  Edit2,
+  Edit,
+  ChevronLeft,
+  Plus,
 } from "lucide-react";
 import { EventForm } from "@/types/event";
 import { TicketTypeForm } from "@/types/ticketTypes";
@@ -297,11 +301,36 @@ export default function EventInfoPage() {
       {/* ================= EVENT HEADER ================= */}
       <div className="bg-white sm:rounded-2xl border border-slate-200 overflow-hidden shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
         {/* Image */}
-        <div className="h-56 bg-slate-100">
+        <div className="h-100 bg-slate-100 relative">
           <img
             src={event.image || "/images/default.jpg"}
             className="w-full h-full object-cover"
           />
+
+          <div className="absolute top-4 left-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm">
+            <span
+              className="text-xs font-extrabold uppercase text-slate-400 px-2 hover:text-slate-500 py-1 rounded-md"
+              onClick={() => navigate("/admin/events")}
+            >
+              <ChevronLeft size={24} />
+            </span>
+          </div>
+          <div className="absolute top-4 right-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm">
+            <span
+              className="text-xs uppercase text-blue-400 px-2 hover:text-blue-500 py-1 rounded-md"
+              onClick={() => handleEditEvent(event)}
+            >
+              <Edit size={16} />
+            </span>
+            <span
+              className="text-xs uppercase text-red-400 px-2 hover:text-red-500 py-1 rounded-md"
+              onClick={() =>
+                confirmToast("Cancel this event?", () => deleteEvent(event._id))
+              }
+            >
+              <Trash2 size={16} />
+            </span>
+          </div>
         </div>
 
         {/* Info */}
@@ -326,6 +355,12 @@ export default function EventInfoPage() {
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
             <Ticket size={18} />
             Ticket Types
+            <div
+              className="flex items-center gap-2 text-blue-600 font-semibold"
+              onClick={() => handleOpenTicketModal(event)}
+            >
+              <Plus size={18} />
+            </div>
           </div>
 
           {ticketType.length === 0 ? (
@@ -403,6 +438,12 @@ export default function EventInfoPage() {
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
             <Layers size={18} />
             Event Slots <p className="uppercase">({event.eventType.name})</p>
+            <div
+              className="flex items-center gap-2 text-blue-600 font-semibold"
+              onClick={() => handleAddSlot(event)}
+            >
+              <Plus size={18} />
+            </div>
           </div>
 
           {slots.length === 0 ? (
@@ -468,29 +509,13 @@ export default function EventInfoPage() {
         </div>
 
         {/* ================= ACTIONS ================= */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4">
+        <div className="hidden bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4">
           <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
             <Button
-              variant="outline"
-              className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"
-              onClick={() => navigate("/admin/events")}
-            >
-              Back
-            </Button>
-            <Button
-              variant="destructiveOutline"
-              onClick={() =>
-                confirmToast("Cancel this event?", () => deleteEvent(event._id))
-              }
-            >
-              Delete Event
-            </Button>
-            <Button
-              onClick={() => handleEditEvent(event)}
-              variant="primary"
+              variant="success"
               className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"
             >
-              Edit Event
+              Add Ticket
             </Button>
             <Button
               variant="cyan"
@@ -498,13 +523,6 @@ export default function EventInfoPage() {
               onClick={() => handleAddSlot(event)}
             >
               Add Schedule
-            </Button>
-            <Button
-              variant="success"
-              className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition"
-              onClick={() => handleOpenTicketModal(event)}
-            >
-              Add Ticket
             </Button>
           </div>
         </div>
