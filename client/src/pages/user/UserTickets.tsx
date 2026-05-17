@@ -136,7 +136,7 @@ export default function UserTickets() {
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
-            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100">
+            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100 max-h-00">
               <div className="md:w-1/2 relative">
                 <img
                   alt="Holi Festival Event"
