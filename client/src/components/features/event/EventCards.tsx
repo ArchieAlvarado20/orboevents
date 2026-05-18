@@ -24,6 +24,7 @@ interface EventCardProps {
   onAddSlot: (event: EventForm) => void;
   onEdit: (event: EventForm) => void;
   onDelete: (event: EventForm) => void;
+  onApproveEvent: (event: EventForm) => void;
 }
 
 export default function EventCard({
@@ -32,6 +33,7 @@ export default function EventCard({
   onAddSlot,
   onEdit,
   onDelete,
+  onApproveEvent,
 }: EventCardProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -135,7 +137,7 @@ export default function EventCard({
               </button>
               {event.status === "pending" ? (
                 <button
-                  onClick={() => onDelete(event)}
+                  onClick={() => onApproveEvent(event)}
                   className=" flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
                 >
                   <ThumbsUp size={18} className="text-violet-600" />
@@ -154,7 +156,7 @@ export default function EventCard({
               </button>
 
               <button
-                onClick={() => onAddSlot(event)}
+                onClick={() => onApproveEvent(event)}
                 className=" hidden flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-slate-50 rounded-lg whitespace-nowrap"
               >
                 <Calendar size={18} />

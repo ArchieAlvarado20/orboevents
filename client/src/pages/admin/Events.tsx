@@ -23,8 +23,14 @@ export default function Events() {
   const [totalPages, setTotalPages] = useState(0);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const { events, loading, unauthorized, fetchEvents, deleteEvent } =
-    useEvent();
+  const {
+    events,
+    loading,
+    unauthorized,
+    fetchEvents,
+    deleteEvent,
+    approveEvent,
+  } = useEvent();
 
   const handleOpenTicketModal = (event: EventForm) => {
     setSelectedEvent(event);
@@ -54,6 +60,12 @@ export default function Events() {
   const handleDeleteEvent = (event: any) => {
     confirmToast("Cancel this event?", async () => {
       await deleteEvent(event._id);
+    });
+  };
+
+  const handleApproveEvent = (event: any) => {
+    confirmToast("Approve this event?", async () => {
+      await approveEvent(event._id);
     });
   };
 
@@ -196,6 +208,7 @@ export default function Events() {
                     onAddSlot={() => handleAddSlot(event)}
                     onEdit={() => handleEditEvent(event)}
                     onDelete={() => handleDeleteEvent(event)}
+                    onApproveEvent={() => handleApproveEvent(event)}
                   />
                 ))}
               </div>

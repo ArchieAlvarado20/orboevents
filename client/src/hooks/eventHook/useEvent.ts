@@ -90,6 +90,35 @@ export const useEvent = () => {
     }
   };
 
+  const approveEvent = async (id: string) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showError("Unauthorized");
+        return;
+      }
+
+      await eventApi.approveEvent(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Event approved successfully");
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to approve event");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -101,5 +130,6 @@ export const useEvent = () => {
     unauthorized,
     fetchEvents,
     deleteEvent,
+    approveEvent,
   };
 };
