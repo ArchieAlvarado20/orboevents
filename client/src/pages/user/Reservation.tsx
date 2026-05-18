@@ -247,12 +247,8 @@ export default function Reservation() {
                       <div className="flex justify-between rs-start">
                         <div>
                           <div className="flex gap-3">
-                            <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
+                            <h3 className="text-xl font-bold mb-1 ">
                               {r.eventId?.name}
-                            </h3>
-
-                            <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
-                              {r.ticketTypeId?.name}
                             </h3>
 
                             <input
@@ -264,6 +260,9 @@ export default function Reservation() {
                               className="w-5 h-5 mt-1"
                             />
                           </div>
+                          <h3 className="text-xl font-bold mb-1 text-slate-600">
+                            {r.ticketTypeId?.name}
+                          </h3>
 
                           <p className="text-sm text-slate-500 font-medium mb-1">
                             <FormattedDate date={r.eventId?.date} />
