@@ -117,11 +117,6 @@ export default function EventTypeCard({
         >
           {eventType.status || "active"}
         </span>
-
-        <div className="flex items-center gap-1 text-xs text-slate-400">
-          <Settings size={10} />
-          UI Config Module
-        </div>
       </div>
 
       {/* ACTIONS */}

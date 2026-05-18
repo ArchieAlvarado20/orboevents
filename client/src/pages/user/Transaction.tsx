@@ -103,7 +103,7 @@ export default function Transaction() {
             <button className="px-6 py-4 font-bold text-violet-600 border-b-2 border-violet-600 transition-all">
               Active Tickets
             </button>
-            <button className="px-6 py-4 font-semibold text-slate-500 hover:text-violet-600 transition-all">
+            <button className="hidden px-6 py-4 font-semibold text-slate-500 hover:text-violet-600 transition-all">
               Order History
             </button>
           </div>
@@ -140,7 +140,7 @@ export default function Transaction() {
                   key={ticket._id}
                   className="col-span-6 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
                 >
-                  <div className="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
+                  <div className="hidden md:w-2/5 relative h-64 md:h-auto overflow-hidden">
                     <img src={ticket.eventId?.image || "/images/events.jpg"} />
                     <div className="absolute top-4 left-4 bg-violet-600 py-1   border border-violet-600  px-4  rounded-2xl shadow-lg">
                       <p className="font-bold text-white  border-violet-600 text-center leading-tight text-sm">
@@ -150,6 +150,18 @@ export default function Transaction() {
                   </div>
                   <div className="md:w-3/5 p-8 flex flex-col justify-between">
                     <div>
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-headline font-bold text-2xl text-gray-900 mb-2  transition-colors">
+                          {ticket.eventId?.name}
+                        </span>
+                        <MoreVertical className="hidden" />
+                      </div>
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-headline font-bold text-1xl text-slate-500 mb-2  transition-colors">
+                          {ticket.ticketTypeId?.name}
+                        </span>
+                        <MoreVertical className="hidden" />
+                      </div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="bg-violet-50 text-violet-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                           {ticket.ticketTypeId?.name}
@@ -162,7 +174,6 @@ export default function Transaction() {
                           <TimerIcon />
                           <span className="text-sm">
                             Starts at {formatTime(ticket.eventId?.startTime)} •
-                            Main Stage
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -195,7 +206,7 @@ export default function Transaction() {
           />
         </section>
 
-        <section className="bg-slate-50 p-2">
+        <section className="hidden bg-slate-50 p-2">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-[#121c2a]">Recent Events</h2>
             <div className="flex gap-2">
@@ -297,7 +308,7 @@ export default function Transaction() {
           </div>
         </section>
         {/* <!-- Comprehensive Order History Table Section --> */}
-        <section className="mb-20">
+        <section className="hidden mb-20 ">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-[#121c2a]">
               Full Order History

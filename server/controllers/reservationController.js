@@ -19,11 +19,11 @@ const createReservation = async (req, res) => {
       status: { $in: ["pending", "confirmed"] },
     });
 
-    if (existing) {
-      return res.status(400).json({
-        message: "You already have a reservation for this event.",
-      });
-    }
+    // if (existing) {
+    //   return res.status(400).json({
+    //     message: "You already have a reservation for this event.",
+    //   });
+    // }
 
     // 2. atomic slot lock (CRITICAL)
     const ticket = await TicketType.findOneAndUpdate(

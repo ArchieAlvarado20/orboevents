@@ -7,6 +7,7 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
+  approveEvent,
 } = require("../controllers/eventController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -39,6 +40,14 @@ router.post(
   upload.single("image"),
   permissionMiddleware(["MANAGE_EVENT"]),
   createEvent,
+);
+
+router.patch(
+  "/admin/events/:id/approve",
+  authMiddleware,
+  adminMiddleware,
+  permissionMiddleware(["APPROVE_EVENT"]),
+  approveEvent,
 );
 
 router.put(

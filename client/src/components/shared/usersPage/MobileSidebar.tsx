@@ -90,7 +90,7 @@ export default function UserMobileSidebar({
                   to="/notifications"
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
-                    `relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
+                    `hidden relative flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 font-bold ${
                       isActive ? "text-violet-600 font-black" : "text-gray-600"
                     }`
                   }

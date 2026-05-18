@@ -4,7 +4,7 @@ import { Mail, Lock, Eye, Apple, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useLocation, useNavigate } from "react-router-dom";
-import { showSuccess, showError } from "../lib/toast";
+import { showSuccess, showError } from "../lib/hotToast";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import { useAuthActions } from "@/hooks/auth/useAuthActions";
 import { validateAuthForm } from "@/hooks/auth/useValidateAuthForm";

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { eventApi } from "@/api/event.api";
 import { showError, showSuccess } from "@/lib/toast";
 import { EventForm } from "@/types/event";
+import { useNavigate } from "react-router-dom";
 
 export interface EventType {
   _id: string;
@@ -25,6 +26,7 @@ export const useEvent = () => {
   const [events, setEvents] = useState<EventForm[]>([]);
   const [loading, setLoading] = useState(false);
   const [unauthorized, setUnauthorized] = useState(false);
+  const navigate = useNavigate();
 
   // =========================
   // FETCH EVENTS
@@ -50,6 +52,9 @@ export const useEvent = () => {
       console.log(err.response?.data?.message || "Failed to fetch events");
       if (err.response?.status === 403) {
         setUnauthorized(true);
+      }
+      if (err.response?.status === 404) {
+        navigate("/admin/events");
       }
     } finally {
       setLoading(false);

@@ -10,6 +10,7 @@ import {
   Plus,
   Search,
   Shield,
+  ShieldAlert,
   Trash2,
 } from "lucide-react";
 
@@ -129,8 +130,8 @@ export default function Categories() {
 
           {categories.length === 0 ? (
             <div className="bg-white w-full rounded-3xl p-12 border border-dashed border-slate-200 text-center">
-              <Shield className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-              <p className="text-slate-500 font-medium">No categorys found.</p>
+              <ShieldAlert className="w-12 h-12 text-slate-200 mx-auto mb-4" />
+              <p className="text-slate-500 font-medium">No category found.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">

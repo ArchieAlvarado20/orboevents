@@ -285,10 +285,13 @@ export default function EventModal({
                   name="category"
                   value={form.category}
                   onChange={handleChange}
-                  options={categories.map((c) => ({
-                    label: c.name,
-                    value: c._id, // ✅ IMPORTANT
-                  }))}
+                  options={categories
+                    .filter((c) => c.status === "active")
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((c) => ({
+                      label: c.name,
+                      value: c._id, // ✅ IMPORTANT
+                    }))}
                   error={errors.category}
                 />
 
@@ -350,6 +353,7 @@ export default function EventModal({
                   name="status"
                   value={form.status}
                   onChange={handleChange}
+                  className="hidden"
                   options={[
                     { label: "Draft", value: "draft" },
                     { label: "Pending", value: "pending" },

@@ -54,9 +54,12 @@ export default function TicketModal({
         {/* EVENT INFO */}
         <div className="px-4">
           <h4 className="text-2xl font-bold mb-1">{ticket?.eventId?.name}</h4>
+          <h4 className="text-1xl font-bold mb-1 text-slate-600">
+            {ticket?.ticketTypeId?.name}
+          </h4>
 
           <p className="text-slate-500 mb-6 text-sm">
-            <FormattedDate date={ticket?.eventId?.date} /> •{" "}
+            <FormattedDate date={ticket?.ticketTypeId?.date} /> •{" "}
             {ticket?.eventId?.location}
           </p>
 

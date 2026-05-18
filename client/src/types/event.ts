@@ -46,7 +46,7 @@ export const EventInitialForm = {
   basePrice: null,
   capacity: null,
 
-  status: "active",
+  status: "pending",
 
   tags: [],
 };

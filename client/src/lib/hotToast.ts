@@ -11,7 +11,13 @@ const baseStyle = {
   animation: "fade-toast 200ms ease",
 };
 
+export const dismissToast = () => {
+  toast.dismiss();
+};
+
 export const showSuccess = (message: string) => {
+  toast.dismiss();
+
   return toast.success(message, {
     icon: React.createElement(CheckCircle, {
       size: 20,
@@ -24,6 +30,8 @@ export const showSuccess = (message: string) => {
 };
 
 export const showError = (message: string) => {
+  toast.dismiss();
+
   return toast.error(message, {
     icon: React.createElement(XCircle, {
       size: 20,
@@ -36,11 +44,14 @@ export const showError = (message: string) => {
 };
 
 export const showInfo = (message: string) => {
+  toast.dismiss();
+
   return toast(message, {
     icon: React.createElement(Info, {
       size: 20,
       className: "text-blue-500",
     }),
+
     duration: 3000,
     style: baseStyle,
   });

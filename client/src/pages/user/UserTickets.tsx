@@ -6,7 +6,7 @@ import NoTicketsAvailable from "@/components/features/tickets/NoTicketsAvailable
 import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import { showError, showInfo, showSuccess } from "@/lib/toast";
+import { showError, showInfo, showSuccess } from "@/lib/hotToast";
 import { Event } from "@/types/event";
 import { TicketTypeForm } from "@/types/ticketTypes";
 
@@ -117,16 +117,16 @@ export default function UserTickets() {
     }
   };
 
-  // setTimeout(() => {
-  //   const el = document.getElementById("selectedTicket");
+  setTimeout(() => {
+    const el = document.getElementById("selectedTicket");
 
-  //   if (el) {
-  //     el.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "center",
-  //     });
-  //   }
-  // }, 50);
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, 50);
 
   return (
     <>

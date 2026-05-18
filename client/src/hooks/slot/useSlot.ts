@@ -11,6 +11,8 @@ export type SlotType = {
   endTime: string;
   capacity: number;
   booked?: number;
+
+  status: string;
 };
 
 export default function useSlots(eventId?: string) {

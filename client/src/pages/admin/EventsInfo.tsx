@@ -16,6 +16,7 @@ import {
   Edit,
   ChevronLeft,
   Plus,
+  ThumbsUp,
 } from "lucide-react";
 import { EventForm } from "@/types/event";
 import { TicketTypeForm } from "@/types/ticketTypes";
@@ -29,6 +30,7 @@ import { confirmToast } from "@/lib/confirmToast";
 import FormattedDate from "@/utils/dateLongFormat";
 import { formatTime } from "@/utils/timeLongFormat";
 import { currency } from "@/types/currency.type";
+import { FcApprove, FcLike } from "react-icons/fc";
 
 export default function EventInfoPage() {
   const { id } = useParams();
@@ -120,6 +122,36 @@ export default function EventInfoPage() {
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  const approveEvent = async (id: string) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        showError("Unauthorized");
+        return;
+      }
+
+      await eventApi.approveEvent(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Event approved successfully");
+      fetchData?.();
+    } catch (err: any) {
+      console.error(err);
+
+      showError(err.response?.data?.message || "Failed to approve event");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const approveTicketType = async (id: string) => {
     if (!id) return;
@@ -245,7 +277,18 @@ export default function EventInfoPage() {
   };
 
   if (loading) return <TransparentSpinner />;
-  if (!event) return <TransparentSpinner />;
+  if (!event) {
+    navigate("/admin/events");
+    showError("No events available.");
+  }
+
+  const statusStyle: Record<string, string> = {
+    draft: "bg-slate-100 text-slate-600",
+    pending: "bg-yellow-100 text-yellow-700",
+    published: "bg-green-100 text-green-700",
+    cancelled: "bg-red-100 text-red-700",
+    completed: "bg-blue-100 text-blue-700",
+  };
 
   return (
     <div className="max-w-full md:ml-64 md:py-10 md:px-10  xl:px-20">
@@ -300,53 +343,84 @@ export default function EventInfoPage() {
 
       {/* ================= EVENT HEADER ================= */}
       <div className="bg-white sm:rounded-2xl border border-slate-200 overflow-hidden shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
-        {/* Image */}
-        <div className="h-100 bg-slate-100 relative">
-          <img
-            src={event.image || "/images/default.jpg"}
-            className="w-full h-full object-cover"
-          />
+        <div className="flex flex-col lg:flex-row">
+          {" "}
+          {/* Image */}
+          <div className="h-100 lg:mx-8 lg:min-w-100 bg-slate-100 relative">
+            <img
+              src={event.image || "/images/default.jpg"}
+              className="w-full h-full object-cover"
+            />
 
-          <div className="absolute top-4 left-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm">
-            <span
-              className="text-xs font-extrabold uppercase text-slate-400 px-2 hover:text-slate-500 py-1 rounded-md"
-              onClick={() => navigate("/admin/events")}
-            >
-              <ChevronLeft size={24} />
-            </span>
+            <div className="absolute top-4 left-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm bg-white">
+              <span
+                className="text-xs font-extrabold uppercase text-slate-400 px-2 hover:text-slate-500 py-1 rounded-md"
+                onClick={() => navigate("/admin/events")}
+              >
+                <ChevronLeft size={16} />
+              </span>
+            </div>
+            {/* STATUS */}
+            <div className="absolute top-5 left-20">
+              <span
+                className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${
+                  statusStyle[event?.status || "draft"]
+                }`}
+              >
+                {event?.status || "draft"}
+              </span>
+            </div>
+            <div className="absolute top-4 right-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm bg-white">
+              {event?.status === "pending" ? (
+                <span
+                  className="text-xs uppercase text-green-400 px-2 hover:text-green-500 py-1 rounded-md"
+                  onClick={() =>
+                    confirmToast("Approve this Event?", () =>
+                      approveEvent(event._id),
+                    )
+                  }
+                >
+                  <ThumbsUp size={16} />
+                </span>
+              ) : (
+                ""
+              )}
+
+              <span
+                className="text-xs uppercase text-blue-400 px-2 hover:text-blue-500 py-1 rounded-md"
+                onClick={() => handleEditEvent(event)}
+              >
+                <Edit size={16} />
+              </span>
+              <span
+                className="text-xs uppercase text-red-400 px-2 hover:text-red-500 py-1 rounded-md"
+                onClick={() =>
+                  confirmToast("Cancel this event?", () =>
+                    deleteEvent(event._id),
+                  )
+                }
+              >
+                <Trash2 size={16} />
+              </span>
+            </div>
           </div>
-          <div className="absolute top-4 right-4 z-40 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5  shadow-sm">
-            <span
-              className="text-xs uppercase text-blue-400 px-2 hover:text-blue-500 py-1 rounded-md"
-              onClick={() => handleEditEvent(event)}
-            >
-              <Edit size={16} />
-            </span>
-            <span
-              className="text-xs uppercase text-red-400 px-2 hover:text-red-500 py-1 rounded-md"
-              onClick={() =>
-                confirmToast("Cancel this event?", () => deleteEvent(event._id))
-              }
-            >
-              <Trash2 size={16} />
-            </span>
-          </div>
-        </div>
+          {/* Info */}
+          <div className="p-5 space-y-3">
+            <h1 className="text-2xl font-bold text-slate-900">{event.name}</h1>
 
-        {/* Info */}
-        <div className="p-5 space-y-3">
-          <h1 className="text-2xl font-bold text-slate-900">{event.name}</h1>
+            <p className="text-slate-600 text-sm text-justify">
+              {event.description}
+            </p>
 
-          <p className="text-slate-600 text-sm">{event.description}</p>
+            <div className="flex flex-wrap gap-4 text-sm text-slate-500">
+              <span className="flex items-center gap-1">
+                <MapPin size={14} /> {event.location}
+              </span>
 
-          <div className="flex flex-wrap gap-4 text-sm text-slate-500">
-            <span className="flex items-center gap-1">
-              <MapPin size={14} /> {event.location}
-            </span>
-
-            <span className="flex items-center gap-1">
-              <Calendar size={14} /> {event.basePrice}
-            </span>
+              <span className="flex items-center gap-1">
+                {currency.rupees} {event.basePrice}
+              </span>
+            </div>
           </div>
         </div>
 

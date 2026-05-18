@@ -24,7 +24,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
 
-          <div className="absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
+          <div className="hidden absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">
             <span
               className="material-symbols-outlined text-violet-600 text-base"
               data-icon="star"
@@ -34,17 +34,13 @@ export default function UserEventCard2({ event }: EventCardProps) {
             <span className="font-semibold text-sm text-violet-600">4.9</span>
           </div>
           <div className="absolute bottom-4 left-4">
-            <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
+            <span className="hidden px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
               Exhibition
             </span>
           </div>
         </div>
         <div className="p-6 flex flex-col grow">
           <div className="flex flex-col gap-2 text-xs mb-3">
-            <div className="flex items-center gap-2 text-gray-400 font-semibold">
-              <CalendarDays className="w-4 h-4 text-indigo-500" />
-              {event.location}
-            </div>
             <div className="flex items-center gap-2 text-gray-400 font-semibold">
               <MapPin className="w-4 h-4 text-indigo-500" />
               {event.location}

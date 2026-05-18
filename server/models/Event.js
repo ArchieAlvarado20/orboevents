@@ -62,9 +62,18 @@ const eventSchema = new mongoose.Schema(
     // STATUS
     status: {
       type: String,
-      enum: ["draft", "pending", "active", "cancelled", "completed"],
+      enum: ["draft", "pending", "published", "cancelled", "completed"],
       default: "draft",
     },
+
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    approvedAt: Date,
+
+    rejectionReason: String,
 
     // TICKETS
     ticketTypes: [

@@ -1,3 +1,4 @@
+import Button from "@/components/shared/Button";
 import { TicketTypeForm } from "@/types/ticketTypes";
 import { Ticket } from "lucide-react";
 import { useState } from "react";
@@ -56,14 +57,20 @@ export default function UserTicketCard({
         </p>
       </div>
 
-      <button
-        onClick={handleClick}
-        className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
-        style={{ backgroundColor: colorHex }}
-        disabled={loading}
-      >
-        {loading ? "Booking..." : "Book Now"}
-      </button>
+      {/* STATUS */}
+      {ticketType.status === "pending" ? (
+        <Button variant="secondary" className="w-full mt-2">
+          Comming Soon!
+        </Button>
+      ) : (
+        <Button
+          className="w-full mt-2 "
+          onClick={handleClick}
+          style={{ backgroundColor: colorHex }}
+        >
+          Book Now!
+        </Button>
+      )}
     </div>
   );
 }

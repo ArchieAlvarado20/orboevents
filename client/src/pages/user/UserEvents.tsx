@@ -65,7 +65,11 @@ export default function UserEvents() {
           `${import.meta.env.VITE_API_URL}/api/events?page=${page}`,
         );
 
-        setEvents(res.data.events || []);
+        const filteredEvents = (res.data.events || []).filter(
+          (event) => event.status !== "pending",
+        );
+
+        setEvents(filteredEvents);
         setTotalPages(res.data.totalPages || 1);
       } catch (err) {
         console.error(err);
@@ -191,7 +195,7 @@ export default function UserEvents() {
           </div>
         </section>
         {/* <!-- Community Callout --> */}
-        <section className="max-w-7xl mx-auto px-6 mt-20">
+        <section className="hidden max-w-7xl mx-auto px-6 mt-20">
           <div className="bg-violet-600 rounded-[40px] p-20 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#fc79bd]/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>

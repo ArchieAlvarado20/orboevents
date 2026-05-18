@@ -12,6 +12,8 @@ export type TicketTypeForm = {
 
   eventId?: string;
 
+  slotId?: string;
+
   status?: "draft" | "pending" | "cancelled" | "published";
 };
 

@@ -8,15 +8,18 @@ import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import SlotCard from "@/components/shared/usersPage/SlotCard";
 import { showError, showInfo, showSuccess } from "@/lib/hotToast";
+import { currency } from "@/types/currency.type";
 import { EventForm } from "@/types/event";
 import { SlotFormType } from "@/types/slot.type";
 import { TicketTypeForm } from "@/types/ticketTypes";
 import {
   ArrowRight,
   Calendar,
+  ChevronLeft,
   MapPin,
   ShieldCheck,
   ShoppingCart,
+  Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -80,27 +83,29 @@ export default function UserSlots() {
   return (
     <>
       <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8">
-        <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex ">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
-            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100 max-h-00">
-              <div className="md:w-1/2 relative">
+            <div className="flex flex-col lg:flex-row">
+              {" "}
+              {/* Image */}
+              <div className="h-100 lg:mx-8 lg:min-w-100 bg-slate-100 relative">
                 <img
-                  alt="Holi Festival Event"
-                  className="w-full h-full max-h-200 object-cover min-w-50 md:min-w-80"
-                  src={event.image || "/images/images.jpg"}
+                  src={event.image || "/images/default.jpg"}
+                  className="w-full h-full object-cover"
                 />
-                <BackButton className="mt-2" />
               </div>
-              {/* Event Info */}
+              {/* Info */}
               <div className="p-5 space-y-3">
                 <h1 className="text-2xl font-bold text-slate-900">
                   {event.name}
                 </h1>
 
-                <p className="text-slate-600 text-sm">{event.description}</p>
+                <p className="text-slate-600 text-sm text-justify py-6 my-4">
+                  {event.description}
+                </p>
 
                 <div className="flex flex-wrap gap-4 text-sm text-slate-500">
                   <span className="flex items-center gap-1">
@@ -108,11 +113,11 @@ export default function UserSlots() {
                   </span>
 
                   <span className="flex items-center gap-1">
-                    <Calendar size={14} /> {event.basePrice}
+                    {currency.rupees} {event.basePrice}
                   </span>
                 </div>
               </div>
-            </section>
+            </div>
             {/* <!-- END: EventSummaryCard --> */}
             {/* <!-- BEGIN: TicketSelection --> */}
             <section>
@@ -130,8 +135,8 @@ export default function UserSlots() {
                   <NoSlotsAvailable />
                 </div>
               ) : (
-                <div className="flex mx-auto">
-                  <div className="grid mx-auto sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-full">
+                <div className="flex px-5 mx-auto">
+                  <div className="grid px-5 sm:min-w-100 lg:max-w-200 grid-cols-1 sm:grid-cols-2 md:grid-cols-2">
                     {/* <!-- Early Bird - Sold Out --> */}
                     {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">

@@ -29,6 +29,11 @@ const slotSchema = new mongoose.Schema(
       default: "pending",
     },
 
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
     booked: {
       type: Number,
       default: 0,

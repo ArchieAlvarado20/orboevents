@@ -246,10 +246,43 @@ const deleteEvent = async (req, res) => {
   }
 };
 
+const approveEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const approved = await Event.findByIdAndUpdate(
+      id,
+      {
+        status: "published",
+
+        approvedBy: req.user._id,
+        approvedAt: new Date(),
+      },
+      { new: true },
+    );
+
+    if (!approved) {
+      return res.status(404).json({
+        message: "Event not found",
+      });
+    }
+
+    res.json({
+      message: "Event approved successfully",
+      event: approved,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   createEvent,
   getEvents,
   getEventById,
   updateEvent,
   deleteEvent,
+  approveEvent,
 };

@@ -29,7 +29,7 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-8 m-5 space-y-4">
+    <div className="bg-white p-6 m-1  rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between relative">
       {/* TITLE + DELETE */}
       <div className="flex justify-between items-center">
         <p className="font-bold text-lg text-slate-900">
@@ -44,11 +44,6 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
       <p className="text-sm text-slate-500">
         {formatTime(slots.startTime)} - {formatTime(slots.endTime)}
       </p>
-
-      {/* CAPACITY */}
-      <div className="text-xs mt-2 text-slate-500">
-        Capacity: {slots.capacity}
-      </div>
 
       {/* STATUS */}
       {slots.status === "pending" ? (
