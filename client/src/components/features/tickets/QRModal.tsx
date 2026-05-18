@@ -21,7 +21,7 @@ export default function TicketModal({
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* modal */}
-      <div className="relative w-[90%] max-w-xl bg-white rounded-[32px] p-8 shadow-[0_15px_50px_rgba(124,58,237,0.12)] border border-violet-200 flex flex-col items-center text-center">
+      <div className="relative w-[90%] max-w-sm bg-white rounded-xl p-8 shadow-[0_15px_50px_rgba(124,58,237,0.12)] border border-violet-200 flex flex-col items-center text-center">
         {/* close button */}
         <button
           onClick={onClose}
@@ -33,11 +33,11 @@ export default function TicketModal({
         {/* QR SECTION */}
         <div className="mb-6 w-full">
           <div
-            className={`p-8 rounded-[40px] flex flex-col items-center border-4 border-dashed border-violet-200 ${
-              ticket.status === "active" ? "bg-green-400" : "bg-red-400"
+            className={`p-2 rounded-xl flex flex-col items-center border-5 border-dashed ${
+              ticket.status === "active" ? "border-green-400" : "border-red-600"
             }`}
           >
-            <div className="bg-white p-2 rounded-3xl shadow-xl mb-4">
+            <div className="bg-white p-2 rounded1xl shadow-xl mb-4">
               <img
                 alt="Ticket QR Code"
                 className="w-56 h-56 object-contain"

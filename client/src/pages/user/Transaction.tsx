@@ -148,7 +148,7 @@ export default function Transaction() {
                       </p>
                     </div>
                   </div>
-                  <div className="md:w-3/5 p-8 flex flex-col justify-between">
+                  <div className="md:w-full p-8 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="font-headline font-bold text-2xl text-gray-900 mb-2  transition-colors">

@@ -250,6 +250,11 @@ export default function Reservation() {
                             <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
                               {r.eventId?.name}
                             </h3>
+
+                            <h3 className="text-xl font-bold mb-1 group-hover:text-violet-600 transition-colors">
+                              {r.ticketTypeId?.name}
+                            </h3>
+
                             <input
                               type="checkbox"
                               checked={selectedReservations.some(
