@@ -53,6 +53,10 @@ export default function useTicketTypeForm(
     if (!form.quantityTotal) newErrors.quantityTotal = "Required";
     if (!form.privileges) newErrors.privileges = "Required";
 
+    if (form.allowedZones.length === 0) {
+      newErrors.allowedZones = "Select at least 1 zone";
+    }
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -61,6 +65,10 @@ export default function useTicketTypeForm(
     if (!validate()) return;
 
     const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Unauthorized");
+      return false;
+    }
     setLoading(true);
 
     try {
@@ -74,7 +82,9 @@ export default function useTicketTypeForm(
         quantityTotal: Number(form.quantityTotal),
 
         accessLevel: form.accessLevel,
-        color: accessLevelColorMap[form.accessLevel ?? "general"],
+        color: accessLevelColorMap[form.accessLevel ?? "regular"],
+
+        allowedZones: form.allowedZones,
 
         privileges: form.privileges
           ? form.privileges.split(",").map((p) => p.trim())

@@ -8,15 +8,18 @@ import { useRef } from "react";
 import useTicketTypeForm from "@/hooks/ticketTypeHook/useTicketTypeForm";
 import { EventForm } from "@/types/event";
 import { accessLevelColorMap } from "@/types/ticketTypes";
+import { EventZoneFormType } from "@/types/eventZone.type";
 
 type TicketTypeModalProps = {
   event: EventForm;
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  eventZones: EventZoneFormType[];
 };
 
 export default function TicketTypeModal({
+  eventZones,
   event,
   open,
   onClose,
@@ -24,19 +27,10 @@ export default function TicketTypeModal({
 }: TicketTypeModalProps) {
   const modalRef = useRef(null);
 
-  const statusStyle = {
-    draft: "bg-gray-100 text-gray-600",
-    pending: "bg-yellow-100 text-yellow-700",
-    published: "bg-green-100 text-green-700",
-    rejected: "bg-red-100 text-red-700",
-  };
-
   const accessLevelOptions = [
     { label: "Vip", value: "vip" },
-    { label: "Media", value: "media" },
-    { label: "General", value: "general" },
-    { label: "Speaker", value: "speaker" },
-    { label: "Staff", value: "staff" },
+    { label: "Premium", value: "premium" },
+    { label: "Regular", value: "regular" },
   ];
 
   const { form, setForm, handleChange, createTicketType, loading, errors } =
@@ -44,6 +38,17 @@ export default function TicketTypeModal({
       onSuccess();
       onClose();
     });
+
+  const toggleEventZone = (id: string) => {
+    setForm((prev) => ({
+      ...prev,
+      allowedZones: Array.isArray(prev.allowedZones)
+        ? prev.allowedZones.includes(id)
+          ? prev.allowedZones.filter((x) => x !== id)
+          : [...prev.allowedZones, id]
+        : [id],
+    }));
+  };
 
   return (
     <>
@@ -113,10 +118,10 @@ export default function TicketTypeModal({
             <div className="px-6 py-6 overflow-y-auto space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Input
-                  label="Ticket Type(Zone)"
+                  label="Ticket Type"
                   name="name"
                   type="text"
-                  placeholder="Name (VIP / GA)"
+                  placeholder="Name VIP TICKETS"
                   className="md:col-span-1"
                   onChange={handleChange}
                   error={errors.name}
@@ -161,6 +166,30 @@ export default function TicketTypeModal({
                 rows={4}
                 error={errors.description}
               />
+
+              <div className="block text-sm font-semibold text-slate-700  mb-2">
+                <span>Allowed Zones: </span>
+              </div>
+              <div
+                className={`grid grid-cols-3 border  p-5 rounded-lg ${errors.allowedZones ? "border-red-500" : "border-slate-200"}`}
+              >
+                {eventZones.map((ez) => (
+                  <label key={ez._id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={form.allowedZones.includes(ez._id)}
+                      onChange={() => toggleEventZone(ez._id)}
+                    />
+                    {ez.zoneId?.name}
+                  </label>
+                ))}
+              </div>
+
+              {errors.allowedZones && (
+                <p className="text-red-500 text-xs mt-2">
+                  {errors.allowedZones}
+                </p>
+              )}
 
               <Input
                 label="Privileges"

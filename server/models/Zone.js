@@ -1,9 +1,22 @@
-const zoneSchema = new mongoose.Schema({
-  name: String, // "Red Carpet Area", "Main Hall", "Networking Lounge"
-  description: String,
-  capacity: Number,
+const mongoose = require("mongoose");
 
-  // ✦ NEW — which ticket types can enter this zone
-  allowedTicketTypes: [String], // e.g. ["vip", "media"]
-  currentOccupancy: { type: Number, default: 0 },
-});
+const zoneSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+
+    description: String,
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+module.exports = mongoose.model("Zone", zoneSchema);

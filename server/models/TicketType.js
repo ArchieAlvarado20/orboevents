@@ -35,17 +35,26 @@ const ticketTypeSchema = new mongoose.Schema(
       default: 0,
     },
 
+    // 🔥 REPLACED accessLevel
+    allowedZones: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "EventZone",
+      },
+    ],
+
     accessLevel: {
       type: String,
-      enum: ["vip", "media", "general", "speaker", "staff"],
-      default: "general",
+      enum: ["vip", "premium", "regular"],
+      default: "regular",
     },
 
+    // optional extra perks/features
     privileges: [String],
 
     color: String,
 
-    // 🔥 NEW: Approval workflow
+    // approval workflow
     status: {
       type: String,
       enum: ["pending", "cancelled", "published"],

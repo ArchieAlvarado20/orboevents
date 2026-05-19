@@ -7,12 +7,14 @@ export type TicketTypeForm = {
 
   privileges: string; // comma-separated input
 
-  accessLevel?: "vip" | "media" | "general" | "speaker" | "staff";
+  accessLevel?: "vip" | "premium" | "regular";
   color?: string;
 
   eventId?: string;
 
   slotId?: string;
+
+  allowedZones: string[];
 
   status?: "draft" | "pending" | "cancelled" | "published";
 };
@@ -23,14 +25,13 @@ export const initialTicketTypeForm = {
   price: "",
   quantityTotal: "",
   privileges: "",
-  accessLevel: "general",
+  accessLevel: "regular",
+  allowedZones: [],
   color: "#3B82F6",
 };
 
 export const accessLevelColorMap = {
   vip: "#FACC15", // gold
-  media: "#A855F7", // purple
-  general: "#3B82F6", // blue
-  speaker: "#10B981", // green
-  staff: "#EF4444", // red
+  premium: "#A855F7", // purple
+  regular: "#3B82F6", // blue
 };

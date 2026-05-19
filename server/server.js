@@ -22,6 +22,8 @@ const adminUsersRoutes = require("./routes/adminUsersRoutes.js");
 const categoryRoutes = require("./routes/categoryRoutes");
 const eventTypeRoutes = require("./routes/eventTypeRoutes");
 const slotRoutes = require("./routes/slotRoutes");
+const zoneRoutes = require("./routes/zoneRoutes");
+const eventZoneRoutes = require("./routes/eventZoneRoutes");
 
 const app = express();
 
@@ -59,6 +61,8 @@ app.use("/api/roles", roleRoutes);
 
 app.use("/api", eventRoutes);
 app.use("/api", ticketTypeRoutes);
+app.use("/api/zones", zoneRoutes);
+app.use("/api/event-zones", eventZoneRoutes);
 app.use("/api/categories", categoryRoutes);
 
 app.use("/api/event-types", eventTypeRoutes);

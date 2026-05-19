@@ -112,6 +112,18 @@ export default function EventCard({
           </button>
           {open && (
             <div className="absolute right-0 mt-2 w-auto bg-white border border-slate-100 rounded shadow flex flex-col gap-1 p-1 shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition">
+              {event.status === "pending" ? (
+                <button
+                  onClick={() => onApproveEvent(event)}
+                  className=" flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
+                >
+                  <ThumbsUp size={18} className="text-violet-600" />
+                  Approve Event
+                </button>
+              ) : (
+                ""
+              )}
+
               <button
                 onClick={() => navigate(`${event._id}`)}
                 className="flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 hover:bg-indigo-50 rounded-lg whitespace-nowrap text-sm font-medium"
@@ -135,17 +147,6 @@ export default function EventCard({
                 <Trash2 size={18} className="text-red-600" />
                 Cancel Event
               </button>
-              {event.status === "pending" ? (
-                <button
-                  onClick={() => onApproveEvent(event)}
-                  className=" flex uppercase items-center gap-2 px-3 py-2 text-slate-600 hover:text-violet-600 text-sm font-medium hover:bg-red-50 rounded-lg whitespace-nowrap"
-                >
-                  <ThumbsUp size={18} className="text-violet-600" />
-                  Approve Event
-                </button>
-              ) : (
-                ""
-              )}
 
               <button
                 onClick={() => onAddTicket(event)}

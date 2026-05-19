@@ -11,9 +11,7 @@ import useEventForm from "@/hooks/eventHook/useEventForm";
 import { useCategory } from "@/hooks/category/useCategory";
 import { useEventType } from "@/hooks/eventType/useEventType";
 import { EventForm, EventInitialForm } from "@/types/event";
-import { error } from "console";
 import { currency } from "@/types/currency.type";
-import UserFileUpload from "@/components/shared/UserFIleUpload";
 
 interface EventModalProps {
   open: boolean;

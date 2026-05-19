@@ -19,6 +19,7 @@ import {
   CassetteTape,
   Music,
   Calendar1Icon,
+  MapPin,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -113,6 +114,24 @@ export default function SidebarAdmin({
             />
             <span className={`${isCollapsed ? "hidden" : "inline"}`}>
               Event Categories
+            </span>
+          </NavLink>
+
+          <NavLink
+            to="/admin/zones"
+            className={({ isActive }) =>
+              `flex items-center text-sm font-medium rounded-lg transition-all ${
+                isActive
+                  ? "text-indigo-600 bg-indigo-50"
+                  : "text-slate-600 hover:bg-slate-100"
+              } ${isCollapsed ? "justify-center px-1 py-1" : "gap-3 px-3 py-2"}`
+            }
+          >
+            <MapPin
+              className={`${iconSize} shrink-0 transition-all duration-200`}
+            />
+            <span className={`${isCollapsed ? "hidden" : "inline"}`}>
+              Event Zones
             </span>
           </NavLink>
 

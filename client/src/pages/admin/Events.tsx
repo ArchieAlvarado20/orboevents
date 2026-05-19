@@ -66,6 +66,7 @@ export default function Events() {
   const handleApproveEvent = (event: any) => {
     confirmToast("Approve this event?", async () => {
       await approveEvent(event._id);
+      fetchEvents();
     });
   };
 
@@ -208,7 +209,9 @@ export default function Events() {
                     onAddSlot={() => handleAddSlot(event)}
                     onEdit={() => handleEditEvent(event)}
                     onDelete={() => handleDeleteEvent(event)}
-                    onApproveEvent={() => handleApproveEvent(event)}
+                    onApproveEvent={() => {
+                      handleApproveEvent(event);
+                    }}
                   />
                 ))}
               </div>

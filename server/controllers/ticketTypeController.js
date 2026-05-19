@@ -8,7 +8,9 @@ const getTicketTypesByEvent = async (req, res) => {
       eventId: req.params.eventId,
       isActive: true,
       status: { $in: ["pending", "published"] },
-    }).sort({ createdAt: 1 });
+    })
+      .populate("allowedZones")
+      .sort({ createdAt: 1 });
 
     return res.json(tickets);
   } catch (err) {
@@ -32,6 +34,7 @@ const createTicketType = async (req, res) => {
       accessLevel,
       privileges,
       color,
+      allowedZones,
     } = req.body;
 
     // 🔥 prevent duplicate ticket type per event (IMPORTANT)
@@ -55,7 +58,7 @@ const createTicketType = async (req, res) => {
       accessLevel,
       privileges,
       color,
-
+      allowedZones,
       status: "pending",
     });
 

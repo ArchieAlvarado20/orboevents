@@ -30,24 +30,41 @@ import { confirmToast } from "@/lib/confirmToast";
 import FormattedDate from "@/utils/dateLongFormat";
 import { formatTime } from "@/utils/timeLongFormat";
 import { currency } from "@/types/currency.type";
-import { FcApprove, FcLike } from "react-icons/fc";
+
+import ZoneModal from "@/components/features/zone/zoneModal";
+import { ZoneFormType } from "@/types/zone.type";
+import { zoneApi } from "@/api/zone.api";
+import useZones from "@/hooks/zone/useZone";
+import EventZoneModal from "@/components/features/eventZone/eventZoneModal";
+import { EventZoneFormType } from "@/types/eventZone.type";
+import { eventZoneApi } from "@/api/eventZone.api";
+import useEventZone from "@/hooks/eventZone/useEventZone";
 
 export default function EventInfoPage() {
   const { id } = useParams();
-
   const [event, setEvent] = useState<EventForm | null>(null);
   const [ticketType, setTicketType] = useState<TicketTypeForm[]>([]);
   const [slots, setSlots] = useState<SlotFormType[]>([]);
+  const [eventZones, setEventZones] = useState<EventZoneFormType[]>([]);
+  const [selectedEventZone, setSelectedEventZone] =
+    useState<EventZoneFormType | null>(null);
+
   const [loading, setLoading] = useState(true);
+
   const [openTicketModal, setOpenTicketModal] = useState(false);
   const navigate = useNavigate();
+
+  const [openSlotModal, setOpenSlotModal] = useState(false);
+  const [openBulkSlotModal, setOpenBulkSlotModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openEventZoneModal, setOpenEventZoneModal] = useState(false);
+
+  const { zones } = useZones();
+
   const handleOpenTicketModal = (event: EventForm) => {
     setEvent(event);
     setOpenTicketModal(true);
   };
-  const [openSlotModal, setOpenSlotModal] = useState(false);
-  const [openBulkSlotModal, setOpenBulkSlotModal] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
 
   const handleAddSlot = (event: EventForm) => {
     setEvent(event);
@@ -97,7 +114,7 @@ export default function EventInfoPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const [eventRes, ticketRes, slotRes] = await Promise.all([
+      const [eventRes, ticketRes, slotRes, eventZoneRes] = await Promise.all([
         eventApi.getByEvent(id, {
           headers: { Authorization: `Bearer ${token}` },
         }),
@@ -107,11 +124,15 @@ export default function EventInfoPage() {
         slotApi.getByEvent(id, {
           headers: { Authorization: `Bearer ${token}` },
         }),
+        eventZoneApi.getByEvent(id, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
 
       setEvent(eventRes.data);
       setTicketType(ticketRes.data);
       setSlots(slotRes.data);
+      setEventZones(eventZoneRes.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -276,11 +297,39 @@ export default function EventInfoPage() {
     }
   };
 
+  // =========================
+  // DELETE EVENT ZONE
+  // =========================
+  const cancelEventZone = async (id: string) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      showError("Unauthorized");
+      return false;
+    }
+
+    try {
+      await eventZoneApi.delete(id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      showSuccess("Event zone cancelled successfully");
+
+      return true;
+    } catch (err: any) {
+      showError(err.response?.data?.message || "Failed to cancel event zone");
+
+      return false;
+    }
+  };
+
   if (loading) return <TransparentSpinner />;
-  if (!event) {
-    navigate("/admin/events");
-    showError("No events available.");
-  }
+  // if (!event) {
+  //   navigate("/admin/events");
+  //   showError("No events available.");
+  // }
 
   const statusStyle: Record<string, string> = {
     draft: "bg-slate-100 text-slate-600",
@@ -292,6 +341,24 @@ export default function EventInfoPage() {
 
   return (
     <div className="max-w-full md:ml-64 md:py-10 md:px-10  xl:px-20">
+      {openEventZoneModal && event && (
+        <EventZoneModal
+          open={openEventZoneModal}
+          event={event}
+          zones={zones}
+          eventZone={selectedEventZone}
+          onClose={() => {
+            setOpenEventZoneModal(false);
+            setSelectedEventZone(null);
+          }}
+          onSuccess={() => {
+            fetchData();
+            setOpenEventZoneModal(false);
+            setSelectedEventZone(null);
+          }}
+        />
+      )}
+
       {openTicketModal && event && (
         <TicketTypeModal
           open={openTicketModal}
@@ -301,6 +368,7 @@ export default function EventInfoPage() {
             fetchData();
             setOpenTicketModal(false);
           }}
+          eventZones={eventZones}
         />
       )}
 
@@ -424,6 +492,88 @@ export default function EventInfoPage() {
           </div>
         </div>
 
+        {/* ================= ZONES ================= */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4">
+          <div className="flex items-center gap-2 text-slate-900 font-semibold">
+            <MapPin size={18} />
+            Event Zones
+            <div
+              className="flex items-center gap-2 text-blue-600 font-semibold"
+              onClick={() => setOpenEventZoneModal(true)}
+            >
+              <Plus size={18} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
+            {eventZones.map((z) => (
+              <div
+                key={z._id}
+                className="relative group bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg transition"
+              >
+                <span
+                  className="absolute right-1 text-xs uppercase top-2  text-red-400 px-2 py-2 rounded-md"
+                  onClick={() =>
+                    confirmToast("Cancel this zone?", async () => {
+                      cancelEventZone(z._id);
+                      fetchData();
+                    })
+                  }
+                >
+                  <Trash2 size={16} />
+                </span>
+
+                {/* HEADER */}
+                <div className="items-center justify-between">
+                  <h3 className="font-bold text-lg text-slate-900">
+                    {z.zoneId?.name}
+                  </h3>
+                </div>
+                <span
+                  className={`text-[10px] px-2 py-1 rounded-full font-semibold ${
+                    z.isActive
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-600"
+                  }`}
+                >
+                  {z.isActive ? "ACTIVE" : "INACTIVE"}
+                </span>
+
+                {/* DESCRIPTION */}
+                <p className="text-sm text-slate-500 mt-1 line-clamp-2">
+                  {z.zoneId?.description}
+                </p>
+
+                {/* DETAILS */}
+                <div className="mt-4 space-y-2 text-sm text-slate-600">
+                  <div className="flex justify-between">
+                    <span>Capacity</span>
+                    <span className="font-semibold text-slate-900">
+                      {z.capacity}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Scan Order</span>
+                    <span className="font-semibold text-slate-900">
+                      #{z.scanOrder}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Re-entry</span>
+                    <span
+                      className={`font-semibold ${
+                        z.isReEntryAllowed ? "text-green-600" : "text-red-500"
+                      }`}
+                    >
+                      {z.isReEntryAllowed ? "Allowed" : "Not Allowed"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         {/* ================= TICKET TYPES ================= */}
         <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
@@ -444,24 +594,23 @@ export default function EventInfoPage() {
               {ticketType.map((t) => (
                 <div
                   key={t._id}
-                  className="p-4 border border-slate-200 rounded-xl hover:shadow-sm transition "
+                  className="relative p-4 border border-slate-200 rounded-xl hover:shadow-sm transition "
                 >
+                  <span
+                    className="absolute right-1 text-xs uppercase top-2  text-red-400 px-2 py-2 rounded-md"
+                    onClick={() =>
+                      confirmToast("Cancel this ticket?", () =>
+                        cancelTicketType(t._id),
+                      )
+                    }
+                  >
+                    <Trash2 size={16} />
+                  </span>
                   <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="flex justify-between items-center w-full">
                       <h3 className="font-bold text-lg text-slate-900">
                         {t.name}
                       </h3>
-
-                      <span
-                        className="text-xs uppercase text-red-400 px-2 py-1 rounded-md"
-                        onClick={() =>
-                          confirmToast("Cancel this ticket?", () =>
-                            cancelTicketType(t._id),
-                          )
-                        }
-                      >
-                        <Trash2 size={16} />
-                      </span>
                     </div>
                   </div>
                   <span
@@ -527,21 +676,20 @@ export default function EventInfoPage() {
               {slots.map((s) => (
                 <div
                   key={s._id}
-                  className="p-4 border rounded-xl border-slate-200"
+                  className="relative p-4 border rounded-xl border-slate-200"
                 >
+                  <span
+                    className="absolute right-1 text-xs uppercase top-2  text-red-400 px-2 py-2 rounded-md"
+                    onClick={() =>
+                      confirmToast("Cancel this Schedule?", () =>
+                        cancelSlot(s._id),
+                      )
+                    }
+                  >
+                    <Trash2 size={16} />
+                  </span>
                   <div className="flex justify-between items-center w-full">
                     <p className="font-bold text-lg text-slate-900">{s.name}</p>
-
-                    <span
-                      className="text-xs uppercase text-red-400 px-2 py-1 rounded-md"
-                      onClick={() =>
-                        confirmToast("Cancel this Schedule?", () =>
-                          cancelSlot(s._id),
-                        )
-                      }
-                    >
-                      <Trash2 size={16} />
-                    </span>
                   </div>
 
                   <FormattedDate

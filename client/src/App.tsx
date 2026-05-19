@@ -35,6 +35,7 @@ import EventType from "./pages/admin/EventType";
 import { Toaster } from "react-hot-toast";
 import EventInfoPage from "./pages/admin/EventsInfo";
 import UserSlots from "./pages/user/UserSlots";
+import ZonePage from "./pages/admin/Zone";
 
 function App() {
   return (
@@ -75,6 +76,7 @@ function App() {
           <Route path="categories" element={<Categories />} />
           <Route path="event-types" element={<EventType />} />
           <Route path="events/:id" element={<EventInfoPage />} />
+          <Route path="zones" element={<ZonePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

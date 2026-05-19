@@ -7,6 +7,7 @@ import UserTicketCard from "@/components/features/tickets/UserTicketCard";
 import BackButton from "@/components/shared/BackButton";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { showError, showInfo, showSuccess } from "@/lib/hotToast";
+import { currency } from "@/types/currency.type";
 import { Event } from "@/types/event";
 import { TicketTypeForm } from "@/types/ticketTypes";
 
@@ -159,7 +160,7 @@ export default function UserTickets() {
                   </span>
 
                   <span className="flex items-center gap-1">
-                    <Calendar size={14} /> {event.basePrice}
+                    {currency.rupees} {event.basePrice}
                   </span>
                 </div>
               </div>
