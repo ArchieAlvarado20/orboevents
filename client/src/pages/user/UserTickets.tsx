@@ -509,95 +509,87 @@ export default function UserTickets() {
                     </div>
                   ) : (
                     <>
-                      {reservations.length === 0 ? (
-                        <TransparentSpinner />
-                      ) : (
-                        <>
-                          {reservations.map((r: any) => (
-                            <div
-                              key={r._id}
-                              className="relative bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
-                            >
-                              <button
-                                onClick={() =>
-                                  confirmToast(
-                                    "Cancel this reservation?",
-                                    () => {
-                                      cancelReservation(r._id);
-                                    },
-                                  )
-                                }
-                                className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700  rounded-xl transition-all"
-                              >
-                                <Trash2 className="w-5 h-5" />
-                              </button>
-                              <div className=" hidden w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
-                                <img
-                                  src={r.eventId?.image || "/images/images.jpg"}
-                                  alt={r.eventId?.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                              </div>
+                      {" "}
+                      {reservations.map((r: any) => (
+                        <div
+                          key={r._id}
+                          className="relative bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
+                        >
+                          <button
+                            onClick={() =>
+                              confirmToast("Cancel this reservation?", () => {
+                                cancelReservation(r._id);
+                              })
+                            }
+                            className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700  rounded-xl transition-all"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                          <div className=" hidden w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
+                            <img
+                              src={r.eventId?.image || "/images/images.jpg"}
+                              alt={r.eventId?.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          </div>
 
-                              <div className="flex-1 flex flex-col justify-between">
-                                <div className="flex justify-between rs-start">
-                                  <div>
-                                    <div className="flex gap-3">
-                                      <h3 className="text-xl font-bold mb-1 ">
-                                        {r.ticketTypeId?.name}
-                                      </h3>
+                          <div className="flex-1 flex flex-col justify-between">
+                            <div className="flex justify-between rs-start">
+                              <div>
+                                <div className="flex gap-3">
+                                  <h3 className="text-xl font-bold mb-1 ">
+                                    {r.ticketTypeId?.name}
+                                  </h3>
 
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedReservations.some(
-                                          (s) => s._id === r._id,
-                                        )}
-                                        onChange={() => toggleReservation(r)}
-                                        className="w-5 h-5 mt-5 md:mt-1"
-                                      />
-                                    </div>
-                                    <h3 className="text-lg font-bold mb-1 text-slate-600">
-                                      {r.eventId?.name}
-                                    </h3>
-
-                                    <p className="text-sm text-slate-500 font-medium mb-1">
-                                      <FormattedDate date={r.eventId?.date} />
-                                    </p>
-                                    <p className="text-xs text-slate-400">
-                                      {r.eventId?.location}
-                                    </p>
-                                    <p className="text-xl mt-2 font-bold mb-1  transition-colors">
-                                      ₹ {r.totalAmount.toFixed(2)}
-                                    </p>
-                                  </div>
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedReservations.some(
+                                      (s) => s._id === r._id,
+                                    )}
+                                    onChange={() => toggleReservation(r)}
+                                    className="w-5 h-5 mt-5 md:mt-1"
+                                  />
                                 </div>
+                                <h3 className="text-lg font-bold mb-1 text-slate-600">
+                                  {r.eventId?.name}
+                                </h3>
 
-                                <div className="hidden flex items-center justify-between mt-4">
-                                  <div className="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-100">
-                                    <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all">
-                                      <Minus className="w-4 h-4" />
-                                    </button>
-                                    <span className="w-10 text-center font-bold text-sm">
-                                      {r.quantity}
-                                    </span>
-                                    <button
-                                      className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all"
-                                      onClick={() =>
-                                        showInfo(
-                                          "For now only one ticket per event only!",
-                                        )
-                                      }
-                                    >
-                                      <Plus className="w-4 h-4" />
-                                    </button>
-                                  </div>
-                                  <div className="text-2xl font-black text-violet-600"></div>
-                                </div>
+                                <p className="text-sm text-slate-500 font-medium mb-1">
+                                  <FormattedDate date={r.eventId?.date} />
+                                </p>
+                                <p className="text-xs text-slate-400">
+                                  {r.eventId?.location}
+                                </p>
+                                <p className="text-xl mt-2 font-bold mb-1  transition-colors">
+                                  ₹ {r.totalAmount.toFixed(2)}
+                                </p>
                               </div>
                             </div>
-                          ))}
-                        </>
-                      )}{" "}
+
+                            <div className="hidden flex items-center justify-between mt-4">
+                              <div className="flex items-center bg-slate-50 rounded-xl p-1 border border-slate-100">
+                                <button className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all">
+                                  <Minus className="w-4 h-4" />
+                                </button>
+                                <span className="w-10 text-center font-bold text-sm">
+                                  {r.quantity}
+                                </span>
+                                <button
+                                  className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white rounded-lg transition-all"
+                                  onClick={() =>
+                                    showInfo(
+                                      "For now only one ticket per event only!",
+                                    )
+                                  }
+                                >
+                                  <Plus className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <div className="text-2xl font-black text-violet-600"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </>
                   )}
                   <Link to="/events">
