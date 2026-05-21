@@ -268,7 +268,7 @@ export default function UserTickets() {
                         ticketType={ticket}
                         onSelect={() => {
                           handleSelectTicket(ticket);
-                          showInfo(`You select ${selectedTicket?.name}`);
+                          showInfo(`You select ${selectedTicket.name}`);
                         }}
                       />
                     ))}
