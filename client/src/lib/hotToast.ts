@@ -3,9 +3,9 @@ import { CheckCircle, XCircle, Info } from "lucide-react";
 import React from "react";
 
 const baseStyle = {
-  background: "rgba(255,255,255,0.6)",
-  backdropFilter: "blur(0.2px)",
-  WebkitBackdropFilter: "blur(0.2px)",
+  background: "white",
+  // backdropFilter: "blur(0.2px)",
+  // WebkitBackdropFilter: "blur(0.2px)",
   borderRadius: "12px",
   color: "#111",
   animation: "fade-toast 200ms ease",

@@ -21,21 +21,13 @@ import useReservation from "@/hooks/reservation/useReservation";
 import BackButton from "@/components/shared/BackButton";
 
 export default function Reservation() {
-  const { fetchReservations, reservations, loading, setReservations } =
-    useReservation();
-  const [selectedReservations, setSelectedReservations] =
-    useState(reservations);
-
-  const navigate = useNavigate();
-
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-  useEffect(() => {
-    fetchReservations();
-    if (reservations.length > 0) {
-      setSelectedReservations(reservations);
-    }
-  }, [reservations.length]);
+  const {
+    reservations,
+    loading,
+    toggleReservation,
+    selectedReservations,
+    handlePayment,
+  } = useReservation();
 
   if (!reservations) {
     return <TransparentSpinner />;
@@ -44,18 +36,6 @@ export default function Reservation() {
   if (loading) {
     return <TransparentSpinner />;
   }
-
-  const toggleReservation = (reservation) => {
-    setSelectedReservations((prev) => {
-      const exists = prev.some((r) => r._id === reservation._id);
-
-      if (exists) {
-        return prev.filter((r) => r._id !== reservation._id);
-      } else {
-        return [...prev, reservation];
-      }
-    });
-  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -73,127 +53,12 @@ export default function Reservation() {
 
   const grandTotal = subtotal + bookingFee + processingFee;
 
-  const cancelReservation = async (reservationId) => {
-    try {
-      await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/reservations/${reservationId}/cancel`,
-        {}, // body (empty kasi wala kang data)
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-
-      showSuccess("Reservation cancelled");
-
-      setReservations((prev) => prev.filter((r) => r._id !== reservationId));
-    } catch (err) {
-      console.error(err);
-      showError("Failed to cancel reservation");
-    }
-  };
-
-  const handlePayment = async () => {
-    try {
-      // 1. CREATE TRANSACTION (backend computes total)
-      const txRes = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/transactions/checkout`,
-        {
-          reservationIds: selectedReservations.map((r) => r._id),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-
-      const transaction = txRes.data.transaction;
-
-      // 2. CREATE RAZORPAY ORDER (based on transaction)
-      const orderRes = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/razorpay/create-order`,
-        {
-          amount: transaction.total * 100, // convert to paise
-          currency: "INR",
-          transactionId: transaction._id,
-        },
-      );
-
-      const order = orderRes.data;
-
-      // 3. CHECK RAZORPAY SCRIPT
-      if (!window.Razorpay) {
-        showError("Razorpay not loaded");
-        return;
-      }
-
-      // 4. OPEN PAYMENT MODAL
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-
-        amount: order.amount,
-        currency: order.currency,
-        order_id: order.id,
-
-        name: "orboevents",
-        description: `Payment for ${selectedReservations.length} ticket(s)`,
-
-        handler: async function (response) {
-          try {
-            // 5. CONFIRM PAYMENT (VERY IMPORTANT)
-            await axios.post(
-              `${import.meta.env.VITE_API_URL}/api/transactions/success`,
-              {
-                transactionId: transaction._id,
-                reservationIds: selectedReservations.map((r) => r._id),
-
-                paymentId: response.razorpay_payment_id,
-                orderId: response.razorpay_order_id,
-                signature: response.razorpay_signature,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-              },
-            );
-            navigate(`/transaction`);
-            showSuccess("Payment successful!");
-
-            await fetchReservations();
-          } catch (err) {
-            console.error(err);
-            showError("Payment verification failed");
-          }
-        },
-
-        prefill: {
-          name: user?.name || "Guest",
-          email: user?.email || "user@email.com",
-        },
-
-        theme: {
-          color: "#3399cc",
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error(err);
-      showError("Payment failed to initialize");
-    }
-  };
-
   const activeTickets = reservations.filter((t) => t.status === "pending");
 
   const count = activeTickets.length;
 
   return (
     <div className=" relative min-h-screen bg-[#f8f9ff] font-sans text-slate-900 pb-20">
-      <BackButton className="absolute left-2 top-10 bg-slate-400 border border-slate-200" />
       <main className=" max-w-7xl mx-auto px-6 py-12 mt-18">
         <div className="flex items-center justify-between gap-3 mb-8">
           <h2 className="text-4xl font-black tracking-tight">

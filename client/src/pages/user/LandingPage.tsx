@@ -1,11 +1,8 @@
 import { userEventApi } from "@/api/userEvent.api";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
-import { showError, showSuccess } from "@/lib/toast";
-import { Event } from "@/types/event";
-import axios from "axios";
 import { ArrowRight, Lightbulb, Megaphone, Newspaper } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   const [events, setEvents] = useState<Event[]>([]);

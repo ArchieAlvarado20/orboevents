@@ -3,7 +3,7 @@ import Topbar from "@/components/shared/usersPage/topbar";
 import UserFooter from "@/components/shared/usersPage/userFooter";
 import { useAuthInit } from "@/hooks/auth/useAuthInit";
 import { useEffect, useState } from "react";
-import { showSuccess } from "@/lib/toast";
+import { showSuccess } from "@/lib/hotToast";
 import UserMobileSidebar from "@/components/shared/usersPage/MobileSidebar";
 
 export default function UserLayout() {

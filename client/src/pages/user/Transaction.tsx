@@ -46,6 +46,8 @@ interface Ticket {
     _id: string;
     name: string;
     price: number;
+    startTime: string;
+    date: string;
   };
 
   transactionId?: string;
@@ -90,7 +92,6 @@ export default function Transaction() {
     fetchTickets();
   }, []);
 
-  
   if (loading) {
     return <TransparentSpinner />;
   }
@@ -179,7 +180,8 @@ export default function Transaction() {
                         <div className="flex items-center gap-2">
                           <TimerIcon />
                           <span className="text-sm">
-                            Starts at {formatTime(ticket.eventId?.startTime)} •
+                            Starts at{" "}
+                            {formatTime(ticket.ticketTypeId?.startTime)} •
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
