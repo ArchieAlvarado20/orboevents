@@ -8,6 +8,7 @@ import UserFooter from "@/components/shared/usersPage/userFooter";
 import { getPagination } from "@/lib/pagination";
 import BackButton from "@/components/shared/BackButton";
 import EventCarousel from "@/components/shared/usersPage/EventCarousel";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 
 interface Event {
   _id: string;
@@ -25,6 +26,7 @@ export default function UserEvents() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const pageRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const categoryOptions = [
     { label: "Sports & Travel", value: "sports", icon: Music },
@@ -60,6 +62,7 @@ export default function UserEvents() {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/events?page=${page}`,
@@ -73,6 +76,8 @@ export default function UserEvents() {
         setTotalPages(res.data.totalPages || 1);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -89,6 +94,12 @@ export default function UserEvents() {
     }
   }, 50);
 
+  if (!events) {
+    return <TransparentSpinner />;
+  }
+  if (loading) {
+    return <TransparentSpinner />;
+  }
   return (
     <>
       <main className="pt-24 pb-20 grow">

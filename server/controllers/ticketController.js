@@ -1,5 +1,6 @@
 const Ticket = require("../models/Ticket");
 const Event = require("../models/Event");
+const TicketType = require("../models/TicketType");
 const QRCode = require("qrcode");
 const { nanoid } = require("nanoid");
 

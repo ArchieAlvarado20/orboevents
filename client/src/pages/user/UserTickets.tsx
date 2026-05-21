@@ -24,7 +24,8 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Reservation from "./Reservation";
 
 export default function UserTickets() {
   const { id } = useParams();
@@ -111,7 +112,7 @@ export default function UserTickets() {
 
       console.log("Reservation success:", res.data);
       showSuccess("Ticket Reserved!");
-      navigate("/reservation");
+      // navigate("/reservation");
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       showError(error.response?.data?.message || "Reservation failed");
@@ -134,7 +135,7 @@ export default function UserTickets() {
       <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8">
         <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-12 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
             <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100 max-h-00">
@@ -172,10 +173,12 @@ export default function UserTickets() {
                 <h2 className="text-xl font-bold text-slate-800">
                   Select Your Experience
                 </h2>
-
-                <span className="text-indigo-600 text-sm font-medium">
-                  Prices include all taxes
-                </span>
+                <Link to="/reservation">
+                  {" "}
+                  <span className="flex gap-2 text-indigo-600 text-sm font-medium">
+                    Go to reservations <ArrowRight />
+                  </span>
+                </Link>
               </div>
               {!tickets.length ? (
                 <div className="flex items-center justify-center min-h-[300px]">
@@ -213,6 +216,7 @@ export default function UserTickets() {
                         onSelect={() => {
                           handleSelectTicket(ticket);
                           showInfo(`You select ${ticket.name} ticket`);
+                          handleReserve();
                         }}
                       />
                     ))}
@@ -328,7 +332,7 @@ export default function UserTickets() {
           </div>
           {/* <!-- END: ContentArea --> */}
           {/* <!-- BEGIN: Sidebar --> */}
-          <aside className="lg:col-span-4 space-y-6">
+          <aside className="hidden lg:col-span-4 space-y-6">
             {/* <!-- BEGIN: OrderSummary --> */}
             <div
               id="selectedTicket"

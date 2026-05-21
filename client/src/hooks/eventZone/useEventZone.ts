@@ -42,33 +42,7 @@ export default function useEventZone(eventId: string) {
     fetchEventZones();
   }, [eventId]);
 
-  // =========================
-  // DELETE EVENT ZONE
-  // =========================
-  const deleteEventZone = async (id: string) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      showError("Unauthorized");
-      return false;
-    }
-
-    try {
-      await eventZoneApi.delete(id, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      showSuccess("Event zone deleted successfully");
-
-      return true;
-    } catch (err: any) {
-      showError(err.response?.data?.message || "Failed to delete event zone");
-
-      return false;
-    }
-  };
+  
 
   return {
     eventZones,
@@ -79,6 +53,5 @@ export default function useEventZone(eventId: string) {
 
     fetchEventZones,
 
-    deleteEventZone,
   };
 }

@@ -13,17 +13,52 @@ const createReservation = async (req, res) => {
     const { eventId, ticketTypeId } = req.body;
 
     // 1. check existing reservation (anti duplicate)
-    const existing = await Reservation.findOne({
-      userId,
-      eventId,
-      status: { $in: ["pending", "confirmed"] },
-    });
+    // const existing = await Reservation.findOne({
+    //   userId,
+    //   eventId,
+    //   status: { $in: "pending" },
+    // });
 
     // if (existing) {
     //   return res.status(400).json({
     //     message: "You already have a reservation for this event.",
     //   });
     // }
+
+    // TOTAL RESERVED + CONFIRMED FOR THIS EVENT
+    const totalReservations = await Reservation.countDocuments({
+      userId,
+      eventId,
+      status: {
+        $in: "pending",
+      },
+    });
+
+    if (totalReservations >= 5) {
+      return res.status(400).json({
+        message: "Maximum of 5 reservations per event only",
+      });
+    }
+
+    // CHECK IF USER RESERVED DIFFERENT TICKET TYPE
+    const existingDifferentTicket = await Reservation.findOne({
+      userId,
+      eventId,
+
+      ticketTypeId: {
+        $ne: ticketTypeId,
+      },
+
+      status: {
+        $in: ["pending"],
+      },
+    });
+
+    if (existingDifferentTicket) {
+      return res.status(400).json({
+        message: "Making reservation of another section is not allowed.",
+      });
+    }
 
     // 2. atomic slot lock (CRITICAL)
     const ticket = await TicketType.findOneAndUpdate(

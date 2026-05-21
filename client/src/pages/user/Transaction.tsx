@@ -1,4 +1,5 @@
 import TicketModal from "@/components/features/tickets/QRModal";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { Event } from "@/types/event";
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
@@ -88,6 +89,11 @@ export default function Transaction() {
 
     fetchTickets();
   }, []);
+
+  
+  if (loading) {
+    return <TransparentSpinner />;
+  }
 
   const activeTickets = tickets.filter((t) => t.status === "active");
 

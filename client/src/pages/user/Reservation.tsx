@@ -16,10 +16,13 @@ import axios from "axios";
 import { showError, showInfo, showSuccess } from "@/lib/hotToast";
 import FormattedDate from "@/utils/dateLongFormat";
 import { confirmToast } from "@/lib/confirmToast";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
+import useReservation from "@/hooks/reservation/useReservation";
+import BackButton from "@/components/shared/BackButton";
 
 export default function Reservation() {
-  const [reservations, setReservations] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { fetchReservations, reservations, loading, setReservations } =
+    useReservation();
   const [selectedReservations, setSelectedReservations] =
     useState(reservations);
 
@@ -27,32 +30,20 @@ export default function Reservation() {
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const fetchReservations = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/reservations/my`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-
-      setReservations(res.data.reservations);
-    } catch (error) {
-      console.log(error);
-      setReservations([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchReservations();
     if (reservations.length > 0) {
       setSelectedReservations(reservations);
     }
   }, [reservations.length]);
+
+  if (!reservations) {
+    return <TransparentSpinner />;
+  }
+
+  if (loading) {
+    return <TransparentSpinner />;
+  }
 
   const toggleReservation = (reservation) => {
     setSelectedReservations((prev) => {
@@ -201,8 +192,9 @@ export default function Reservation() {
   const count = activeTickets.length;
 
   return (
-    <div className="min-h-screen bg-[#f8f9ff] font-sans text-slate-900 pb-20">
-      <main className="max-w-7xl mx-auto px-6 py-12 mt-18">
+    <div className=" relative min-h-screen bg-[#f8f9ff] font-sans text-slate-900 pb-20">
+      <BackButton className="absolute left-2 top-10 bg-slate-400 border border-slate-200" />
+      <main className=" max-w-7xl mx-auto px-6 py-12 mt-18">
         <div className="flex items-center justify-between gap-3 mb-8">
           <h2 className="text-4xl font-black tracking-tight">
             Ticket Reserved
@@ -233,8 +225,18 @@ export default function Reservation() {
                 {reservations.map((r: any) => (
                   <div
                     key={r._id}
-                    className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
+                    className="relative bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col md:flex-row gap-6 group hover:shadow-md transition-shadow"
                   >
+                    <button
+                      onClick={() =>
+                        confirmToast("Cancel this reservation?", () => {
+                          cancelReservation(r._id);
+                        })
+                      }
+                      className="absolute top-2 right-2 p-2 text-pink-300 hover:text-pink-500  rounded-xl transition-all"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
                     <div className=" hidden w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
                       <img
                         src={r.eventId?.image || "/images/images.jpg"}
@@ -274,16 +276,6 @@ export default function Reservation() {
                             ₹ {r.totalAmount.toFixed(2)}
                           </p>
                         </div>
-                        <button
-                          onClick={() =>
-                            confirmToast("Cancel this reservation?", () => {
-                              cancelReservation(r._id);
-                            })
-                          }
-                          className="p-2 text-slate-300 hover:text-pink-500  rounded-xl transition-all"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
                       </div>
 
                       <div className="hidden flex items-center justify-between mt-4">

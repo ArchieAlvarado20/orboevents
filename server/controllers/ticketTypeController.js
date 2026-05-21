@@ -31,7 +31,7 @@ const createTicketType = async (req, res) => {
       description,
       price,
       quantityTotal,
-      accessLevel,
+      accessLevel,  
       privileges,
       color,
       allowedZones,
