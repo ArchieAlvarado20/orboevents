@@ -3,9 +3,15 @@ const Reservation = require("../models/Reservation");
 const Ticket = require("../models/Ticket");
 const { v4: uuidv4 } = require("uuid");
 const { nanoid } = require("nanoid");
+const Razorpay = require("razorpay");
 
 const checkout = async (req, res) => {
   try {
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+
     const userId = req.user.id;
 
     if (!userId) {
@@ -63,13 +69,35 @@ const checkout = async (req, res) => {
       referenceNo: uuidv4(),
     });
 
+    const razorpayOrder = await razorpay.orders.create({
+      amount: Math.round(total * 100), // 🔥 paise
+      currency: "INR",
+      receipt: transaction.referenceNo,
+    });
+
+    transaction.razorpayOrderId = razorpayOrder.id;
+    await transaction.save();
+
     return res.status(201).json({
       message: "Transaction created",
       transaction,
+      razorpayOrder,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("CHECKOUT ERROR:", error);
+
+    if (error instanceof Error) {
+      console.error("MESSAGE:", error.message);
+      console.error("STACK:", error.stack);
+
+      return res.status(500).json({
+        message: error.message,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Unknown server error",
+    });
   }
 };
 //

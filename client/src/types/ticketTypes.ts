@@ -28,6 +28,7 @@ export const initialTicketTypeForm = {
   accessLevel: "regular",
   allowedZones: [],
   color: "#3B82F6",
+  slotId: "",
 };
 
 export const accessLevelColorMap = {

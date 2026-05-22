@@ -48,6 +48,7 @@ interface Ticket {
     price: number;
     startTime: string;
     date: string;
+    accessLevel: string;
   };
 
   transactionId?: string;
@@ -171,7 +172,7 @@ export default function Transaction() {
                       </div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="bg-violet-50 text-violet-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                          {ticket.ticketTypeId?.name}
+                          {ticket.ticketTypeId?.accessLevel}
                         </span>
                         <MoreVertical className="hidden" />
                       </div>

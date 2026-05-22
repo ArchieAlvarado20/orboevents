@@ -56,7 +56,8 @@ const createReservation = async (req, res) => {
 
     if (existingDifferentTicket) {
       return res.status(400).json({
-        message: "Making reservation of another section is not allowed.",
+        message:
+          "Making reservation of another section is not allowed for this event.",
       });
     }
 

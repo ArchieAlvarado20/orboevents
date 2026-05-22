@@ -14,7 +14,10 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 const permissionMiddleware = require("../middleware/permissionMiddleware");
 
 //PUBLIC
-router.get("/events/:eventId/public/ticket-types", getTicketTypesByEvent);
+router.get(
+  "/events/:eventId/slots/:slotId/public/ticket-types",
+  getTicketTypesByEvent,
+);
 
 router.post(
   "/ticket-types/",

@@ -1,11 +1,12 @@
 import { userEventApi } from "@/api/userEvent.api";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
+import { EventType } from "@/hooks/eventHook/useEvent";
 import { ArrowRight, Lightbulb, Megaphone, Newspaper } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
     const fetchEvents = async () => {

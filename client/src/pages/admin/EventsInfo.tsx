@@ -30,15 +30,10 @@ import { confirmToast } from "@/lib/confirmToast";
 import FormattedDate from "@/utils/dateLongFormat";
 import { formatTime } from "@/utils/timeLongFormat";
 import { currency } from "@/types/currency.type";
-
-import ZoneModal from "@/components/features/zone/zoneModal";
-import { ZoneFormType } from "@/types/zone.type";
-import { zoneApi } from "@/api/zone.api";
 import useZones from "@/hooks/zone/useZone";
 import EventZoneModal from "@/components/features/eventZone/eventZoneModal";
 import { EventZoneFormType } from "@/types/eventZone.type";
 import { eventZoneApi } from "@/api/eventZone.api";
-import useEventZone from "@/hooks/eventZone/useEventZone";
 
 export default function EventInfoPage() {
   const { id } = useParams();
@@ -363,6 +358,7 @@ export default function EventInfoPage() {
         <TicketTypeModal
           open={openTicketModal}
           event={event}
+          slots={slots}
           onClose={() => setOpenTicketModal(false)}
           onSuccess={() => {
             fetchData();

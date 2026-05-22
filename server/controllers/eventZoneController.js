@@ -21,6 +21,12 @@ const createEventZone = async (req, res) => {
     });
 
     if (existing) {
+      if (!existing.isActive) {
+        existing.isActive = true;
+        await existing.save();
+        return res.json(existing);
+      }
+
       return res.status(400).json({
         message: "Zone already assigned to this event",
       });

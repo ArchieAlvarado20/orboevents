@@ -54,19 +54,7 @@ export default function useReservation() {
         },
       );
 
-      const transaction = txRes.data.transaction;
-
-      // 2. CREATE RAZORPAY ORDER (based on transaction)
-      const orderRes = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/razorpay/create-order`,
-        {
-          amount: transaction.total * 100, // convert to paise
-          currency: "INR",
-          transactionId: transaction._id,
-        },
-      );
-
-      const order = orderRes.data;
+      const { transaction, razorpayOrder } = txRes.data;
 
       // 3. CHECK RAZORPAY SCRIPT
       if (!window.Razorpay) {
@@ -78,9 +66,9 @@ export default function useReservation() {
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-        amount: order.amount,
-        currency: order.currency,
-        order_id: order.id,
+        order_id: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
 
         name: "orboevents",
         description: `Payment for ${selectedReservations.length} ticket(s)`,

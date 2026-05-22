@@ -27,6 +27,7 @@ export default function Reservation() {
     toggleReservation,
     selectedReservations,
     handlePayment,
+    cancelReservation,
   } = useReservation();
 
   if (!reservations) {
@@ -98,7 +99,7 @@ export default function Reservation() {
                           cancelReservation(r._id);
                         })
                       }
-                      className="absolute top-2 right-2 p-2 text-pink-300 hover:text-pink-500  rounded-xl transition-all"
+                      className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700  rounded-xl transition-all"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>

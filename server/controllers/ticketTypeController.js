@@ -4,11 +4,20 @@ const Event = require("../models/Event");
 // 📄 GET Ticket Types by Event
 const getTicketTypesByEvent = async (req, res) => {
   try {
-    const tickets = await TicketType.find({
-      eventId: req.params.eventId,
+    const { eventId, slotId } = req.params;
+
+    const filter = {
+      eventId,
       isActive: true,
       status: { $in: ["pending", "published"] },
-    })
+    };
+
+    // only apply slot filter for user
+    if (slotId) {
+      filter.slotId = slotId;
+    }
+
+    const tickets = await TicketType.find(filter)
       .populate("allowedZones")
       .sort({ createdAt: 1 });
 
@@ -27,11 +36,12 @@ const createTicketType = async (req, res) => {
   try {
     const {
       eventId,
+      slotId,
       name,
       description,
       price,
       quantityTotal,
-      accessLevel,  
+      accessLevel,
       privileges,
       color,
       allowedZones,
@@ -40,6 +50,7 @@ const createTicketType = async (req, res) => {
     // 🔥 prevent duplicate ticket type per event (IMPORTANT)
     const existing = await TicketType.findOne({
       eventId,
+      slotId,
       name,
     });
 
@@ -51,6 +62,7 @@ const createTicketType = async (req, res) => {
 
     const ticket = await TicketType.create({
       eventId,
+      slotId,
       name,
       description,
       price,

@@ -16,7 +16,6 @@ const ticketTypeRoutes = require("./routes/ticketTypeRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const testRoutes = require("./routes/testRoutes");
-const razorpayRoutes = require("./routes/razorpayRoutes.js");
 const roleRoutes = require("./routes/roleRoutes.js");
 const adminUsersRoutes = require("./routes/adminUsersRoutes.js");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -67,8 +66,6 @@ app.use("/api/categories", categoryRoutes);
 
 app.use("/api/event-types", eventTypeRoutes);
 app.use("/api", slotRoutes);
-
-app.use("/api/razorpay", razorpayRoutes);
 
 app.get("/", (req, res) => {
   res.send("Smart Ticketing API Running");

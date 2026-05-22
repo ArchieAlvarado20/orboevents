@@ -5,6 +5,7 @@ import { useAuthInit } from "@/hooks/auth/useAuthInit";
 import { useEffect, useState } from "react";
 import { showSuccess } from "@/lib/hotToast";
 import UserMobileSidebar from "@/components/shared/usersPage/MobileSidebar";
+import ScrollToTop from "@/components/shared/topUponNavigate";
 
 export default function UserLayout() {
   const [user, setUser] = useState(null);

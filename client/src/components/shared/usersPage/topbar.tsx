@@ -68,7 +68,10 @@ export default function Topbar({ user, setIsOpen }: any) {
 
   return (
     <header className="fixed top-0 w-full z-40 bg-white/80  backdrop-blur-md border-b border-gray-100  shadow-[0_4px_20px_rgba(124,58,237,0.08)]">
-      <div className="flex justify-between items-center px-6 py-4 mx-auto w-full">
+      <div
+        className="flex justify-between items-center px-6 py-4 mx-auto w-full"
+        id="top"
+      >
         <div className="flex lg:px-10  justify-between gap-8 w-full">
           <NavLink
             to="/"

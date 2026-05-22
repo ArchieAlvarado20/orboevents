@@ -9,9 +9,11 @@ import useTicketTypeForm from "@/hooks/ticketTypeHook/useTicketTypeForm";
 import { EventForm } from "@/types/event";
 import { accessLevelColorMap } from "@/types/ticketTypes";
 import { EventZoneFormType } from "@/types/eventZone.type";
+import { SlotType } from "@/hooks/slot/useSlot";
 
 type TicketTypeModalProps = {
   event: EventForm;
+  slots: SlotType[];
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
@@ -20,6 +22,7 @@ type TicketTypeModalProps = {
 
 export default function TicketTypeModal({
   eventZones,
+  slots,
   event,
   open,
   onClose,
@@ -126,6 +129,20 @@ export default function TicketTypeModal({
                   onChange={handleChange}
                   error={errors.name}
                 />
+                <Select
+                  label="Slot (Schedule)"
+                  name="slotId"
+                  value={form.slotId}
+                  onChange={handleChange}
+                  options={slots
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((s) => ({
+                      label: s.name,
+                      value: s._id, // ✅ IMPORTANT
+                    }))}
+                  error={errors.slotId}
+                />
+
                 <Input
                   label="Total Quantity"
                   name="quantityTotal"

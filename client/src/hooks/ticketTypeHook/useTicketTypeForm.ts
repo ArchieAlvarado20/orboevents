@@ -52,6 +52,7 @@ export default function useTicketTypeForm(
     if (!form.price) newErrors.price = "Required";
     if (!form.quantityTotal) newErrors.quantityTotal = "Required";
     if (!form.privileges) newErrors.privileges = "Required";
+    if (!form.slotId) newErrors.slotId = "Required";
 
     if (form.allowedZones.length === 0) {
       newErrors.allowedZones = "Select at least 1 zone";
@@ -74,6 +75,7 @@ export default function useTicketTypeForm(
     try {
       const payload = {
         eventId,
+        slotId: form.slotId,
 
         name: form.name,
         description: form.description,

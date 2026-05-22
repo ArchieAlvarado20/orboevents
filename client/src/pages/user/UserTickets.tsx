@@ -28,10 +28,9 @@ import FormattedDate from "@/utils/dateLongFormat";
 import useReservation from "@/hooks/reservation/useReservation";
 
 export default function UserTickets() {
-  const { id } = useParams();
+  const { id, slotId } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [tickets, setTickets] = useState<TicketTypeForm[]>([]);
-  const [slots, setSlots] = useState<SlotFormType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
@@ -77,7 +76,7 @@ export default function UserTickets() {
       }
 
       try {
-        const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id);
+        const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id, slotId);
         setTickets(ticketRes.data || []);
         console.log(ticketRes.data);
       } catch (err: unknown) {
@@ -268,7 +267,7 @@ export default function UserTickets() {
                         ticketType={ticket}
                         onSelect={() => {
                           handleSelectTicket(ticket);
-                          showInfo(`You select ${selectedTicket.name}`);
+                          showInfo(`You selected ${ticket.name}`);
                         }}
                       />
                     ))}

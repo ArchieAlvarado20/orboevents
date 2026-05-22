@@ -8,6 +8,12 @@ const ticketTypeSchema = new mongoose.Schema(
       required: true,
     },
 
+    slotId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Slot",
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,

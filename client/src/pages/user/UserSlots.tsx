@@ -68,6 +68,16 @@ export default function UserSlots() {
     fetchData();
   }, [id]);
 
+  setTimeout(() => {
+    const el = document.getElementById("top");
+
+    if (el) {
+      el.scrollIntoView({
+        block: "center",
+      });
+    }
+  }, 50);
+
   if (loading) {
     return <TransparentSpinner />;
   }
@@ -82,7 +92,7 @@ export default function UserSlots() {
 
   return (
     <>
-      <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8">
+      <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8" id="top">
         <div className="flex ">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
