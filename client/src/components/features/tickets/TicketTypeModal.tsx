@@ -119,6 +119,19 @@ export default function TicketTypeModal({
             </div>
 
             <div className="px-6 py-6 overflow-y-auto space-y-6">
+              <Select
+                label="Slot (Schedule)"
+                name="slotId"
+                value={form.slotId}
+                onChange={handleChange}
+                options={slots
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((s) => ({
+                    label: s.name,
+                    value: s._id, // ✅ IMPORTANT
+                  }))}
+                error={errors.slotId}
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Input
                   label="Ticket Type"
@@ -128,19 +141,6 @@ export default function TicketTypeModal({
                   className="md:col-span-1"
                   onChange={handleChange}
                   error={errors.name}
-                />
-                <Select
-                  label="Slot (Schedule)"
-                  name="slotId"
-                  value={form.slotId}
-                  onChange={handleChange}
-                  options={slots
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((s) => ({
-                      label: s.name,
-                      value: s._id, // ✅ IMPORTANT
-                    }))}
-                  error={errors.slotId}
                 />
 
                 <Input

@@ -104,14 +104,8 @@ export default function UserEvents() {
     <>
       <main className="pt-24 pb-20 grow">
         {/* <!-- Hero Section --> */}
-        <section className="max-w-7xl mx-auto sm:px-6 mb-12" id="top">
-          <EventCarousel
-            images={[
-              "https://picsum.photos/800/400?1",
-              "https://picsum.photos/800/400?2",
-              "https://picsum.photos/800/400?3",
-            ]}
-          />
+        <section className="max-w-7xl py-8 mx-auto sm:px-6 mb-12" id="top">
+          <EventCarousel events={events} />
         </section>
         {/* <!-- Filters & Sort --> */}
         <section className="hidden max-w-7xl mx-auto px-6 mb-2">
