@@ -50,7 +50,7 @@ export default function EventCarousel({ events = [] }) {
       <img
         src={currentEvent.image}
         alt={currentEvent.name}
-        className="relative z-20 w-full h-full object-cover object-[50%_20%] duration-500 cursor-pointer"
+        className="relative z-10 w-full h-full object-cover object-[50%_20%] duration-500 cursor-pointer"
       />
 
       {/* DARK OVERLAY */}
