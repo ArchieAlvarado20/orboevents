@@ -55,8 +55,6 @@ const registerUser = async (req, res) => {
       });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
-
     // 🔥 DEFAULT ROLE (User)
     const defaultRole = await Role.findOne({ accessLevel: "user" });
 
@@ -69,7 +67,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashed,
+      password,
       role: defaultRole._id,
     });
 
@@ -77,7 +75,7 @@ const registerUser = async (req, res) => {
       {
         id: user._id,
         email: user.email,
-        role: user.role,
+        role: defaultRole.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" },
@@ -90,7 +88,7 @@ const registerUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: defaultRole.role,
       },
     });
   } catch (error) {
