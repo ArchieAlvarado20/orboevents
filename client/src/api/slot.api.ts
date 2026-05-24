@@ -10,6 +10,8 @@ export const slotApi = {
   getByEventPublic: (eventId: string) =>
     axios.get(`${API}/events/${eventId}/public/slots`),
 
+  getSlotById: (slotId: string) => axios.get(`${API}/slot/${slotId}`),
+
   // CREATE SLOTS (for event)
   create: (eventId: string, data: unknown, config?: AxiosRequestConfig) =>
     axios.post(`${API}/events/${eventId}/slots`, data, config),

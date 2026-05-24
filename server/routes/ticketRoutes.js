@@ -3,7 +3,6 @@ const router = express.Router();
 const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
 const {
-  createTicket,
   getMyTickets,
   verifyTicket,
   getTicketsByTransaction,

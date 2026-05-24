@@ -20,17 +20,22 @@ import {
   ShieldCheck,
   ShoppingCart,
   Trash2,
+  Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { confirmToast } from "@/lib/confirmToast";
 import FormattedDate from "@/utils/dateLongFormat";
 import useReservation from "@/hooks/reservation/useReservation";
+import { SlotType } from "@/hooks/slot/useSlot";
+import { slotApi } from "@/api/slot.api";
+import { formatTime } from "@/utils/timeLongFormat";
 
 export default function UserTickets() {
   const { id, slotId } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [tickets, setTickets] = useState<TicketTypeForm[]>([]);
+  const [slot, setSlot] = useState<SlotType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
@@ -78,20 +83,20 @@ export default function UserTickets() {
       try {
         const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id, slotId);
         setTickets(ticketRes.data || []);
-        console.log(ticketRes.data);
+        // console.log(ticketRes.data);
       } catch (err: unknown) {
         console.error("Tickets failed", err);
         setTickets([]);
       }
 
-      // try {
-      //   const slotsRes = await slotApi.getByEvent(id);
-      //   setSlots(slotsRes.data || []);
-      //   console.log(slotsRes.data);
-      // } catch (err) {
-      //   console.error("Slots failed", err);
-      //   setSlots([]);
-      // }
+      try {
+        const slotsRes = await slotApi.getSlotById(slotId);
+
+        setSlot(slotsRes.data);
+        console.log(slotsRes.data);
+      } catch (err) {
+        console.error("Slots failed", err);
+      }
 
       setLoading(false);
     };
@@ -104,13 +109,9 @@ export default function UserTickets() {
     return <TransparentSpinner />;
   }
 
-  if (error) {
-    return <TransparentSpinner />;
-  }
-
-  if (!event) {
+  if (error || !event || !slot) {
     navigate("/events");
-    showError("No event found.");
+    showError("No ticket found.");
   }
 
   const handleReserve = async () => {
@@ -157,10 +158,6 @@ export default function UserTickets() {
     return <TransparentSpinner />;
   }
 
-  if (loading) {
-    return <TransparentSpinner />;
-  }
-
   const checkoutItems = reservations.filter((r) =>
     selectedReservations.some((s) => s._id === r._id),
   );
@@ -195,14 +192,21 @@ export default function UserTickets() {
                 <img
                   alt="Holi Festival Event"
                   className="w-full h-full max-h-200 object-cover min-w-50 md:min-w-80"
-                  src={event.image || "/images/images.jpg"}
+                  src={event?.image || "/images/images.jpg"}
                 />
                 <BackButton className="mt-2" />
               </div>
               {/* Event Info */}
               <div className="p-5 space-y-3">
                 <h1 className="text-2xl font-bold text-slate-900">
-                  {event.name}
+                  {event?.name}
+                </h1>
+                <h1 className="inline-block text-md font-lg text-slate-200 bg-violet-600 rounded-sm px-2 py-1">
+                  <FormattedDate date={slot?.date} />
+                </h1>
+
+                <h1 className="text-md font-bold text-slate-900 rounded-sm px-2 py-1">
+                  Starts at {formatTime(slot?.startTime)}
                 </h1>
 
                 <p className="text-slate-600 text-sm">{event.description}</p>
@@ -214,6 +218,10 @@ export default function UserTickets() {
 
                   <span className="flex items-center gap-1">
                     {currency.rupees} {event.basePrice}
+                  </span>
+
+                  <span className="flex items-center gap-1">
+                    <Users size={14} /> {slot?.capacity}
                   </span>
                 </div>
               </div>

@@ -4,114 +4,6 @@ const TicketType = require("../models/TicketType");
 const QRCode = require("qrcode");
 const { nanoid } = require("nanoid");
 
-// CREATE TICKET
-const createTicket = async (req, res) => {
-  try {
-    const { eventId, ticketTypeId, zoneId, transactionId } = req.body;
-
-    if (!eventId || !ticketTypeId) {
-      return res.status(400).json({
-        message: "eventId and ticketTypeId are required",
-      });
-    }
-
-    // 1. Fetch the event
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    if (event.status !== "active") {
-      return res.status(400).json({ message: "Event is not active" });
-    }
-
-    // 2. Find the requested ticket type inside the event
-    const ticketType = event.ticketTypes.id(ticketTypeId);
-    if (!ticketType) {
-      return res.status(404).json({ message: "Ticket type not found" });
-    }
-
-    if (!ticketType.isActive) {
-      return res
-        .status(400)
-        .json({ message: "This ticket type is no longer available" });
-    }
-
-    // 3. Check stock
-    if (ticketType.quantitySold >= ticketType.quantityTotal) {
-      return res.status(400).json({ message: "This ticket type is sold out" });
-    }
-
-    // 4. If a zone is requested, validate it
-    let zone = null;
-    if (zoneId) {
-      zone = event.zones.id(zoneId);
-      if (!zone) {
-        return res.status(404).json({ message: "Zone not found" });
-      }
-
-      // Check if this ticket type's accessLevel is allowed in the zone
-      if (!zone.allowedTicketTypes.includes(ticketType.accessLevel)) {
-        return res.status(403).json({
-          message: `Access denied: ${ticketType.name} is not allowed in ${zone.name}`,
-        });
-      }
-
-      // Check zone capacity
-      if (zone.currentOccupancy >= zone.capacity) {
-        return res
-          .status(400)
-          .json({ message: `${zone.name} is at full capacity` });
-      }
-    }
-
-    // 5. If ticket type requires approval, flag it as pending instead of active
-    const initialStatus = ticketType.requiresApproval ? "pending" : "active";
-
-    // 6. Create the ticket — snapshot key fields from ticketType
-    const ticket = await Ticket.create({
-      eventId,
-      userId: req.user.id,
-      transactionId,
-      ticketTypeId,
-      ticketTypeName: ticketType.name,
-      accessLevel: ticketType.accessLevel,
-      zoneId: zoneId || null,
-      pricePaid: ticketType.price,
-      qrToken: nanoid(),
-      status: initialStatus,
-    });
-
-    // 7. Increment quantitySold on the embedded subdoc and save
-    ticketType.quantitySold += 1;
-
-    // 8. Increment zone occupancy if zone was assigned
-    if (zone) {
-      zone.currentOccupancy += 1;
-    }
-
-    await event.save();
-
-    // 9. Generate QR code — embed key info for scanner
-    const qrData = JSON.stringify({
-      ticketId: ticket._id,
-      qrToken: ticket.qrToken,
-      eventId: ticket.eventId,
-      accessLevel: ticket.accessLevel,
-      zoneId: ticket.zoneId,
-    });
-
-    const qrCodeImage = await QRCode.toDataURL(qrData);
-    ticket.qrCode = qrCodeImage;
-    await ticket.save();
-
-    res.status(201).json(ticket);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
-  }
-};
-
 // GET TICKETS
 const getMyTickets = async (req, res) => {
   try {
@@ -210,7 +102,6 @@ const verifyTicket = async (req, res) => {
 };
 
 module.exports = {
-  createTicket,
   getMyTickets,
   verifyTicket,
   getTicketsByTransaction,

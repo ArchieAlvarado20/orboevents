@@ -20,6 +20,22 @@ const getSlotsByEvent = async (req, res) => {
   }
 };
 
+const getSlotById = async (req, res) => {
+  try {
+    const { slotId } = req.params;
+
+    const slot = await Slot.findById(slotId);
+
+    if (!slot) {
+      return res.status(404).json({ message: "Slot not found" });
+    }
+
+    res.json(slot);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ==============================
 // CREATE SLOTS
 // ==============================
@@ -212,6 +228,7 @@ const deleteSlot = async (req, res) => {
 };
 
 module.exports = {
+  getSlotById,
   getSlotsByEvent,
   createSlots,
   deleteSlot,

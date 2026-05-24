@@ -9,6 +9,7 @@ const {
   createBulkSlots,
   approveSlot,
   cancelSlot,
+  getSlotById,
 } = require("../controllers/slotController");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const authMiddleware = require("../middleware/authMiddleware");
@@ -16,6 +17,7 @@ const permissionMiddleware = require("../middleware/permissionMiddleware");
 
 // PUBLIC
 router.get("/events/:eventId/public/slots", getSlotsByEvent);
+router.get("/slot/:slotId", getSlotById);
 
 // GET EVENT SLOTS
 router.get(

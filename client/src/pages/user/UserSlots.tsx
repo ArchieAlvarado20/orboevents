@@ -82,12 +82,9 @@ export default function UserSlots() {
     return <TransparentSpinner />;
   }
 
-  if (error) {
-    return <TransparentSpinner />;
-  }
-
-  if (!event) {
-    return <div className="text-center py-10">Event not found</div>;
+  if (error || !event) {
+    navigate("/events");
+    showError("No ticket found.");
   }
 
   return (
@@ -133,12 +130,12 @@ export default function UserSlots() {
             <section>
               <div className="flex flex-col px-5 md:flex-row justify-between md:items-end gap-2 mb-6">
                 <h2 className="text-xl font-bold text-slate-800">
-                  Select Your Experience
+                  Select Your Spot
                 </h2>
 
-                <span className="text-indigo-600 text-sm font-medium">
+                {/* <span className="text-indigo-600 text-sm font-medium">
                   Prices include all taxes
-                </span>
+                </span> */}
               </div>
               {!slots.length ? (
                 <div className="flex items-center justify-center min-h-[300px]">
