@@ -21,7 +21,7 @@ export default function UserEventCard2({ event }: EventCardProps) {
           <img
             src={event.image || "/images/images.jpg"}
             alt={event.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="relative z-10 w-full h-full object-cover object-[50%_20%] duration-500 cursor-pointer"
           />
 
           <div className="hidden absolute top-4 right-4 glass-card px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/40 shadow-sm">

@@ -10,7 +10,7 @@ const generateRef = () => {
 const createReservation = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { eventId, ticketTypeId } = req.body;
+    const { eventId, ticketTypeId, quantity } = req.body;
 
     // 1. check existing reservation (anti duplicate)
     // const existing = await Reservation.findOne({
@@ -62,18 +62,26 @@ const createReservation = async (req, res) => {
     }
 
     // 2. atomic slot lock (CRITICAL)
+    const qty = Number(quantity);
+
+    if (!qty || qty <= 0) {
+      return res.status(400).json({ message: "Invalid quantity" });
+    }
+
     const ticket = await TicketType.findOneAndUpdate(
       {
         _id: ticketTypeId,
         $expr: {
-          $lt: [
-            { $add: ["$quantitySold", "$quantityReserved"] },
-            { $ifNull: ["$quantityTotal", 0] },
+          $lte: [
+            {
+              $add: ["$quantitySold", "$quantityReserved", qty],
+            },
+            "$quantityTotal",
           ],
         },
       },
       {
-        $inc: { quantityReserved: 1 },
+        $inc: { quantityReserved: qty },
       },
       { new: true },
     );
@@ -87,20 +95,26 @@ const createReservation = async (req, res) => {
     // 3. create reservation
     const expiresAt = new Date(Date.now() + HOLD_MINUTES * 60 * 1000);
 
-    const reservation = await Reservation.create({
-      userId,
-      eventId,
-      ticketTypeId,
-      referenceNumber: generateRef(),
-      quantity: 1,
-      totalAmount: ticket.price,
-      expiresAt,
-      status: "pending",
-    });
+    const reservations = [];
+
+    for (let i = 0; i < qty; i++) {
+      const reservation = await Reservation.create({
+        userId,
+        eventId,
+        ticketTypeId,
+        referenceNumber: generateRef(),
+        quantity: 1,
+        totalAmount: ticket.price,
+        expiresAt,
+        status: "pending",
+      });
+
+      reservations.push(reservation);
+    }
 
     return res.status(201).json({
       message: "Reservation created",
-      reservation,
+      reservations,
     });
   } catch (error) {
     console.error(error);

@@ -39,6 +39,7 @@ export default function UserTickets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const {
     reservations,
@@ -49,20 +50,17 @@ export default function UserTickets() {
     fetchReservations,
   } = useReservation();
 
-  const total = selectedTicket?.price || 0;
+  const total = (selectedTicket?.price || 0) * quantity;
 
-  const handleSelectTicket = (ticket: any) => {
+  const handleSelectTicket = (ticket: any, qty: number) => {
     setSelectedTicket(ticket);
+    setQuantity(qty);
 
     setTimeout(() => {
-      const el = document.getElementById("reservation");
-
-      if (el) {
-        el.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
+      document.getElementById("reservation")?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     }, 50);
   };
 
@@ -123,6 +121,7 @@ export default function UserTickets() {
         {
           eventId: event._id,
           ticketTypeId: selectedTicket._id,
+          quantity: quantity,
         },
         {
           headers: {
@@ -133,6 +132,7 @@ export default function UserTickets() {
 
       console.log("Reservation success:", res.data);
       showSuccess("Ticket Reserved!");
+      setQuantity(1);
       fetchReservations();
       setSelectedTicket(null);
 
@@ -169,11 +169,9 @@ export default function UserTickets() {
 
   const subtotal = checkoutItems.reduce((a, r) => a + (r.totalAmount || 0), 0);
 
-  const processingFee = 0;
+  const serviceFee = 100;
 
-  const bookingFee = 0;
-
-  const grandTotal = subtotal + bookingFee + processingFee;
+  const grandTotal = subtotal + serviceFee;
 
   const activeTickets = reservations.filter((t) => t.status === "pending");
 
@@ -233,6 +231,9 @@ export default function UserTickets() {
                 <h2 className="text-xl font-bold text-slate-800">
                   Select Your Experience
                 </h2>
+                <h2 className="text-sm text-slate-600">
+                  Note: Limit 5 tickets reservation per event.
+                </h2>
                 <Link to="/reservation">
                   {" "}
                   <span className="flex gap-2 text-indigo-600 text-sm font-medium">
@@ -271,12 +272,9 @@ export default function UserTickets() {
 
                     {tickets.map((ticket) => (
                       <UserTicketCard
-                        key={ticket._id}
+                        key={`${ticket._id}-${quantity}`}
                         ticketType={ticket}
-                        onSelect={() => {
-                          handleSelectTicket(ticket);
-                          showInfo(`You selected ${ticket.name}`);
-                        }}
+                        onSelect={handleSelectTicket}
                       />
                     ))}
                   </div>
@@ -403,6 +401,7 @@ export default function UserTickets() {
                     <p className="font-bold text-slate-900">
                       {selectedTicket?.name || "No ticket selected"}
                     </p>
+
                     <p className="text-xs text-slate-500">
                       {selectedTicket?.privileges?.length
                         ? selectedTicket.privileges.join(", ")
@@ -416,17 +415,12 @@ export default function UserTickets() {
                 <div className="space-y-3 py-6 border-y border-slate-100">
                   <div className="flex justify-between text-slate-500 text-sm">
                     <span>Subtotal</span>
+                    <p className=" text-slate-900">
+                      {quantity > 1 ? ` x (${quantity} tickets)` : ``}
+                    </p>
                     <span className="font-medium text-slate-900">
-                      ₹{selectedTicket?.price.toFixed(2) || "0.00"}
+                      ₹{selectedTicket?.price.toFixed(2) * quantity || "0.00"}
                     </span>
-                  </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Service Fee</span>
-                    <span className="font-medium text-slate-900">₹0.00</span>
-                  </div>
-                  <div className="flex justify-between text-slate-500 text-sm">
-                    <span>Tax (GST 0%)</span>
-                    <span className="font-medium text-slate-900">₹0.00</span>
                   </div>
                 </div>
                 <div className="hidden items-center gap-2 mt-6">
@@ -621,22 +615,20 @@ export default function UserTickets() {
                           ₹ {subtotal.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-slate-500 font-medium">
-                        <span>Booking Fees</span>
-                        <span className="text-slate-900 font-bold">
-                          ₹ {bookingFee.toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-slate-500 font-medium pb-4 border-b border-slate-50">
-                        <span>Processing</span>
-                        <span className="text-slate-900 font-bold">
-                          ₹ {processingFee.toFixed(2)}
-                        </span>
-                      </div>
+                      {ticketCount > 1 && (
+                        <div className="flex justify-between text-slate-500 font-medium pb-4 border-b border-slate-50">
+                          <span>Service Fee</span>
+                          <span className="text-slate-900 font-bold">
+                            ₹ {serviceFee.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
                       <div className="flex justify-between items-center pt-2">
                         <span className="text-xl font-bold">Total</span>
                         <span className="text-3xl font-black text-violet-600">
-                          ₹ {grandTotal.toFixed(2)}
+                          {ticketCount === 0
+                            ? "₹ 0"
+                            : `₹ ${grandTotal.toFixed(2)}`}
                         </span>
                       </div>
                     </div>
