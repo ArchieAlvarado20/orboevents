@@ -25,21 +25,6 @@ const createReservation = async (req, res) => {
     //   });
     // }
 
-    // TOTAL RESERVED + CONFIRMED FOR THIS EVENT
-    const totalReservations = await Reservation.countDocuments({
-      userId,
-      eventId,
-      status: {
-        $in: "pending",
-      },
-    });
-
-    if (totalReservations >= 5) {
-      return res.status(400).json({
-        message: "Maximum of 5 reservations per event only",
-      });
-    }
-
     // CHECK IF USER RESERVED DIFFERENT TICKET TYPE
     const existingDifferentTicket = await Reservation.findOne({
       userId,
@@ -61,11 +46,23 @@ const createReservation = async (req, res) => {
       });
     }
 
+    // TOTAL RESERVED + CONFIRMED FOR THIS EVENT
+    const totalReservations = await Reservation.countDocuments({
+      userId,
+      eventId,
+      status: "pending",
+    });
     // 2. atomic slot lock (CRITICAL)
     const qty = Number(quantity);
 
     if (!qty || qty <= 0) {
       return res.status(400).json({ message: "Invalid quantity" });
+    }
+
+    if (qty + totalReservations > 5) {
+      return res.status(400).json({
+        message: "Maximum of 5 reservations per event only",
+      });
     }
 
     const ticket = await TicketType.findOneAndUpdate(
