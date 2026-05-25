@@ -121,6 +121,7 @@ export default function UserTickets() {
         {
           eventId: event._id,
           ticketTypeId: selectedTicket._id,
+          slotId: slotId,
           quantity: quantity,
         },
         {
@@ -179,13 +180,13 @@ export default function UserTickets() {
 
   return (
     <>
-      <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8">
+      <main className="max-w-7xl mt-24 mx-auto sm:px-4 sm:py-8">
         <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
-            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100 max-h-00">
+            <section className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100 ">
               <div className="md:w-1/2 relative">
                 <img
                   alt="Holi Festival Event"
@@ -488,7 +489,7 @@ export default function UserTickets() {
                 <h2 className="text-4xl font-black tracking-tight">
                   Ticket Reserved
                 </h2>
-                <span className="text-sm font-bold text-violet-600 bg-violet-100 px-1 py-1 rounded-lg w-1/4 text-center">
+                <span className="text-sm font-bold text-violet-600 bg-violet-100 px-1 py-1 rounded-lg w-1/8 text-center">
                   {count} {count === 1 ? "Item" : "Items"}
                 </span>
               </div>
@@ -555,13 +556,19 @@ export default function UserTickets() {
                                   {r.eventId?.name}
                                 </h3>
 
-                                <p className="text-sm text-slate-500 font-medium mb-1">
-                                  <FormattedDate date={r.eventId?.date} />
+                                <h3 className="text-md text-slate-600 font-bold mb-1">
+                                  <FormattedDate date={slot?.date} />
+                                </h3>
+
+                                <p className="text-md text-slate-600 font-bold mb-1">
+                                  {formatTime(slot?.startTime)}
                                 </p>
-                                <p className="text-xs text-slate-400">
+
+                                <p className="text-md text-slate-600 font-bold mb-1">
                                   {r.eventId?.location}
                                 </p>
-                                <p className="text-xl mt-2 font-bold mb-1  transition-colors">
+
+                                <p className="text-xl text-violet-600 mt-2 font-bold mb-1  transition-colors">
                                   ₹ {r.totalAmount.toFixed(2)}
                                 </p>
                               </div>

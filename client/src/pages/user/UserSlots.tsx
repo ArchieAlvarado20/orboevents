@@ -89,7 +89,7 @@ export default function UserSlots() {
 
   return (
     <>
-      <main className="max-w-7xl mt-20 mx-auto sm:px-4 sm:py-8" id="top">
+      <main className="max-w-7xl mt-24 mx-auto sm:px-4 sm:py-8" id="top">
         <div className="flex ">
           {/* <!-- BEGIN: ContentArea --> */}
           <div className="lg:col-span-8 space-y-8">

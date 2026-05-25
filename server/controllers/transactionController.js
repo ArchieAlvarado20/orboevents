@@ -31,7 +31,8 @@ const checkout = async (req, res) => {
       status: "pending",
     })
       .populate("eventId")
-      .populate("ticketTypeId");
+      .populate("ticketTypeId")
+      .populate("slotId");
 
     if (!reservations.length) {
       return res.status(400).json({ message: "No valid reservations" });
@@ -39,6 +40,7 @@ const checkout = async (req, res) => {
 
     const items = reservations.map((r) => ({
       eventId: r.eventId,
+      slotId: r.slotId,
       ticketTypeId: r.ticketTypeId,
       name: r.ticketTypeId.name,
       price: r.totalAmount,
@@ -51,7 +53,7 @@ const checkout = async (req, res) => {
 
     const discount = 0;
     const discountAmount = 0;
-    const serviceFee = 100;
+    const serviceFee = 0;
 
     const total = subtotal - discountAmount + serviceFee;
 

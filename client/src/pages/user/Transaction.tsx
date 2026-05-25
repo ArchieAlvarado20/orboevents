@@ -1,6 +1,8 @@
 import TicketModal from "@/components/features/tickets/QRModal";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
+import { currency } from "@/types/currency.type";
 import { Event } from "@/types/event";
+import { TicketTypeForm } from "@/types/ticketTypes";
 import { formatTime } from "@/utils/timeLongFormat";
 import axios from "axios";
 import {
@@ -20,6 +22,7 @@ import {
   Wallet2Icon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { FaRupeeSign } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 interface Ticket {
@@ -83,6 +86,7 @@ export default function Transaction() {
         );
 
         setTickets(res.data.data);
+        console.log(res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -172,12 +176,19 @@ export default function Transaction() {
                       </div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="bg-violet-50 text-violet-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                          {ticket.ticketTypeId?.accessLevel}
+                          {ticket.transactionId?.status}
                         </span>
                         <MoreVertical className="hidden" />
                       </div>
                       <h3 className="text-3xl font-bold mb-2"></h3>
                       <div className="flex flex-col gap-2 text-slate-500 mb-6">
+                        <div className="flex items-center gap-2">
+                          <FaRupeeSign />
+                          <span className="text-sm">
+                            Amount Paid {currency.rupees}
+                            {ticket.ticketTypeId?.price}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-2">
                           <TimerIcon />
                           <span className="text-sm">
@@ -185,6 +196,7 @@ export default function Transaction() {
                             {formatTime(ticket.ticketTypeId?.startTime)} •
                           </span>
                         </div>
+
                         <div className="flex items-center gap-2">
                           <MapPin />
                           <span className="text-sm">

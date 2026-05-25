@@ -10,7 +10,7 @@ const generateRef = () => {
 const createReservation = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { eventId, ticketTypeId, quantity } = req.body;
+    const { eventId, ticketTypeId, slotId, quantity } = req.body;
 
     // 1. check existing reservation (anti duplicate)
     // const existing = await Reservation.findOne({
@@ -29,7 +29,7 @@ const createReservation = async (req, res) => {
     const existingDifferentTicket = await Reservation.findOne({
       userId,
       eventId,
-
+      slotId,
       ticketTypeId: {
         $ne: ticketTypeId,
       },
@@ -98,6 +98,7 @@ const createReservation = async (req, res) => {
       const reservation = await Reservation.create({
         userId,
         eventId,
+        slotId,
         ticketTypeId,
         referenceNumber: generateRef(),
         quantity: 1,

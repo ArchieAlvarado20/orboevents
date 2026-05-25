@@ -16,6 +16,11 @@ const reservationSchema = new mongoose.Schema(
       index: true,
     },
 
+    slotId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Slot",
+    },
+
     ticketTypeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "TicketType",

@@ -239,7 +239,7 @@ export default function TicketTypeModal({
                 </div>
                 <span
                   style={{
-                    color: accessLevelColorMap[form.accessLevel ?? "general"],
+                    color: accessLevelColorMap[form.accessLevel ?? "regular"],
                   }}
                 >
                   <TicketCheckIcon size={24} />
