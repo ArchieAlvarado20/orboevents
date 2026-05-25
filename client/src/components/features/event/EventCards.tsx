@@ -72,7 +72,7 @@ export default function EventCard({
       <div className="h-48 relative overflow-hidden">
         <img
           src={event.image || "/images/images.jpg"}
-          className="relative z-10 w-full h-full object-cover object-[50%_20%] duration-500 cursor-pointer"
+          className="relative w-full h-full object-cover object-[50%_20%]  duration-500"
         />
 
         {/* STATUS */}
