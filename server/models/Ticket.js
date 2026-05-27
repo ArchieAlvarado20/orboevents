@@ -7,6 +7,12 @@ const ticketSchema = new mongoose.Schema({
     ref: "Event",
     required: true,
   },
+
+  slotId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Slot",
+    required: true,
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
   // Reference the embedded subdoc by its auto-generated _id

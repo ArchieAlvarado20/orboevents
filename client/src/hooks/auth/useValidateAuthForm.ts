@@ -20,6 +20,16 @@ export const validateAuthForm = (form: any, isLogin: boolean) => {
     if (form.password !== form.confirmPassword) {
       return "Passwords do not match";
     }
+
+    if (!form.phone.trim()) {
+      return "Phone number is required";
+    }
+
+    const phoneRegex = /^9\d{9}$/;
+
+    if (!phoneRegex.test(form.phone)) {
+      return "Phone must be in format 9XXXXXXXXX";
+    }
   }
 
   return null;

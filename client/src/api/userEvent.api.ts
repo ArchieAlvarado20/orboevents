@@ -3,7 +3,7 @@ import axios, { type AxiosRequestConfig } from "axios";
 const API = `${import.meta.env.VITE_API_URL}/api/events`;
 
 export const userEventApi = {
-  get: (config?: AxiosRequestConfig) => axios.get(API, config),
+  get: () => axios.get(API),
 
   create: (data: unknown, config?: AxiosRequestConfig) =>
     axios.post(API, data, config),

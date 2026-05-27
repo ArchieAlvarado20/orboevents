@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
         role: user.role, // ✅ VERY IMPORTANT
       },
       process.env.JWT_SECRET || "secret",
-      { expiresIn: "1d" },
+      { expiresIn: "30d" },
     );
 
     res.json({
@@ -45,7 +45,7 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -67,6 +67,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
+      phone,
       password,
       role: defaultRole._id,
     });
@@ -88,6 +89,7 @@ const registerUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: defaultRole.role,
       },
     });
@@ -102,4 +104,26 @@ const registerUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, registerUser };
+const checkEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(200).json({
+        exists: true,
+      });
+    }
+
+    return res.status(200).json({
+      exists: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { loginUser, registerUser, checkEmail };

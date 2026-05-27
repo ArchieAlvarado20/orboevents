@@ -17,6 +17,12 @@ const transactionSchema = new mongoose.Schema(
           ref: "Event",
           required: true,
         },
+
+        slotId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Slot",
+          required: true,
+        },
         ticketTypeId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "TicketType",

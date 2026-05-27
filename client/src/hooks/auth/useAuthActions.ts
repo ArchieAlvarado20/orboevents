@@ -50,6 +50,15 @@ export function useAuthActions() {
     return user;
   };
 
+  const checkEmail = async (email: string) => {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/check-email`,
+      { email },
+    );
+
+    return res.data.exists;
+  };
+
   const googleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google`;
   };
@@ -59,5 +68,6 @@ export function useAuthActions() {
     register,
     handleGoogleLogin: googleLogin,
     navigate,
+    checkEmail,
   };
 }

@@ -9,7 +9,15 @@ const getMyTickets = async (req, res) => {
   try {
     const tickets = await Ticket.find({ userId: req.user.id })
       .populate("eventId", "name date location image startTime organizerName")
-      .populate("ticketTypeId", "name price")
+      .populate("slotId", "date capacity startTime endTime")
+      .populate({
+        path: "ticketTypeId",
+        select: "name price accessLevel allowedZones",
+        populate: {
+          path: "allowedZones",
+          select: "name",
+        },
+      })
       .populate("transactionId")
       .sort({ createdAt: -1 });
 

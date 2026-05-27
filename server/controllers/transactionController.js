@@ -53,7 +53,7 @@ const checkout = async (req, res) => {
 
     const discount = 0;
     const discountAmount = 0;
-    const serviceFee = 0;
+    const serviceFee = 100;
 
     const total = subtotal - discountAmount + serviceFee;
 
@@ -195,6 +195,7 @@ const paymentSuccess = async (req, res) => {
       for (let i = 0; i < item.quantity; i++) {
         tickets.push({
           eventId: item.eventId,
+          slotId: item.slotId,
           ticketTypeId: item.ticketTypeId,
           userId: transaction.userId,
           transactionId: transaction._id,

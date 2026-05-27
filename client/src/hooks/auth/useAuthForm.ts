@@ -5,7 +5,9 @@ export function useAuthForm() {
     name: "",
     email: "",
     password: "",
+    phone: "",
     confirmPassword: "",
+    otp: "",
   });
 
   const handleChange = (
@@ -25,8 +27,10 @@ export function useAuthForm() {
     setForm({
       name: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
+      otp: "",
     });
   };
 

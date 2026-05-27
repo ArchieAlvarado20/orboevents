@@ -19,6 +19,7 @@ import { confirmToast } from "@/lib/confirmToast";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import useReservation from "@/hooks/reservation/useReservation";
 import BackButton from "@/components/shared/BackButton";
+import { formatTime } from "@/utils/timeLongFormat";
 
 export default function Reservation() {
   const {
@@ -116,7 +117,7 @@ export default function Reservation() {
                         <div>
                           <div className="flex gap-3">
                             <h3 className="text-xl font-bold mb-1 ">
-                              {r.eventId?.name}
+                              {r.ticketTypeId?.name}
                             </h3>
 
                             <input
@@ -125,20 +126,26 @@ export default function Reservation() {
                                 (s) => s._id === r._id,
                               )}
                               onChange={() => toggleReservation(r)}
-                              className="w-5 h-5 mt-1"
+                              className="w-5 h-5 mt-5 md:mt-1"
                             />
                           </div>
-                          <h3 className="text-xl font-bold mb-1 text-slate-600">
-                            {r.ticketTypeId?.name}
+                          <h3 className="text-lg font-bold mb-1 text-slate-600">
+                            {r.eventId?.name}
                           </h3>
 
-                          <p className="text-sm text-slate-500 font-medium mb-1">
-                            <FormattedDate date={r.eventId?.date} />
+                          <h3 className="text-md text-slate-600 font-bold mb-1">
+                            <FormattedDate date={r.slotId?.date} />
+                          </h3>
+
+                          <p className="text-md text-slate-600 font-bold mb-1">
+                            {formatTime(r.slotId?.startTime)}
                           </p>
-                          <p className="text-xs text-slate-400">
+
+                          <p className="text-md text-slate-600 font-bold mb-1">
                             {r.eventId?.location}
                           </p>
-                          <p className="text-xl mt-2 font-bold mb-1  transition-colors">
+
+                          <p className="text-xl text-violet-600 mt-2 font-bold mb-1  transition-colors">
                             ₹ {r.totalAmount.toFixed(2)}
                           </p>
                         </div>

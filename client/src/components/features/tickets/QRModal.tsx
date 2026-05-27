@@ -1,6 +1,7 @@
 import FormattedDate from "@/utils/dateLongFormat";
 import { X, Wallet2, Share, DownloadCloud } from "lucide-react";
 import { formatTicketId } from "./TicketNumFormat";
+import { formatTime } from "@/utils/timeLongFormat";
 
 type TicketModalProps = {
   open: boolean;
@@ -58,9 +59,18 @@ export default function TicketModal({
             {ticket?.ticketTypeId?.name}
           </h4>
 
+          <p className="text-slate-500 text-sm">{ticket?.eventId?.location}</p>
+
+          <p className="text-slate-500 text-sm">
+            <FormattedDate date={ticket.slotId?.date} />
+          </p>
+
           <p className="text-slate-500 mb-6 text-sm">
-            <FormattedDate date={ticket?.ticketTypeId?.date} /> •{" "}
-            {ticket?.eventId?.location}
+            {formatTime(ticket.slotId?.startTime)}
+          </p>
+
+          <p className="text-slate-500 mb-6 text-sm">
+            {ticket.ticketType?.allowedZones?.map((z) => z.name).join(", ")}
           </p>
 
           {/* ACTIONS */}

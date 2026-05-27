@@ -129,6 +129,7 @@ const getMyReservations = async (req, res) => {
       status: { $nin: ["confirmed", "cancelled", "expired"] },
     })
       .populate("eventId", "name image date location")
+      .populate("slotId", "date capacity startTime endTime")
       .populate("ticketTypeId", "name price accessLevel")
       .sort({ createdAt: -1 });
 

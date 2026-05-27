@@ -23,12 +23,12 @@ import Logo from "@/components/shared/Logo";
 import { FaBatteryHalf } from "react-icons/fa";
 import axios from "axios";
 import UserEventCard from "@/components/shared/usersPage/userEventCard";
-import { Event } from "@/types/event";
+import { EventForm } from "@/types/event";
 import { Link } from "react-router-dom";
 import { useScrollToSection } from "@/utils/scrollToSection";
 
 const SmartTicketingLanding = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventForm[]>([]);
   const { scrollToSection } = useScrollToSection();
 
   useEffect(() => {
@@ -38,8 +38,11 @@ const SmartTicketingLanding = () => {
           `${import.meta.env.VITE_API_URL}/api/events`,
         );
 
-        const events = res.data.events || [];
-        setEvents(events.slice(0, 3));
+        const filteredEvents = (res.data.events || []).filter(
+          (event) => event.status !== "pending",
+        );
+
+        setEvents(filteredEvents.slice(0, 3));
       } catch (err) {
         console.error(err);
       }

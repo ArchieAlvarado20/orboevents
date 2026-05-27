@@ -39,19 +39,29 @@ interface Ticket {
   eventId?: {
     _id: string;
     name: string;
-    date: string;
     location: string;
+    venue: string;
     image?: string;
     startTime: string;
+  };
+
+  slotId?: {
+    _id: string;
+    name: string;
+    date: string;
+    startTime: string;
+    endTime: string;
   };
 
   ticketTypeId?: {
     _id: string;
     name: string;
     price: number;
-    startTime: string;
-    date: string;
     accessLevel: string;
+    allowedZones?: {
+      _id: string;
+      name: string;
+    }[];
   };
 
   transactionId?: string;
@@ -192,8 +202,8 @@ export default function Transaction() {
                         <div className="flex items-center gap-2">
                           <TimerIcon />
                           <span className="text-sm">
-                            Starts at{" "}
-                            {formatTime(ticket.ticketTypeId?.startTime)} •
+                            Starts at {formatTime(ticket.slotId?.startTime)} •{" "}
+                            {formatTime(ticket.slotId?.endTime)}
                           </span>
                         </div>
 

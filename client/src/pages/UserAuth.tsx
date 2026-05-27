@@ -1,7 +1,7 @@
 import Logo from "@/components/shared/Logo";
 import UserInput from "@/components/shared/usersPage/components/UserInput";
-import { Mail, Lock, Eye, Apple, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Mail, Lock, Eye, Apple, User, Phone } from "lucide-react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useLocation, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "../lib/hotToast";
@@ -10,6 +10,7 @@ import { useAuthActions } from "@/hooks/auth/useAuthActions";
 import { validateAuthForm } from "@/hooks/auth/useValidateAuthForm";
 import BackButton from "@/components/shared/BackButton";
 import OrboeventsLogo from "@/components/shared/LogoIcon";
+import { sendOtp } from "./fireBase-otp";
 
 export default function UserAuth() {
   const [loading, setLoading] = useState(false);
@@ -18,11 +19,13 @@ export default function UserAuth() {
   const navigate = useNavigate();
   const location = useLocation();
   const { form, handleChange, resetForm } = useAuthForm();
-  const { login, register, handleGoogleLogin } = useAuthActions();
+  const { login, register, handleGoogleLogin, checkEmail } = useAuthActions();
 
   const query = new URLSearchParams(location.search);
   const tab = query.get("tab");
   const [isLogin, setIsLogin] = useState(tab !== "register");
+
+  const [showOtpModal, setShowOtpModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,27 +37,72 @@ export default function UserAuth() {
       return;
     }
 
-    setLoading(true);
+    if (isLogin) {
+      const user = await login(form);
+      showSuccess(`Welcome back, ${user.name}!`);
+      navigate("/");
+      return;
+    }
+    const exists = await checkEmail(form.email);
 
+    if (exists) {
+      showError("Email already exists");
+      return;
+    }
+
+    // register flow → send OTP only
+    await handleSendOtp();
+  };
+
+  const handleSendOtp = async () => {
     try {
-      if (isLogin) {
-        const user = await login(form);
+      const formattedPhone = `+63${form.phone}`;
 
-        showSuccess(`Welcome back, ${user.name}!`);
-        navigate("/");
-      } else {
-        await register(form);
-        showSuccess("Account created successfully");
-        setIsLogin(true);
-        navigate("/");
-      }
-    } catch (err: any) {
-      showError(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+      const confirmation = await sendOtp(formattedPhone);
+
+      window.confirmationResult = confirmation;
+
+      setShowOtpModal(true); // open modal
+    } catch (err) {
+      showError("Failed to send OTP");
     }
   };
 
+  const handleVerifyOtp = async () => {
+    try {
+      setLoading(true);
+      const formatPhone = (phone: string) => `+63${phone}`;
+
+      const result = await window.confirmationResult.confirm(form.otp);
+
+      console.log("Firebase user:", result.user);
+
+      // ONLY NOW register backend
+      await register({
+        ...form,
+        phone: formatPhone(form.phone),
+      });
+
+      showSuccess("Account created successfully");
+
+      navigate("/");
+      window.confirmationResult = null;
+    } catch (err: any) {
+      const code = err?.code; // Firebase error code
+      const message = err?.message;
+
+      const firebaseErrors: Record<string, string> = {
+        "auth/invalid-verification-code": "Invalid OTP code",
+        "auth/code-expired": "OTP expired. Please request again",
+        "auth/too-many-requests": "Too many attempts. Try again later",
+        "auth/missing-verification-code": "Please enter OTP code",
+      };
+
+      const finalMessage = firebaseErrors[code] || message || "Invalid OTP!";
+
+      showError(finalMessage);
+    }
+  };
   return (
     <>
       <div className="min-h-screen bg-purple-300  flex items-center justify-center p-0 md:p-6 font-sans">
@@ -138,6 +186,17 @@ export default function UserAuth() {
                   onChange={handleChange}
                   icon={<Mail className="w-5 h-5" />}
                 />
+                {!isLogin && (
+                  <UserInput
+                    label="Phone Number"
+                    name="phone"
+                    type="tel"
+                    value={form.phone}
+                    placeholder="992123456"
+                    onChange={handleChange}
+                    icon={<Phone className="w-5 h-5" />}
+                  />
+                )}
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center px-1">
@@ -205,7 +264,10 @@ export default function UserAuth() {
                   </div>
                 )}
 
-                <button className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]">
+                <button
+                  type="submit"
+                  className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl shadow-purple-600/20 active:scale-[0.98]"
+                >
                   {isLogin
                     ? loading
                       ? "Signing in..."
@@ -215,6 +277,7 @@ export default function UserAuth() {
                       : "Create Account"}
                 </button>
               </form>
+              <div id="recaptcha-container"></div>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -257,6 +320,39 @@ export default function UserAuth() {
           </div>
         </div>
       </div>
+
+      {showOtpModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-md rounded-3xl p-10 space-y-5">
+            <h2 className="text-2xl font-bold">Verify OTP</h2>
+
+            <p className="text-gray-500">Enter the code sent to your phone</p>
+
+            <input
+              type="text"
+              name="otp"
+              value={form.otp}
+              onChange={handleChange}
+              placeholder="123456"
+              className="w-full h-14 border border-slate-200 rounded-2xl px-4"
+            />
+
+            <button
+              onClick={handleVerifyOtp}
+              className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold"
+            >
+              Verify OTP
+            </button>
+
+            <button
+              onClick={() => setShowOtpModal(false)}
+              className="w-full h-12 text-gray-500"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

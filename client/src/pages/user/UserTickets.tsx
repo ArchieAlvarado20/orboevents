@@ -65,7 +65,7 @@ export default function UserTickets() {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !slotId) return;
 
     const fetchData = async () => {
       setLoading(true);
@@ -557,11 +557,11 @@ export default function UserTickets() {
                                 </h3>
 
                                 <h3 className="text-md text-slate-600 font-bold mb-1">
-                                  <FormattedDate date={slot?.date} />
+                                  <FormattedDate date={r.slotId?.date} />
                                 </h3>
 
                                 <p className="text-md text-slate-600 font-bold mb-1">
-                                  {formatTime(slot?.startTime)}
+                                  {formatTime(r.slotId?.startTime)}
                                 </p>
 
                                 <p className="text-md text-slate-600 font-bold mb-1">
