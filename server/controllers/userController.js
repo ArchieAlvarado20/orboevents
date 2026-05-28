@@ -224,13 +224,62 @@ const sendResetLink = async (req, res) => {
     await resend.emails.send({
       from: "Orboevents <onboarding@resend.dev>",
       to: email,
-      subject: "Reset Your Password",
+      subject: "Reset Your Orboevents Password",
+
       html: `
-        <h2>Reset Password</h2>
-        <p>Click the link below to reset your password:</p>
-        <a href="${resetLink}">${resetLink}</a>
-        <p>This link will expire in 15 minutes.</p>
-      `,
+  <div style="font-family: Arial, sans-serif; background:#f6f7fb; padding:40px;">
+    <div style="max-width:520px; margin:0 auto; background:#ffffff; border-radius:16px; padding:32px; box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <h1 style="color:#6d28d9; font-size:24px; margin-bottom:10px;">
+        Orboevents
+      </h1>
+
+      <h2 style="font-size:20px; color:#111827; margin-bottom:16px;">
+        Reset Your Password
+      </h2>
+
+      <p style="font-size:14px; color:#4b5563; line-height:1.6;">
+        We received a request to reset your password. Click the button below to create a new password.
+        This link will expire in <strong>15 minutes</strong> for your security.
+      </p>
+
+      <div style="text-align:center; margin:28px 0;">
+        <a href="${resetLink}"
+          style="
+            background:#6d28d9;
+            color:#ffffff;
+            padding:12px 24px;
+            border-radius:10px;
+            text-decoration:none;
+            font-weight:bold;
+            display:inline-block;
+          ">
+          Reset Password
+        </a>
+      </div>
+
+      <p style="font-size:12px; color:#6b7280; line-height:1.5;">
+        If the button doesn't work, copy and paste this link into your browser:
+      </p>
+
+      <p style="font-size:12px; color:#6d28d9; word-break:break-all;">
+        ${resetLink}
+      </p>
+
+      <hr style="margin:24px 0; border:none; border-top:1px solid #eee;" />
+
+      <p style="font-size:12px; color:#9ca3af;">
+        If you didn’t request this, you can safely ignore this email.
+        Your account is still secure.
+      </p>
+
+    </div>
+
+    <p style="text-align:center; font-size:11px; color:#9ca3af; margin-top:16px;">
+      © ${new Date().getFullYear()} Orboevents. All rights reserved.
+    </p>
+  </div>
+  `,
     });
 
     res.json({
