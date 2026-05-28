@@ -25,10 +25,10 @@ export const validateAuthForm = (form: any, isLogin: boolean) => {
       return "Phone number is required";
     }
 
-    const phoneRegex = /^9\d{9}$/;
+    const phoneRegex = /^\+[1-9]\d{6,14}$/;
 
     if (!phoneRegex.test(form.phone)) {
-      return "Phone must be in format 9XXXXXXXXX";
+      return "Phone must be in format +1234567890";
     }
   }
 

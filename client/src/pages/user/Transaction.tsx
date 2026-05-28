@@ -1,4 +1,5 @@
 import TicketModal from "@/components/features/tickets/QRModal";
+import Button from "@/components/shared/Button";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import { currency } from "@/types/currency.type";
 import { Event } from "@/types/event";
@@ -216,13 +217,13 @@ export default function Transaction() {
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      <button
+                      <Button
                         onClick={() => handleShowTicket(ticket)}
                         className="flex-1 bg-violet-600 text-white py-3 px-6 rounded-xl font-bold hover:bg-violet-700 hover:shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <QrCode />
                         Show Ticket
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

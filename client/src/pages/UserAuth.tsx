@@ -3,14 +3,15 @@ import UserInput from "@/components/shared/usersPage/components/UserInput";
 import { Mail, Lock, Eye, Apple, User, Phone } from "lucide-react";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "../lib/hotToast";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import { useAuthActions } from "@/hooks/auth/useAuthActions";
 import { validateAuthForm } from "@/hooks/auth/useValidateAuthForm";
 import BackButton from "@/components/shared/BackButton";
 import OrboeventsLogo from "@/components/shared/LogoIcon";
-import { sendOtp } from "./fireBase-otp";
+import axios from "axios";
+import Button from "@/components/shared/Button";
 
 export default function UserAuth() {
   const [loading, setLoading] = useState(false);
@@ -36,71 +37,61 @@ export default function UserAuth() {
       showError(errorMsg);
       return;
     }
+    try {
+      if (isLogin) {
+        const user = await login(form);
+        showSuccess(`Welcome back, ${user.name}!`);
+        navigate("/");
+        return;
+      }
+      const exists = await checkEmail(form.email);
 
-    if (isLogin) {
-      const user = await login(form);
-      showSuccess(`Welcome back, ${user.name}!`);
-      navigate("/");
-      return;
+      if (exists) {
+        showError("Email already exists");
+        return;
+      }
+
+      // register flow → send OTP only
+      await handleSendOtp();
+    } catch (err: any) {
+      const message = err?.response?.data?.message || "Invalid credentials";
+
+      showError(message);
     }
-    const exists = await checkEmail(form.email);
-
-    if (exists) {
-      showError("Email already exists");
-      return;
-    }
-
-    // register flow → send OTP only
-    await handleSendOtp();
   };
 
   const handleSendOtp = async () => {
     try {
-      const formattedPhone = `+63${form.phone}`;
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/send-otp`, {
+        email: form.email,
+      });
 
-      const confirmation = await sendOtp(formattedPhone);
+      setShowOtpModal(true);
 
-      window.confirmationResult = confirmation;
-
-      setShowOtpModal(true); // open modal
-    } catch (err) {
-      showError("Failed to send OTP");
+      showSuccess("OTP sent to your email");
+    } catch (err: any) {
+      showError(err.response?.data?.message || "Failed to send OTP");
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
       setLoading(true);
-      const formatPhone = (phone: string) => `+63${phone}`;
 
-      const result = await window.confirmationResult.confirm(form.otp);
-
-      console.log("Firebase user:", result.user);
-
-      // ONLY NOW register backend
-      await register({
-        ...form,
-        phone: formatPhone(form.phone),
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/verify-otp`, {
+        email: form.email,
+        otp: form.otp,
       });
+
+      await register(form);
 
       showSuccess("Account created successfully");
 
       navigate("/");
-      window.confirmationResult = null;
     } catch (err: any) {
-      const code = err?.code; // Firebase error code
-      const message = err?.message;
-
-      const firebaseErrors: Record<string, string> = {
-        "auth/invalid-verification-code": "Invalid OTP code",
-        "auth/code-expired": "OTP expired. Please request again",
-        "auth/too-many-requests": "Too many attempts. Try again later",
-        "auth/missing-verification-code": "Please enter OTP code",
-      };
-
-      const finalMessage = firebaseErrors[code] || message || "Invalid OTP!";
-
-      showError(finalMessage);
+      showError(err.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -188,7 +179,7 @@ export default function UserAuth() {
                 />
                 {!isLogin && (
                   <UserInput
-                    label="Phone Number"
+                    label="Phone Number(+country code)"
                     name="phone"
                     type="tel"
                     value={form.phone}
@@ -204,12 +195,12 @@ export default function UserAuth() {
                       Password
                     </label>
                     {isLogin && (
-                      <button
-                        type="button"
+                      <Link
+                        to={"/forgot-password"}
                         className="text-xs font-bold text-purple-600 hover:text-purple-700"
                       >
                         Forgot Password?
-                      </button>
+                      </Link>
                     )}
                   </div>
                   <div className="relative group">
@@ -337,19 +328,21 @@ export default function UserAuth() {
               className="w-full h-14 border border-slate-200 rounded-2xl px-4"
             />
 
-            <button
+            <Button
               onClick={handleVerifyOtp}
-              className="w-full h-14 bg-purple-600 text-white rounded-2xl font-bold"
+              variant="primary"
+              className="w-full h-12"
             >
               Verify OTP
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="outline"
               onClick={() => setShowOtpModal(false)}
               className="w-full h-12 text-gray-500"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       )}

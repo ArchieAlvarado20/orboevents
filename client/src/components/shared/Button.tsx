@@ -26,11 +26,11 @@ const baseStyles =
 
 const variants = {
   primary:
-    "bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-500/20",
+    "bg-purple-600 hover:bg-purple-700 text-white shadow-sm shadow-purple-500/20",
 
   secondary: "bg-slate-200 hover:bg-slate-300 text-slate-800",
 
-  outline: "border border-slate-300 hover:bg-slate-100 text-indigo-600",
+  outline: "border border-slate-300 hover:bg-slate-100 text-purple-600",
 
   danger: "bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-500/20",
 

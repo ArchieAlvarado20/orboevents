@@ -36,6 +36,8 @@ import { Toaster } from "react-hot-toast";
 import EventInfoPage from "./pages/admin/EventsInfo";
 import UserSlots from "./pages/user/UserSlots";
 import ZonePage from "./pages/admin/Zone";
+import UserForgotPassword from "./pages/forgotPassword";
+import ResetPassword from "./pages/resetpassword";
 
 function App() {
   return (
@@ -60,6 +62,8 @@ function App() {
           <Route path="image" element={<QRImageScanner />} />
           <Route path="reservation" element={<Reservation />} />
           <Route path="transaction" element={<Transaction />} />
+          <Route path="forgot-password" element={<UserForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         <Route path="/admin" element={<Auth />} />

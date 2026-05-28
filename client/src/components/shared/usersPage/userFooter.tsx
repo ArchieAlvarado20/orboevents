@@ -2,6 +2,7 @@ import { FaAndroid, FaApple, FaInstagram, FaTwitter } from "react-icons/fa";
 import Logo from "../Logo";
 import { QrCode } from "lucide-react";
 import OrboeventsLogo from "../LogoIcon";
+import Button from "../Button";
 
 export default function UserFooter() {
   return (
@@ -107,9 +108,7 @@ export default function UserFooter() {
                   placeholder="Email address"
                   className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-violet-600/10 focus:border-violet-600 transition-all"
                 />
-                <button className="px-4 py-3 bg-violet-600 text-white rounded-xl font-bold">
-                  Join
-                </button>
+                <Button variant="primary">Join</Button>
               </div>
             </div>
           </div>

@@ -36,6 +36,18 @@ const userSchema = new mongoose.Schema(
       ref: "Role",
       required: true,
     },
+
+    isOtpVerified: {
+      type: Boolean,
+      default: false,
+    },
+    resetToken: {
+      type: String,
+    },
+
+    resetTokenExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
