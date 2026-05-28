@@ -7,12 +7,17 @@ const {
   updateCategory,
   deleteCategory,
 } = require("../controllers/categoryController");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 const router = express.Router();
 
+// Public route to get all categories
+router.get("/public", getCategories);
+
 router.post("/", createCategory);
 
-router.get("/", getCategories);
+router.get("/", authMiddleware, adminMiddleware, getCategories);
 
 router.get("/:id", getCategory);
 

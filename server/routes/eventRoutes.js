@@ -8,6 +8,7 @@ const {
   updateEvent,
   deleteEvent,
   approveEvent,
+  getAdminEvents,
 } = require("../controllers/eventController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -28,7 +29,7 @@ router.get(
   authMiddleware,
   adminMiddleware,
   permissionMiddleware(["MANAGE_EVENT"]),
-  getEvents,
+  getAdminEvents,
 );
 
 router.get("/admin/events/:id", authMiddleware, adminMiddleware, getEventById);

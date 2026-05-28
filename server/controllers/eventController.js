@@ -66,14 +66,110 @@ const getEvents = async (req, res) => {
     }
 
     // STATUS FILTER
-    if (status) {
-      filter.status = status;
-    } else {
-      filter.status = {
-        $ne: "cancelled",
+    filter.status = {
+      $nin: ["cancelled", "pending"],
+    };
+
+    // LOCATION FILTER
+    if (location) {
+      filter.location = {
+        $regex: location,
+        $options: "i",
       };
     }
 
+    // TAGS FILTER
+    if (tags) {
+      filter.tags = {
+        $in: tags.split(","),
+      };
+    }
+
+    // SEARCH
+    if (search) {
+      filter.$or = [
+        {
+          name: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          "organizer.name": {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          venue: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    const events = await Event.find(filter)
+      .populate("category")
+      .populate("eventType")
+      .populate("ticketTypes")
+      // .populate("slot")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Event.countDocuments(filter);
+
+    res.status(200).json({
+      events,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: Number(page),
+    });
+  } catch (err) {
+    console.error("GET EVENTS ERROR:", err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+const getAdminEvents = async (req, res) => {
+  try {
+    const {
+      category,
+      eventType,
+      search,
+      page = 1,
+      status,
+      tags,
+      location,
+    } = req.query;
+
+    const limit = 12;
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+    // CATEGORY FILTER
+    if (category) {
+      filter.category = category;
+    }
+
+    // EVENT TYPE FILTER
+    if (eventType) {
+      filter.eventType = eventType;
+    }
+
+    // STATUS FILTER
+    filter.status = { $ne: "cancelled" };
     // LOCATION FILTER
     if (location) {
       filter.location = {
@@ -285,4 +381,5 @@ module.exports = {
   updateEvent,
   deleteEvent,
   approveEvent,
+  getAdminEvents,
 };

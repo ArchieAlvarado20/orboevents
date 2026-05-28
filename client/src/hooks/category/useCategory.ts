@@ -23,9 +23,33 @@ export const useCategory = () => {
   // ==============================
   const fetchCategories = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Unauthorized");
+        return;
+      }
       setLoading(true);
 
-      const res = await categoryApi.get();
+      const res = await categoryApi.get({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCategories(res.data);
+    } catch (err: any) {
+      showError(err.response?.data?.message || "Failed to fetch categories");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPublicCategories = async () => {
+    try {
+      setLoading(true);
+
+      const res = await categoryApi.getPublicCategories();
 
       setCategories(res.data);
     } catch (err: any) {
@@ -62,6 +86,7 @@ export const useCategory = () => {
     setCategories,
     loading,
     fetchCategories,
+    fetchPublicCategories,
     deleteCategory,
   };
 };

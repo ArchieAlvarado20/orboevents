@@ -22,7 +22,7 @@ export default function Topbar({ user, setIsOpen }: any) {
 
   const navLinks = [
     { name: "Home", id: "home" },
-    { name: "Events", id: "events" },
+    { name: "Events", path: "/events" },
     { name: "How It Works", id: "how-it-works" },
     { name: "Contact", id: "contact" },
   ];

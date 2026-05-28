@@ -325,7 +325,7 @@ export default function UserAuth() {
               value={form.otp}
               onChange={handleChange}
               placeholder="123456"
-              className="w-full h-14 border border-slate-200 rounded-2xl px-4"
+              className="w-full h-14 pl-6 pr-12 bg-gray-50 border border-gray-100 rounded-2xl text-gray-900 font-medium focus:bg-white focus:ring-4 focus:ring-purple-600/10 focus:border-purple-600 outline-none transition-all"
             />
 
             <Button

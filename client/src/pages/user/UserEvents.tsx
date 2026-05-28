@@ -1,47 +1,24 @@
-import Topbar from "@/components/shared/usersPage/topbar";
 import UserEventCard2 from "@/components/shared/usersPage/userEventCard2";
 import axios from "axios";
-import { ChevronLeft, ChevronRight, Filter, SwatchBook } from "lucide-react";
+import { Calendar, ChevronRight, Filter, SwatchBook } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Music, FlaskConical } from "lucide-react";
-import UserFooter from "@/components/shared/usersPage/userFooter";
 import { getPagination } from "@/lib/pagination";
-import BackButton from "@/components/shared/BackButton";
 import EventCarousel from "@/components/shared/usersPage/EventCarousel";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-
-interface Event {
-  _id: string;
-  name?: string;
-  date: string;
-  location: string;
-  image?: string;
-  status?: "active" | "pending" | "completed";
-  description: string;
-  price?: number;
-}
+import { categoryApi } from "@/api/category.api";
+import { showError } from "@/lib/alert";
+import { useCategory } from "@/hooks/category/useCategory";
+import { EventForm } from "@/types/event";
+import { userEventApi } from "@/api/userEvent.api";
 
 export default function UserEvents() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventForm[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const pageRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const categoryOptions = [
-    { label: "Sports & Travel", value: "sports", icon: Music },
-    { label: "Science & Research", value: "science", icon: FlaskConical },
-    { label: "New Years Eve", value: "newyear", icon: Music },
-    {
-      label: "Industrial Engineering",
-      value: "engineering",
-      icon: FlaskConical,
-    },
-    { label: "Holi", value: "holi", icon: Music },
-    { label: "Health & Wellness", value: "health", icon: FlaskConical },
-    { label: "Garbe", value: "garbe", icon: Music },
-    { label: "Public Event", value: "public", icon: Music },
-  ];
+  const { categories, fetchPublicCategories } = useCategory();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handlePageClick = (p: number, index: number) => {
     setPage(p);
@@ -63,16 +40,16 @@ export default function UserEvents() {
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
+
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/events?page=${page}`,
-        );
+        const res = await userEventApi.get({
+          params: {
+            page,
+            category: selectedCategory,
+          },
+        });
 
-        const filteredEvents = (res.data.events || []).filter(
-          (event) => event.status !== "pending",
-        );
-
-        setEvents(filteredEvents);
+        setEvents(res.data.events || []);
         setTotalPages(res.data.totalPages || 1);
       } catch (err) {
         console.error(err);
@@ -82,7 +59,8 @@ export default function UserEvents() {
     };
 
     fetchEvents();
-  }, [page]);
+    fetchPublicCategories();
+  }, [page, selectedCategory]);
 
   setTimeout(() => {
     const el = document.getElementById("top");
@@ -100,6 +78,9 @@ export default function UserEvents() {
   if (loading) {
     return <TransparentSpinner />;
   }
+  const filteredEvents = events.filter((event) => {
+    return selectedCategory ? event.category?.name === selectedCategory : true;
+  });
   return (
     <>
       <main className="pt-24 pb-20 grow">
@@ -108,16 +89,32 @@ export default function UserEvents() {
           <EventCarousel events={events} />
         </section>
         {/* <!-- Filters & Sort --> */}
-        <section className="hidden max-w-7xl mx-auto px-6 mb-2">
+        <section className="   max-w-7xl mx-auto px-6 mb-2">
           <div className="flex flex-wrap items-center justify-between gap-4 py-2">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              {categoryOptions.map((cat, index) => {
+              <button
+                onClick={() => setSelectedCategory("")}
+                className={`px-6 py-2 rounded-full font-semibold text-sm whitespace-nowrap shadow-lg shadow-violet-600/20 ${
+                  selectedCategory === ""
+                    ? "bg-violet-100 text-violet-700"
+                    : "text-slate-500"
+                }`}
+              >
+                All
+              </button>
+
+              {categories.map((cat) => {
                 return (
                   <button
-                    key={cat.value}
-                    className={`px-6 py-2 rounded-full font-semibold text-sm whitespace-nowrap shadow-lg shadow-violet-600/20 ${index === 0 ? "bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200" : "text-slate-500 dark:text-slate-400 hover:bg-violet-50"}`}
+                    key={cat._id}
+                    onClick={() => setSelectedCategory(cat.name)}
+                    className={`px-6 py-2 rounded-full font-semibold text-sm whitespace-nowrap shadow-lg shadow-violet-600/20 ${
+                      selectedCategory === cat.name
+                        ? "bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200"
+                        : "text-slate-500 dark:text-slate-400 hover:bg-violet-50"
+                    }`}
                   >
-                    {cat.label}
+                    {cat.name}
                   </button>
                 );
               })}
@@ -136,12 +133,30 @@ export default function UserEvents() {
         </section>
         {/* <!-- Event Grid --> */}
         <section className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* <!-- Event Card --> */}
-            {events?.map((event) => (
-              <UserEventCard2 key={event._id} event={event} />
-            ))}
-          </div>
+          {filteredEvents.length === 0 ? (
+            <div className="bg-white w-full rounded-3xl p-12 border border-dashed border-slate-200 text-center">
+              <Calendar className="w-12 h-12 text-slate-200 mx-auto mb-4" />
+
+              <p className="text-slate-500 font-medium">
+                No events found for this category.
+              </p>
+
+              <button
+                onClick={() => setSelectedCategory("")}
+                className="mt-4 text-violet-600 font-bold hover:underline"
+              >
+                View All Events
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* <!-- Event Card --> */}
+
+              {filteredEvents.map((event) => (
+                <UserEventCard2 key={event._id} event={event} />
+              ))}
+            </div>
+          )}
           {/* <!-- Pagination --> */}
           <div className="flex items-center overflow-x-auto gap-2 mt-6 flex-wrap justify-center">
             <button
@@ -185,9 +200,9 @@ export default function UserEvents() {
             <button
               onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
               disabled={page === totalPages}
-              className="px-3 py-1 bg-slate-200 rounded disabled:opacity-50p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
+              className="px-3 py-2 bg-slate-200 rounded disabled:opacity-50p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              {">"}
+              <ChevronRight className="w-4 h-4" />
             </button>
 
             <button

@@ -5,6 +5,8 @@ const API = `${import.meta.env.VITE_API_URL}/api/categories`;
 export const categoryApi = {
   get: (config?: AxiosRequestConfig) => axios.get(API, config),
 
+  getPublicCategories: () => axios.get(`${API}/public`),
+
   getById: (id: string, config?: AxiosRequestConfig) =>
     axios.get(`${API}/${id}`, config),
 
