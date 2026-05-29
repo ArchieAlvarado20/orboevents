@@ -1,254 +1,226 @@
-import Sidebar from "@/components/shared/SidebarAdmin";
-import { StatsCard } from "@/components/shared/StatCard";
+import { dashboardApi } from "@/api/adminDashboard.api";
 import {
-  Blocks,
-  CheckCircle,
-  Download,
-  MoreVertical,
-  PlusCircle,
-  QrCode,
-  Search,
+  CalendarCheck,
+  CalendarDays,
+  DollarSign,
   Ticket,
-  Timer,
+  Users2,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Users from "./Users";
+import Unauthorized from "@/components/shared/Unauthorized";
+import { showError } from "@/lib/toast";
+import { useNavigate } from "react-router-dom";
 
-export default function Dashboard() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+const StatCard = ({
+  label,
+  value,
+  icon: Icon,
+  accent,
+  iconBg,
+  iconColor,
+}: {
+  label: string;
+  value: any;
+  icon: React.ElementType;
+  accent: string;
+  iconBg: string;
+  iconColor: string;
+}) => (
+  <div
+    className={`bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:-translate-y-1 hover:shadow-md transition-all duration-200 cursor-default`}
+  >
+    <div className="flex flex-col gap-3">
+      <div
+        className={`w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-xl ${iconBg}`}
+      >
+        <Icon className={`w-5 h-5 ${iconColor}`} />
+      </div>
+      <div>
+        <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">
+          {label}
+        </p>
+        <p className="text-3xl font-bold text-gray-800 mt-1 leading-tight">
+          {value ?? "—"}
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
+const SkeletonCard = () => (
+  <div className="bg-white rounded-2xl p-6 shadow-sm h-36 animate-pulse">
+    <div className="flex flex-col gap-3">
+      <div className="w-10 h-10 rounded-xl bg-gray-200" />
+      <div className="space-y-2">
+        <div className="h-3 bg-gray-200 rounded w-1/2" />
+        <div className="h-8 bg-gray-200 rounded w-2/3" />
+      </div>
+    </div>
+  </div>
+);
+
+export default function DashboardPage() {
+  const [dashboard, setDashboard] = useState<any>(null);
+  const [reservationDashboard, setReservationDashboard] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          alert("Unauthorized");
+          return;
+        }
+        setLoading(true);
+        const res = await dashboardApi.getOverview({
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDashboard(res.data);
+      } catch (err: any) {
+        if (err.response && err.response.status === 403) {
+          setUnauthorized(true);
+          navigate("/admin");
+          showError("Unauthorized access. Please log in as admin.");
+        } else {
+          console.error(err);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchReservationDashboard = async () => {
+      try {
+        setLoading(true);
+        const res = await dashboardApi.getReservationDashboard();
+        setReservationDashboard(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+
+    fetchReservationDashboard();
+  }, []);
+
+  const stats = [
+    {
+      label: "Pending Events",
+      value: dashboard?.overview?.pendingEvents,
+      icon: CalendarDays,
+      accent: "border-indigo-500",
+      iconBg: "bg-indigo-50",
+      iconColor: "text-indigo-500",
+    },
+    {
+      label: "Active Events",
+      value: dashboard?.overview?.publishedEvents,
+      icon: CalendarDays,
+      accent: "border-emerald-500",
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-500",
+    },
+    {
+      label: "Completed Events",
+      value: dashboard?.overview?.completedEvents,
+      icon: CalendarDays,
+      accent: "border-amber-500",
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
+    },
+    {
+      label: "Cancelled Events",
+      value: dashboard?.overview?.cancelledEvents,
+      icon: CalendarDays,
+      accent: "border-rose-500",
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-500",
+    },
+  ];
+
+  const reservationStats = [
+    {
+      label: "Total Reservations",
+      value: reservationDashboard?.overview?.totalReservations,
+      icon: CalendarCheck,
+      accent: "border-indigo-500",
+      iconBg: "bg-indigo-50",
+      iconColor: "text-indigo-500",
+    },
+    {
+      label: "Pending Reservations",
+      value: reservationDashboard?.overview?.pendingReservations,
+      icon: CalendarCheck,
+      accent: "border-emerald-500",
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-500",
+    },
+    {
+      label: "Completed Reservations",
+      value: reservationDashboard?.overview?.confirmedReservations,
+      icon: CalendarCheck,
+      accent: "border-amber-500",
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
+    },
+    {
+      label: "Cancelled Reservations",
+      value: reservationDashboard?.overview?.cancelledReservations,
+      icon: CalendarCheck,
+      accent: "border-rose-500",
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-500",
+    },
+  ];
 
   return (
     <>
-      <main
-        className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
-      >
-        <div className="max-w-container-max mx-auto">
-          {/* <!-- Page Header --> */}
-          <div className="mb-6 space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-              System Overview
-            </h1>
-
-            <p className="text-sm text-slate-500">
-              Real-time ticketing performance and monitoring.
+      {unauthorized ? (
+        <>
+          <div className="md:ml-64 sm:m-auto">
+            <Unauthorized message="Admin access only!" />
+          </div>
+        </>
+      ) : (
+        <div className="p-8 md:ml-64  min-h-screen bg-white">
+          <div className="mb-7">
+            <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+            <p className="text-sm text-gray-400 mt-1">
+              Overview of your platform metrics
             </p>
           </div>
-          {/* <!-- Stats Cards Grid --> */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            {/* <!-- Total Tickets Card --> */}
-            <StatsCard
-              title="Total Tickets"
-              value="12,482"
-              icon={<Ticket className="w-5 h-5" />}
-              trendValue="12%"
-              trendLabel="vs last month"
-              trendType="up"
-            />
-            {/* <!-- Active Tickets Card --> */}
-            <StatsCard
-              title="Active Tickets"
-              value="4,819"
-              icon={<Timer className="w-5 h-5" />}
-              trendValue="5%"
-              trendLabel="vs last month"
-              trendType="up"
-            />
-            {/* <!-- Used Tickets Card --> */}
-            <StatsCard
-              title="Used Tickets"
-              value="7,663"
-              icon={<CheckCircle className="w-5 h-5" />}
-              trendValue="5%"
-              trendLabel="vs last month"
-              trendType="neutral"
-            />
+
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            Event Statistics
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {loading
+              ? [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+              : stats.map((stat) => <StatCard key={stat.label} {...stat} />)}
           </div>
-          {/* <!-- Main Layout Grid --> */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-            {/* <!-- Scan Activity Table (Left - 2/3) --> */}
-            <div className="lg:col-span-2 bg-surface-container-lowest border border-slate-200 rounded-xl overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="font-h3 text-h3 text-on-background">
-                  Recent Scan Activity
-                </h3>
-                <button className="text-primary font-label-md hover:underline cursor-pointer">
-                  View all
-                </button>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-100">
-                    <tr>
-                      <th className="px-6 py-4 font-label-md text-on-surface-variant">
-                        Ticket ID
-                      </th>
-                      <th className="px-6 py-4 font-label-md text-on-surface-variant">
-                        Timestamp
-                      </th>
-                      <th className="px-6 py-4 font-label-md text-on-surface-variant">
-                        Status
-                      </th>
-                      <th className="px-6 py-4 font-label-md text-on-surface-variant">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-body-base text-on-background font-medium">
-                        #TIC-99420
-                      </td>
-                      <td className="px-6 py-4 font-body-sm text-on-surface-variant">
-                        Oct 24, 14:22:10
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                          Valid
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button className="p-1 hover:bg-slate-200 rounded transition-colors">
-                          <MoreVertical className="h-4 w-4 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-body-base text-on-background font-medium">
-                        #TIC-88124
-                      </td>
-                      <td className="px-6 py-4 font-body-sm text-on-surface-variant">
-                        Oct 24, 14:21:45
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                          Used
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button className="p-1 hover:bg-slate-200 rounded transition-colors">
-                          <MoreVertical className="h-4 w-4 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-body-base text-on-background font-medium">
-                        #TIC-77301
-                      </td>
-                      <td className="px-6 py-4 font-body-sm text-on-surface-variant">
-                        Oct 24, 14:19:02
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          Invalid
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button className="p-1 hover:bg-slate-200 rounded transition-colors">
-                          <MoreVertical className="h-4 w-4 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-body-base text-on-background font-medium">
-                        #TIC-99419
-                      </td>
-                      <td className="px-6 py-4 font-body-sm text-on-surface-variant">
-                        Oct 24, 14:18:30
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                          Valid
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button className="p-1 hover:bg-slate-200 rounded transition-colors">
-                          <MoreVertical className="h-4 w-4 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-body-base text-on-background font-medium">
-                        #TIC-99418
-                      </td>
-                      <td className="px-6 py-4 font-body-sm text-on-surface-variant">
-                        Oct 24, 14:15:12
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                          Valid
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button className="p-1 hover:bg-slate-200 rounded transition-colors">
-                          <MoreVertical className="h-4 w-4 text-slate-500" />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {/* <!-- Right Sidebar / Active Scanners (1/3) --> */}
-            <div className="space-y-3">
-              {/* <!-- Active Scanners Bento --> */}
-              <div className="bg-indigo-600 rounded-xl p-6 text-white overflow-hidden relative">
-                <div className="relative z-10">
-                  <p className="text-indigo-100 font-label-md mb-1">
-                    Active Scanners
-                  </p>
-                  <div className="flex items-end gap-2 mb-4">
-                    <h4 className="text-3xl font-bold">24</h4>
-                    <span className="text-indigo-200 font-label-xs mb-1">
-                      Devices Online
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-2 bg-white/10 rounded-lg">
-                      <span className="font-body-sm">Main Gate A</span>
-                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-2 bg-white/10 rounded-lg">
-                      <span className="font-body-sm">North Entrance</span>
-                      <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
-                    </div>
-                    <div className="flex items-center justify-between p-2 bg-white/10 rounded-lg">
-                      <span className="font-body-sm">VIP Access</span>
-                      <div className="w-2 h-2 rounded-full bg-amber-400"></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute top-0 right-0 -mr-8 -mt-8 opacity-10">
-                  <QrCode />
-                </div>
-              </div>
-              {/* <!-- Quick Actions Bento --> */}
-              <div className="bg-surface-container-lowest border border-slate-200 rounded-xl p-6">
-                <h3 className="font-label-md text-on-background mb-4">
-                  Quick Actions
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <button className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-colors">
-                    <PlusCircle className="h-5 w-5 text-indigo-600 mb-2" />
-                    <span className="font-label-xs">New Batch</span>
-                  </button>
-                  <button className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-colors">
-                    <Download className="h-4 w-4" />
-                    <span className="font-label-xs">Export All</span>
-                  </button>
-                  <button className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-colors">
-                    <Search className="h-4 w-4" />
-                    <span className="font-label-xs">Lookup</span>
-                  </button>
-                  <button className="flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100 transition-colors">
-                    <Blocks />
-                    <span className="font-label-xs">Revoke</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+
+          <h2 className="text-lg font-semibold text-gray-700 mb-4 mt-4">
+            Tickets Reservation Statistics
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            {loading
+              ? [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+              : reservationStats.map((stat) => (
+                  <StatCard key={stat.label} {...stat} />
+                ))}
           </div>
         </div>
-      </main>
+      )}
     </>
   );
 }

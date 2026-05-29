@@ -27,7 +27,7 @@ export default function EventModal({
   event,
 }: EventModalProps) {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const { categories } = useCategory();
+  const { categories, fetchCategories } = useCategory();
   const { eventTypes } = useEventType();
 
   const {
@@ -60,6 +60,7 @@ export default function EventModal({
   };
 
   useEffect(() => {
+    fetchCategories();
     if (event?.image) {
       setPreview(event?.image);
     }

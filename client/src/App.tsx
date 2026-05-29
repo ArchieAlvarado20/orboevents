@@ -38,6 +38,7 @@ import UserSlots from "./pages/user/UserSlots";
 import ZonePage from "./pages/admin/Zone";
 import UserForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetpassword";
+import ProtectedRoute from "./components/shared/ProtectedRoutes";
 
 function App() {
   return (
@@ -70,7 +71,14 @@ function App() {
         {/* Admin Group */}
         <Route path="/admin/*" element={<AdminLayout />}>
           <Route path="*" element={<_404Page />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="events" element={<Events />} />
           <Route path="roles" element={<Role />} />
           <Route path="users" element={<Users />} />

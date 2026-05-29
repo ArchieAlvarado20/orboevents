@@ -23,6 +23,7 @@ const eventTypeRoutes = require("./routes/eventTypeRoutes");
 const slotRoutes = require("./routes/slotRoutes");
 const zoneRoutes = require("./routes/zoneRoutes");
 const eventZoneRoutes = require("./routes/eventZoneRoutes");
+const adminDashboardRoutes = require("./routes/adminDashboardRoutes");
 
 const app = express();
 
@@ -66,7 +67,7 @@ app.use("/api/categories", categoryRoutes);
 
 app.use("/api/event-types", eventTypeRoutes);
 app.use("/api", slotRoutes);
-
+app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.get("/", (req, res) => {
   res.send("Smart Ticketing API Running");
 });

@@ -570,6 +570,81 @@ export default function EventInfoPage() {
             ))}
           </div>
         </div>
+
+        {/* ================= SLOTS ================= */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
+          <div className="flex items-center gap-2 text-slate-900 font-semibold">
+            <Layers size={18} />
+            Event Slots <p className="uppercase">({event.eventType.name})</p>
+            <div
+              className="flex items-center gap-2 text-blue-600 font-semibold"
+              onClick={() => handleAddSlot(event)}
+            >
+              <Plus size={18} />
+            </div>
+          </div>
+
+          {slots.length === 0 ? (
+            <p className="text-sm text-slate-500">No slots available</p>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
+              {slots.map((s) => (
+                <div
+                  key={s._id}
+                  className="relative p-4 border rounded-xl border-slate-200"
+                >
+                  <span
+                    className="absolute right-1 text-xs uppercase top-2  text-red-400 px-2 py-2 rounded-md"
+                    onClick={() =>
+                      confirmToast("Cancel this Schedule?", () =>
+                        cancelSlot(s._id),
+                      )
+                    }
+                  >
+                    <Trash2 size={16} />
+                  </span>
+                  <div className="flex justify-between items-center w-full">
+                    <p className="font-bold text-lg text-slate-900">{s.name}</p>
+                  </div>
+
+                  <FormattedDate
+                    date={s.date}
+                    className="text-sm font-medium"
+                  />
+
+                  <p className="text-sm text-slate-500">
+                    {formatTime(s.startTime)} - {formatTime(s.endTime)}
+                  </p>
+
+                  <div className="text-xs mt-2 text-slate-500">
+                    Capacity: {s.capacity}
+                  </div>
+                  {s.status === "pending" ? (
+                    <Button
+                      variant="warning"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                      onClick={() =>
+                        confirmToast("Approve this schedule?", () =>
+                          approveSlot(s._id),
+                        )
+                      }
+                    >
+                      For Approval
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="gradient"
+                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
+                    >
+                      Published
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* ================= TICKET TYPES ================= */}
         <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
           <div className="flex items-center gap-2 text-slate-900 font-semibold">
@@ -633,80 +708,6 @@ export default function EventInfoPage() {
                       onClick={() =>
                         confirmToast("Approve this ticket?", () =>
                           approveTicketType(t._id),
-                        )
-                      }
-                    >
-                      For Approval
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="gradient"
-                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
-                    >
-                      Published
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ================= SLOTS ================= */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 m-5 space-y-4 ">
-          <div className="flex items-center gap-2 text-slate-900 font-semibold">
-            <Layers size={18} />
-            Event Slots <p className="uppercase">({event.eventType.name})</p>
-            <div
-              className="flex items-center gap-2 text-blue-600 font-semibold"
-              onClick={() => handleAddSlot(event)}
-            >
-              <Plus size={18} />
-            </div>
-          </div>
-
-          {slots.length === 0 ? (
-            <p className="text-sm text-slate-500">No slots available</p>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols- gap-3 lg:grid-cols-4">
-              {slots.map((s) => (
-                <div
-                  key={s._id}
-                  className="relative p-4 border rounded-xl border-slate-200"
-                >
-                  <span
-                    className="absolute right-1 text-xs uppercase top-2  text-red-400 px-2 py-2 rounded-md"
-                    onClick={() =>
-                      confirmToast("Cancel this Schedule?", () =>
-                        cancelSlot(s._id),
-                      )
-                    }
-                  >
-                    <Trash2 size={16} />
-                  </span>
-                  <div className="flex justify-between items-center w-full">
-                    <p className="font-bold text-lg text-slate-900">{s.name}</p>
-                  </div>
-
-                  <FormattedDate
-                    date={s.date}
-                    className="text-sm font-medium"
-                  />
-
-                  <p className="text-sm text-slate-500">
-                    {formatTime(s.startTime)} - {formatTime(s.endTime)}
-                  </p>
-
-                  <div className="text-xs mt-2 text-slate-500">
-                    Capacity: {s.capacity}
-                  </div>
-                  {s.status === "pending" ? (
-                    <Button
-                      variant="warning"
-                      className="shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition w-full mt-2"
-                      onClick={() =>
-                        confirmToast("Approve this schedule?", () =>
-                          approveSlot(s._id),
                         )
                       }
                     >

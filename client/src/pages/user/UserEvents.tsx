@@ -162,16 +162,16 @@ export default function UserEvents() {
             <button
               onClick={() => setPage(1)}
               disabled={page === 1}
-              className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
+              className="p-1 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              {"<<"}
+              first
             </button>
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
               className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              {"<"}
+              <ChevronRight className="w-4 h-4 rotate-180" />
             </button>
             {/* Pages */}
             {getPagination(page, totalPages).map((p, i) =>
@@ -208,9 +208,9 @@ export default function UserEvents() {
             <button
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
-              className="p-2 border font-extrabold border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
+              className="p-1 border  border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:bg-slate-200"
             >
-              {">>"}
+              last
             </button>
           </div>
         </section>

@@ -3,7 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Footer from "@/components/shared/Footer";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "@/components/shared/Logo";
 import { showError, showSuccess } from "@/lib/toast";
 import OrboeventsLogo from "@/components/shared/LogoIcon";
@@ -274,12 +274,12 @@ transition-all"
                   Password
                 </label>
 
-                <a
-                  className="text-sm font-medium text-indigo-600 hover:underline"
-                  href="#"
+                <Link
+                  to={"/forgot-password"}
+                  className="text-xs font-bold text-purple-600 hover:text-purple-700"
                 >
-                  Forgot password?
-                </a>
+                  Forgot Password?
+                </Link>
               </div>
 
               <div className="relative">

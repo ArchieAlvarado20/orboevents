@@ -19,9 +19,21 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const status = err.response?.status;
+
+    if (status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/login";
+    }
+
+    if (status === 403) {
+      const role = localStorage.getItem("role");
+
+      localStorage.removeItem("token");
+
+      if (role === "admin" || role === "super") {
+        window.location.href = "/admin";
+      }
     }
 
     return Promise.reject(err);
