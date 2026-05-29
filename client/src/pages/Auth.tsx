@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "@/components/shared/Logo";
 import { showError, showSuccess } from "@/lib/toast";
 import OrboeventsLogo from "@/components/shared/LogoIcon";
+import Button from "@/components/shared/Button";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -178,13 +179,14 @@ export default function Auth() {
             "Unauthorized: You do not have access to the admin dashboard",
           );
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Invalid token");
 
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-
-        navigate("/admin");
+        if (err.response && err.response.status === 403) {
+          navigate("/admin");
+        }
       }
     };
 
@@ -276,7 +278,7 @@ transition-all"
 
                 <Link
                   to={"/forgot-password"}
-                  className="text-xs font-bold text-slate-600 hover:text-slate-700"
+                  className="text-xs font-bold text-purple-600 hover:text-purple-700"
                 >
                   Forgot Password?
                 </Link>
@@ -346,20 +348,21 @@ transition-all"
                 Remember me!
               </label>
             </div> */}
-            <button
-              type="submit"
+            <Button
+              variant="primary"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors active:scale-[0.98] duration-150 shadow-md shadow-indigo-600/20 disabled:opacity-50"
+              className="w-full  text-white py-3 px-4 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition-colors active:scale-[0.98] duration-150 shadow-md shadow-indigo-600/20 disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign In to Dashboard"}
-            </button>
+            </Button>
           </form>
 
           {/* TOGGLE */}
           <div className="hidden text-center mt-5 mb-5">
             <p className="text-xs text-on-surface font-medium">
               {isLogin ? "No account?" : "Already have account?"}
-              <button
+              <Button
+                variant="primary"
                 className="text-indigo-600 font-bold ml-2 hover:underline underline-offset-4 cursor-pointer"
                 onClick={() => {
                   setIsLogin(!isLogin);
@@ -367,7 +370,7 @@ transition-all"
                 }}
               >
                 {isLogin ? "Register" : "Login"}
-              </button>
+              </Button>
             </p>
           </div>
 

@@ -67,47 +67,45 @@ export default function DashboardPage() {
   const [unauthorized, setUnauthorized] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  const fetchDashboard = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        if (!token) {
-          alert("Unauthorized");
-          return;
-        }
-        setLoading(true);
-        const res = await dashboardApi.getOverview({
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setDashboard(res.data);
-      } catch (err: any) {
-        if (err.response && err.response.status === 403) {
-          setUnauthorized(true);
-          navigate("/admin");
-          showError("Unauthorized access. Please log in as admin.");
-        } else {
-          console.error(err);
-        }
-      } finally {
-        setLoading(false);
+      if (!token) {
+        alert("Unauthorized");
+        return;
       }
-    };
-
-    const fetchReservationDashboard = async () => {
-      try {
-        setLoading(true);
-        const res = await dashboardApi.getReservationDashboard();
-        setReservationDashboard(res.data);
-      } catch (err) {
+      setLoading(true);
+      const res = await dashboardApi.getOverview({
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setDashboard(res.data);
+    } catch (err: any) {
+      if (err.response && err.response.status === 403) {
+        setUnauthorized(true);
+        showError("Unauthorized access. Please log in as admin.");
+      } else {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const fetchReservationDashboard = async () => {
+    try {
+      setLoading(true);
+      const res = await dashboardApi.getReservationDashboard();
+      setReservationDashboard(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchDashboard();
-
     fetchReservationDashboard();
   }, []);
 

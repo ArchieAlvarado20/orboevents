@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import api from "@/api/interceptor.api";
 
 export const useAuthInit = ({
   setUser,
@@ -25,7 +26,7 @@ export const useAuthInit = ({
       try {
         localStorage.setItem("token", token);
 
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/me`, {
+        const res = await api.get(`${import.meta.env.VITE_API_URL}/api/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -35,7 +36,6 @@ export const useAuthInit = ({
         setUser(user);
 
         if (!hasShown) {
-          showSuccess?.(`Welcome back, ${user.name}!`);
           sessionStorage.setItem("auth-toast", "true");
         }
       } catch (err) {

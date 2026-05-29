@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }: any) {
-  const [loading, setLoading] = useState(true);
+  const [checking, setChecking] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    setLoading(false);
+    setChecking(false);
   }, []);
 
-  if (loading) return null;
+  if (checking) return null; // or spinner
 
   if (!token) {
     return <Navigate to="/admin" replace />;
