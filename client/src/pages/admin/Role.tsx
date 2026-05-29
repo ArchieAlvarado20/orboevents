@@ -1,6 +1,7 @@
 import RoleCard from "@/components/features/role/RoleCards";
 import RoleModal from "@/components/features/role/RoleModal";
 import Button from "@/components/shared/Button";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import Unauthorized from "@/components/shared/Unauthorized";
 import useRoles from "@/hooks/roleHook/useRoles";
 import { confirmToast } from "@/lib/confirmToast";
@@ -27,6 +28,9 @@ export default function Role() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const { roles, loading, deleteRole, fetchRoles, unauthorized } = useRoles();
 
+  if (loading) {
+    return <TransparentSpinner />;
+  }
   const handleDeleteRole = (role: any) => {
     confirmToast("Delete this role?", async () => {
       await deleteRole(role._id);

@@ -42,6 +42,8 @@ export default function useRoles() {
       }
 
       console.log(message);
+    } finally {
+      setLoading(false);
     }
   };
 

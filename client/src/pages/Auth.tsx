@@ -276,7 +276,7 @@ transition-all"
 
                 <Link
                   to={"/forgot-password"}
-                  className="text-xs font-bold text-purple-600 hover:text-purple-700"
+                  className="text-xs font-bold text-slate-600 hover:text-slate-700"
                 >
                   Forgot Password?
                 </Link>
@@ -336,7 +336,7 @@ transition-all"
                 </div>
               </div>
             )}
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <input
                 className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500/20"
                 id="remember"
@@ -345,7 +345,7 @@ transition-all"
               <label className="ml-2 text-sm text-slate-500">
                 Remember me!
               </label>
-            </div>
+            </div> */}
             <button
               type="submit"
               disabled={loading}

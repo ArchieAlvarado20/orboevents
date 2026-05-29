@@ -2,6 +2,7 @@ import UserCard from "@/components/features/user/UserCard";
 import UserEditModal from "@/components/features/user/UserEditModal";
 import UserModal from "@/components/features/user/UserModal";
 import Button from "@/components/shared/Button";
+import TransparentSpinner from "@/components/shared/TransparentSpinner";
 import Unauthorized from "@/components/shared/Unauthorized";
 import { useAdminUsers } from "@/hooks/adminUsersHook/useAdminUsers";
 import { confirmToast } from "@/lib/confirmToast";
@@ -9,6 +10,7 @@ import { UserType } from "@/types/adminUsers.type";
 
 import { List, Menu, Plus, Search } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function Users() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -17,6 +19,7 @@ export default function Users() {
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const { users, loading, error, refetch, unauthorized, deleteUser } =
     useAdminUsers();
+  const navigate = useNavigate();
 
   const handleEdit = (user: UserType) => {
     setSelectedUser(user);
@@ -28,6 +31,14 @@ export default function Users() {
       await deleteUser(user._id);
     });
   };
+
+  if (loading) {
+    return <TransparentSpinner />;
+  }
+
+  if (error) {
+    navigate("/admin/dashboard");
+  }
 
   return (
     <>
