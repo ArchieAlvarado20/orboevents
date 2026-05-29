@@ -76,10 +76,6 @@ export const useCategory = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   return {
     unauthorized,
     categories,

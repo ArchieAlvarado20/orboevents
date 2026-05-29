@@ -14,7 +14,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { confirmToast } from "@/lib/confirmToast";
 import CategoryModal from "@/components/features/category/CategoryModal";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
@@ -28,6 +28,10 @@ export default function Categories() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const { categories, loading, deleteCategory, unauthorized, fetchCategories } =
     useCategory();
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleDeleteCategory = (category: any) => {
     console.log(categories);
