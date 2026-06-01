@@ -33,7 +33,7 @@ export default function ResetPassword() {
       });
 
       showSuccess("Password reset successful");
-      navigate("/");
+      navigate("/login");
     } catch (err: any) {
       const message = err?.response?.data?.message || "Reset failed";
 
@@ -48,14 +48,6 @@ export default function ResetPassword() {
       <BackButton className="absolute top-4 left-4 text-gray-700" />
 
       <div className="w-full max-w-md bg-white rounded-3xl p-10 shadow-2xl space-y-6">
-        {/* Logo */}
-        <div className="flex w-full justify-center mx-auto">
-          <OrboeventsLogo
-            className="h-24 text-white"
-            subClassName="text-white"
-          />
-        </div>
-
         <div className="text-center">
           <h1 className="text-2xl font-bold mt-2">Reset Password</h1>
         </div>
