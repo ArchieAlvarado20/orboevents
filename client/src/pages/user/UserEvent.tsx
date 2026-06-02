@@ -137,7 +137,6 @@ export default function UserEvents() {
     };
 
     fetchEvents();
-    fetchPublicCategories();
   }, [
     page,
     selectedCategory,
@@ -148,6 +147,10 @@ export default function UserEvents() {
     minPrice,
     maxPrice,
   ]);
+  useEffect(() => {
+    fetchPublicCategories();
+  }, []);
+
   if (!events) {
     return <TransparentSpinner />;
   }
@@ -190,7 +193,7 @@ export default function UserEvents() {
         {/* ═══ SEARCH + FILTER BAR ═══ */}
         <section className="max-w-7xl mx-auto px-6 mb-8">
           <div className="flex flex-col md:flex-row gap-3 mb-5">
-            <div className="search-box relative flex-1 bg-white border border-slate-200 rounded-2xl transition-all overflow-hidden flex items-center">
+            <div className="hidden search-box relative flex-1 bg-white border border-slate-200 rounded-2xl transition-all overflow-hidden flex items-center">
               <Search className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
               <input
                 value={searchInput}
@@ -215,7 +218,7 @@ export default function UserEvents() {
             </div>
             <button
               onClick={() => setShowFilters((p) => !p)}
-              className={`flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm border transition-all ${showFilters || hasFilters ? "bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25" : "bg-white text-slate-700 border-slate-200 hover:border-violet-300 hover:text-violet-600"}`}
+              className={`hidden  items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm border transition-all ${showFilters || hasFilters ? "bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25" : "bg-white text-slate-700 border-slate-200 hover:border-violet-300 hover:text-violet-600"}`}
             >
               <SlidersHorizontal className="w-4 h-4" /> Filters
               {hasFilters && (
@@ -227,7 +230,7 @@ export default function UserEvents() {
             {hasFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-sm bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 transition-all"
+                className="hidden flex items-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-sm bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 transition-all"
               >
                 <X className="w-4 h-4" /> Clear All
               </button>
@@ -314,7 +317,11 @@ export default function UserEvents() {
           )}
 
           {/* Category pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide py-1">
+          <div
+            className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide py-1"
+            ref={eventGridRef}
+            id="category"
+          >
             <button
               onClick={() => setSelectedCategory("")}
               className={`cat-pill flex items-center gap-1.5 px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap border transition-all ${
@@ -337,6 +344,12 @@ export default function UserEvents() {
                   onClick={() => {
                     setSelectedCategory(cat.name);
                     setPage(1);
+                    setTimeout(() => {
+                      document.getElementById("category")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                      });
+                    }, 50);
                   }}
                   className={`cat-pill flex items-center gap-1.5 px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap border transition-all ${isActive ? "active bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25" : "bg-white text-slate-600 border-slate-200 hover:border-violet-300 hover:text-violet-600 hover:bg-violet-50"}`}
                 >
@@ -372,11 +385,7 @@ export default function UserEvents() {
         </section>
 
         {/* ═══ EVENT GRID ═══ */}
-        <section
-          className="max-w-7xl mx-auto px-6 min-h-96"
-          ref={eventGridRef}
-          id="category"
-        >
+        <section className="max-w-7xl mx-auto px-6 min-h-96">
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[...Array(6)].map((_, i) => (
