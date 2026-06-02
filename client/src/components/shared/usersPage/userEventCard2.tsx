@@ -80,11 +80,18 @@ export default function UserEventCard2({ event }: EventCardProps) {
 
         <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
           <div className="flex flex-col">
-            <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">Starting from</span>
-            <span className="font-black text-violet-600 text-xl">₹{event.price?.toLocaleString("en-IN") ?? "—"}</span>
+            <span className="text-slate-400 font-semibold text-[10px] uppercase tracking-wider">
+              Starting from
+            </span>
+            <span className="font-black text-violet-600 text-xl">
+              ₹{event.basePrice?.toLocaleString("en-IN") ?? "—"}
+            </span>
           </div>
           <button
-            onClick={(e) => { e.stopPropagation(); handleBookNow(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleBookNow();
+            }}
             className="flex items-center gap-1.5 bg-violet-600 text-white px-5 py-2.5 rounded-2xl font-bold text-sm hover:bg-violet-700 shadow-md shadow-violet-600/20 hover:shadow-violet-600/35 hover:-translate-y-0.5 transition-all"
           >
             Book Spot
