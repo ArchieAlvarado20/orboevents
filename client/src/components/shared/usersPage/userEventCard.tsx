@@ -19,7 +19,7 @@ export default function UserEventCard({ event }: EventCardProps) {
         <img
           src={event.image || "/images/images.jpg"}
           alt={event.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform  object-[50%_20%] duration-500 cursor-pointer"
         />
 
         {/* Date Badge */}

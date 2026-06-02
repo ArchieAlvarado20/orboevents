@@ -347,12 +347,12 @@ export default function EventModal({
                   }
                 />
 
-                <Select
+                {/* <Select
                   label="Status"
                   name="status"
                   value={form.status}
                   onChange={handleChange}
-                  className="hidden"
+                  className=""
                   options={[
                     { label: "Draft", value: "draft" },
                     { label: "Pending", value: "pending" },
@@ -360,7 +360,7 @@ export default function EventModal({
                     { label: "Cancelled", value: "cancelled" },
                     { label: "Completed", value: "completed" },
                   ]}
-                />
+                /> */}
               </div>
             )}
 

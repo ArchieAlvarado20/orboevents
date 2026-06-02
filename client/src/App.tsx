@@ -5,16 +5,10 @@ import Auth from "./pages/Auth";
 import Events from "./pages/admin/Events";
 import QRScanner from "./components/QRScanner";
 import QRImageScanner from "./components/QRimage";
-import Test from "./pages/admin/test";
-import CreateTest from "./pages/admin/testCreate";
 import Analytics from "./pages/admin/Analytics";
 import Ticket from "./pages/admin/Tickets";
-import LandingPage from "./pages/user/LandingPage";
 import Category from "./pages/user/Category";
-
-import UserEvents from "./pages/user/UserEvents";
 import UserTickets from "./pages/user/UserTickets";
-
 import Organizer from "./pages/user/Organizer";
 import About from "./pages/user/About";
 import AdminLayout from "./Layout/AdminLayout";
@@ -27,7 +21,6 @@ import ScrollToTop from "./components/shared/topUponNavigate";
 import Reservation from "./pages/user/Reservation";
 import Transaction from "./pages/user/Transaction";
 import SmartTicketingLanding from "./pages/user/main";
-import DigitalTicketMockup from "./pages/user/mobile";
 import Role from "./pages/admin/Role";
 import Users from "./pages/admin/Users";
 import Categories from "./pages/admin/Categories";
@@ -39,6 +32,7 @@ import ZonePage from "./pages/admin/Zone";
 import UserForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetpassword";
 import ProtectedRoute from "./components/shared/ProtectedRoutes";
+import UserEvents from "./pages/user/UserEvent";
 
 function App() {
   return (
