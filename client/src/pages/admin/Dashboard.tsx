@@ -65,7 +65,6 @@ export default function DashboardPage() {
   const [reservationDashboard, setReservationDashboard] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [unauthorized, setUnauthorized] = useState(false);
-  const navigate = useNavigate();
 
   const fetchDashboard = async () => {
     try {
