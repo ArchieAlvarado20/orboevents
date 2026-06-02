@@ -163,23 +163,6 @@ export default function useEventForm(onSuccess?: () => void) {
       err.tags = "Tags is required";
     }
 
-    // =========================
-    // STATUS (FIX FOR YOUR ENUM ERROR)
-    // =========================
-    const allowedStatus = [
-      "draft",
-      "pending",
-      "active",
-      "cancelled",
-      "completed",
-    ];
-
-    if (!form.status) {
-      err.status = "Status is required";
-    } else if (!allowedStatus.includes(form.status)) {
-      err.status = "Invalid status value";
-    }
-
     setErrors(err);
 
     return Object.keys(err).length === 0;
@@ -214,7 +197,6 @@ export default function useEventForm(onSuccess?: () => void) {
       formData.append("venue", form.venue);
       formData.append("basePrice", String(form.basePrice));
       formData.append("capacity", String(form.capacity));
-      formData.append("status", form.status);
 
       // =========================
       // IMAGE

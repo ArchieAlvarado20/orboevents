@@ -2,8 +2,6 @@
 # GLOBAL
 # ========================
 node_modules/
-.env
-.env.*
 !.env.sample
 *.log
 .DS_Store
@@ -33,3 +31,4 @@ server/.env*
 # BUILD / CACHE
 # ========================
 coverage/
+config.bat
