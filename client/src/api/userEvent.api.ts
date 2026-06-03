@@ -5,6 +5,8 @@ const API = `${import.meta.env.VITE_API_URL}/api/events`;
 export const userEventApi = {
   get: (params?: any) => axios.get(API, { params }),
 
+  getAllEvents: () => axios.get(`${API}/all-events`),
+
   create: (data: unknown, config?: AxiosRequestConfig) =>
     axios.post(API, data, config),
 

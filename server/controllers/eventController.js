@@ -38,6 +38,29 @@ const createEvent = async (req, res) => {
 // ==============================
 // GET ALL EVENTS
 // ==============================
+
+const getAllEvents = async (req, res) => {
+  try {
+    const filter = {};
+
+    filter.status = {
+      $nin: ["cancelled", "pending"],
+    };
+
+    const allEvents = await Event.find(filter).sort({
+      createdAt: -1,
+    });
+
+    // STATUS FILTER
+
+    res.status(200).json(allEvents);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 const getEvents = async (req, res) => {
   try {
     const {
@@ -382,4 +405,5 @@ module.exports = {
   deleteEvent,
   approveEvent,
   getAdminEvents,
+  getAllEvents,
 };

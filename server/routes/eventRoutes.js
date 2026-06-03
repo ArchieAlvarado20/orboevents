@@ -9,6 +9,7 @@ const {
   deleteEvent,
   approveEvent,
   getAdminEvents,
+  getAllEvents,
 } = require("../controllers/eventController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -20,6 +21,7 @@ const router = express.Router();
 const upload = multer({ dest: "uploads/" });
 
 // PUBLIC
+router.get("/events/all-events", getAllEvents);
 router.get("/events", getEvents);
 router.get("/events/:id/public", getEventById);
 
