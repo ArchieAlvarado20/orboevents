@@ -71,6 +71,9 @@ const getEvents = async (req, res) => {
       status,
       tags,
       location,
+      basePrice,
+      minPrice,
+      maxPrice,
     } = req.query;
 
     const limit = 12;
@@ -138,6 +141,23 @@ const getEvents = async (req, res) => {
       ];
     }
 
+    if (basePrice) {
+      filter.basePrice = Number(basePrice);
+    }
+
+    if (minPrice || maxPrice) {
+      filter.basePrice = {};
+
+      if (minPrice) filter.basePrice.$gte = Number(minPrice);
+      if (maxPrice) filter.basePrice.$lte = Number(maxPrice);
+    }
+
+    if (minPrice && maxPrice && minPrice > maxPrice) {
+      return res.status(400).json({
+        message: "minPrice cannot be greater than maxPrice",
+      });
+    }
+
     const events = await Event.find(filter)
       .populate("category")
       .populate("eventType")
@@ -174,6 +194,8 @@ const getAdminEvents = async (req, res) => {
       status,
       tags,
       location,
+      minPrice,
+      maxPrice,
     } = req.query;
 
     const limit = 12;
@@ -236,6 +258,17 @@ const getAdminEvents = async (req, res) => {
           },
         },
       ];
+    }
+
+    if (basePrice) {
+      filter.basePrice = Number(basePrice);
+    }
+
+    if (minPrice || maxPrice) {
+      filter.basePrice = {};
+
+      if (minPrice) filter.basePrice.$gte = Number(minPrice);
+      if (maxPrice) filter.basePrice.$lte = Number(maxPrice);
     }
 
     const events = await Event.find(filter)
