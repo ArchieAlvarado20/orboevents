@@ -43,8 +43,8 @@ export default function UserMobileSidebar({
   const navLinks = [
     { name: "Home", id: "home", icon: Building2 },
     { name: "Events", path: "/events", id: "events", icon: Calendar },
-    { name: "How It Works", id: "how-it-works", icon: HelpCircle },
-    { name: "Contact", id: "contact", icon: Phone },
+    { name: "How It Works", path: "/how-it-works", icon: HelpCircle },
+    { name: "Contact", path: "/contact", icon: Phone },
   ];
 
   const navigate = useNavigate();

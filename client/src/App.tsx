@@ -25,6 +25,8 @@ import Reservation from "./pages/user/Reservation";
 import Transaction from "./pages/user/Transaction";
 import SmartTicketingLanding from "./pages/user/main";
 import DigitalTicketMockup from "./pages/user/mobile";
+import HowItWorks from "./pages/user/HowItWorks";
+import Contact from "./pages/user/Contact";
 import Role from "./pages/admin/Role";
 import Users from "./pages/admin/Users";
 
@@ -49,6 +51,8 @@ function App() {
           <Route path="image" element={<QRImageScanner />} />
           <Route path="reservation" element={<Reservation />} />
           <Route path="transaction" element={<Transaction />} />
+          <Route path="how-it-works" element={<HowItWorks />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
 
         <Route path="/admin" element={<Auth />} />

@@ -23,8 +23,8 @@ export default function Topbar({ user, setIsOpen }: any) {
   const navLinks = [
     { name: "Home", id: "home" },
     { name: "Events", path: "/events" },
-    { name: "How It Works", id: "how-it-works" },
-    { name: "Contact", id: "contact" },
+    { name: "How It Works", path: "/how-it-works" },
+    { name: "Contact", path: "/contact" },
   ];
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Topbar({ user, setIsOpen }: any) {
     return () => observer.disconnect();
   }, [location.pathname]);
 
-  const isActive = (link) => {
+  const isActive = (link: any) => {
     if (link.path) {
       return location.pathname === link.path;
     }

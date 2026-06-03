@@ -1,0 +1,120 @@
+[
+  {
+    "_id": {
+      "$oid": "69fd54cf42d4daf0b1fee64c"
+    },
+    "name": "Super-Admin",
+    "description": "Global Management",
+    "permissions": [
+      "MANAGE_USERS",
+      "MANAGE_ROLES",
+      "MANAGE_EVENT",
+      "MANAGE_SCANNERS",
+      "MANAGE_TICKETTYPES",
+      "SCAN_TICKET",
+      "MANAGE_SLOTS",
+      "APPROVE_SLOTS",
+      "APPROVE_TICKETTYPES",
+      "APPROVE_EVENT"
+    ],
+    "status": "active",
+    "scopeType": "global",
+    "createdAt": {
+      "$date": "2026-05-08T03:13:19.641Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T18:00:05.663Z"
+    },
+    "__v": 8,
+    "accessLevel": "super"
+  },
+  {
+    "_id": {
+      "$oid": "69fda927ca802309f1f77206"
+    },
+    "name": "Ticket Scanner",
+    "description": "ScansTickets",
+    "permissions": ["SCAN_TICKET", "MANAGE_SCANNERS"],
+    "status": "active",
+    "scopeType": "global",
+    "createdAt": {
+      "$date": "2026-05-08T09:13:11.946Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-16T03:10:22.101Z"
+    },
+    "__v": 5,
+    "accessLevel": "staff"
+  },
+  {
+    "_id": {
+      "$oid": "69fdbd9cf92b3aea749e753a"
+    },
+    "name": "Manager",
+    "description": "Aria Manager",
+    "permissions": ["SCAN_TICKET"],
+    "status": "active",
+    "scopeType": "global",
+    "createdAt": {
+      "$date": "2026-05-08T10:40:28.768Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T17:28:09.519Z"
+    },
+    "__v": 9,
+    "accessLevel": "admin"
+  },
+  {
+    "_id": {
+      "$oid": "6a01551a8ce672a04fbe32a0"
+    },
+    "name": "Sub-Admin",
+    "description": "Administrator",
+    "permissions": [
+      "MANAGE_ROLES",
+      "MANAGE_SCANNERS",
+      "MANAGE_EVENT",
+      "MANAGE_TICKETTYPES",
+      "MANAGE_SCANNERS",
+      "MANAGE_SLOTS",
+      "APPROVE_EVENT",
+      "APPROVE_TICKETTYPES",
+      "APPROVE_SLOTS",
+      "MANAGE_USERS"
+    ],
+    "status": "active",
+    "scopeType": "global",
+    "createdAt": {
+      "$date": "2026-05-11T04:03:38.879Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-25T07:33:46.200Z"
+    },
+    "__v": 7,
+    "accessLevel": "admin"
+  },
+  {
+    "_id": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "name": "User",
+    "description": "Normal User",
+    "permissions": [
+      "MANAGE_USERS",
+      "MANAGE_ROLES",
+      "MANAGE_EVENT",
+      "MANAGE_SCANNERS",
+      "MANAGE_TICKETTYPE",
+      "SCAN_TICKET"
+    ],
+    "status": "active",
+    "createdAt": {
+      "$date": "2026-05-08T03:13:19.641Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T16:39:42.701Z"
+    },
+    "__v": 7,
+    "accessLevel": "user"
+  }
+]
