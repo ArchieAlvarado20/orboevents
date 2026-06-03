@@ -194,8 +194,6 @@ const getAdminEvents = async (req, res) => {
       status,
       tags,
       location,
-      minPrice,
-      maxPrice,
     } = req.query;
 
     const limit = 12;
@@ -258,17 +256,6 @@ const getAdminEvents = async (req, res) => {
           },
         },
       ];
-    }
-
-    if (basePrice) {
-      filter.basePrice = Number(basePrice);
-    }
-
-    if (minPrice || maxPrice) {
-      filter.basePrice = {};
-
-      if (minPrice) filter.basePrice.$gte = Number(minPrice);
-      if (maxPrice) filter.basePrice.$lte = Number(maxPrice);
     }
 
     const events = await Event.find(filter)

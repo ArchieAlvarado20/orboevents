@@ -157,17 +157,17 @@ export default function Transaction() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full h-full">
               {tickets.map((ticket) => (
                 <div
                   key={ticket._id}
                   className="col-span-6 group relative overflow-hidden rounded-[32px] bg-white shadow-[0_10px_40px_rgba(124,58,237,0.06)] border border-violet-100/50 flex flex-col md:flex-row"
                 >
-                  <div className="hidden md:w-2/5 relative h-64 md:h-auto overflow-hidden">
+                  <div className="md:w-full relative h-64 md:h-auto overflow-hidden">
                     <img src={ticket.eventId?.image || "/images/events.jpg"} />
                     <div className="absolute top-4 left-4 bg-violet-600 py-1   border border-violet-600  px-4  rounded-2xl shadow-lg">
                       <p className="font-bold text-white  border-violet-600 text-center leading-tight text-sm">
-                        <br />
+                        {formatTime(ticket.slotId?.date)}
                       </p>
                     </div>
                   </div>

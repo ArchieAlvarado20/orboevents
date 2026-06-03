@@ -427,7 +427,10 @@ export default function UserEvents() {
                   <span className="text-slate-900 font-bold">
                     {events.length}
                   </span>{" "}
-                  of <span className="text-slate-900 font-bold">{total}</span>{" "}
+                  of{" "}
+                  <span className="text-slate-900 font-bold">
+                    {events.length}
+                  </span>{" "}
                   events
                 </>
               )}
