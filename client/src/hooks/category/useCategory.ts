@@ -51,7 +51,9 @@ export const useCategory = () => {
 
       const res = await categoryApi.getPublicCategories();
 
-      setCategories(res.data);
+      setCategories(
+        res.data.filter((category: any) => category.status === "active"),
+      );
     } catch (err: any) {
       showError(err.response?.data?.message || "Failed to fetch categories");
     } finally {
