@@ -89,8 +89,6 @@ const createReservation = async (req, res) => {
       { new: true },
     );
 
-    console.log("slot after:", slot?.booked);
-
     if (!slot) {
       return res.status(400).json({ message: "Slot is fully booked" });
     }
