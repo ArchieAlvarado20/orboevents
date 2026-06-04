@@ -1,3 +1,4 @@
+import useSlots from "@/hooks/slot/useSlot";
 import { EventForm } from "@/types/event";
 import FormattedDate from "@/utils/dateLongFormat";
 import { CalendarDays, MapPin } from "lucide-react";
@@ -9,6 +10,7 @@ interface EventCardProps {
 
 export default function UserEventCard2({ event }: EventCardProps) {
   const navigate = useNavigate();
+  const { slots } = useSlots(event._id);
 
   const handleBookNow = (event: EventForm) => {
     navigate(`/slots/${event._id}`);
@@ -28,14 +30,11 @@ export default function UserEventCard2({ event }: EventCardProps) {
             <span
               className="material-symbols-outlined text-violet-600 text-base"
               data-icon="star"
-            >
-              star
-            </span>
-            <span className="font-semibold text-sm text-violet-600">4.9</span>
+            ></span>
           </div>
           <div className="absolute bottom-4 left-4">
-            <span className="hidden px-3 py-1 bg-white/90 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
-              Exhibition
+            <span className="px-3 py-2 bg-white/10 backdrop-blur-md rounded-full font-semibold text-xs text-violet-600 shadow-sm">
+              {event.category?.name}
             </span>
           </div>
         </div>
@@ -51,6 +50,26 @@ export default function UserEventCard2({ event }: EventCardProps) {
             {event.name}
           </h3>
           <p className="text-gray-600 line-clamp-2 mb-4">{event.description}</p>
+          {slots.length > 0 && (
+            <div className="flex items-center gap-2 text-gray-500 mb-4">
+              <h1 className="inline-block text-md text-start font-bold text-slate-200 bg-violet-600 rounded-md px-4 py-1">
+                <FormattedDate date={slots[0]?.date} showWeekday={false} />
+              </h1>
+              {slots.length > 1 && (
+                <>
+                  {" "}
+                  to{" "}
+                  <h1 className="inline-block text-md font-bold text-slate-200 bg-violet-600 rounded-md px-4 py-1">
+                    <FormattedDate
+                      date={slots[slots.length - 1]?.date}
+                      showWeekday={false}
+                    />
+                  </h1>
+                </>
+              )}
+            </div>
+          )}
+
           <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-gray-400 font-semibold text-[10px] uppercase">

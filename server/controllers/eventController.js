@@ -162,6 +162,10 @@ const getEvents = async (req, res) => {
       .populate("category")
       .populate("eventType")
       .populate("ticketTypes")
+      .populate({
+        path: "slot",
+        select: "date startTime endTime capacity",
+      })
       // .populate("slot")
       .sort({ createdAt: -1 })
       .skip(skip)

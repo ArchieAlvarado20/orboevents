@@ -82,6 +82,13 @@ const eventSchema = new mongoose.Schema(
         ref: "TicketType",
       },
     ],
+
+    slot: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Slot",
+      },
+    ],
   },
   { timestamps: true },
 );

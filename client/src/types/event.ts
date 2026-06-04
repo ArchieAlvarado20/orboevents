@@ -23,6 +23,12 @@ export interface EventForm {
   status: "draft" | "pending" | "published" | "cancelled" | "completed";
 
   tags: string[];
+
+  slot?: {
+    _id?: string;
+    date: string;
+    startTime?: string;
+  }[];
 }
 
 export const EventInitialForm = {
@@ -49,4 +55,11 @@ export const EventInitialForm = {
   status: "pending",
 
   tags: [],
+  slot: [
+    {
+      name: "",
+      date: "",
+      startTime: "",
+    },
+  ],
 };

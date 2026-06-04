@@ -22,6 +22,7 @@ import { useCategory } from "@/hooks/category/useCategory";
 import { EventForm } from "@/types/event";
 import { categoryIconMap } from "@/types/categoryIcon.type";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
+import useSlots from "@/hooks/slot/useSlot";
 
 /* ─── Skeleton Card ─── */
 function SkeletonCard() {
@@ -43,14 +44,14 @@ function SkeletonCard() {
 }
 
 /* ─── Custom debounce hook — prevents API call on every keystroke ─── */
-function useDebounce<T>(value: T, delay: number): T {
-  const [debounced, setDebounced] = useState<T>(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-  return debounced;
-}
+// function useDebounce<T>(value: T, delay: number): T {
+//   const [debounced, setDebounced] = useState<T>(value);
+//   useEffect(() => {
+//     const timer = setTimeout(() => setDebounced(value), delay);
+//     return () => clearTimeout(timer);
+//   }, [value, delay]);
+//   return debounced;
+// }
 
 export default function UserEvents() {
   const [events, setEvents] = useState<EventForm[]>([]);
@@ -67,24 +68,32 @@ export default function UserEvents() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
   const { categories, fetchPublicCategories } = useCategory();
 
+  const [filters, setFilters] = useState({
+    search: "",
+    location: "",
+    minPrice: "",
+    maxPrice: "",
+    dateFrom: "",
+    dateTo: "",
+  });
+
   // Debounced values — API fires only after user stops typing (500ms)
-  const search = useDebounce(searchInput, 500);
-  const locationFilter = useDebounce(locationInput, 500);
+  // const search = useDebounce(searchInput, 500);
+  // const locationFilter = useDebounce(locationInput, 500);
 
   const pageRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const paginationTotal = Math.max(totalPages, 1);
 
   const hasFilters =
     selectedCategory ||
-    locationFilter ||
+    locationInput ||
     dateFrom ||
     dateTo ||
     minPrice ||
     maxPrice ||
-    search;
+    searchInput;
 
   const handlePageClick = (p: number | string, index: number) => {
     if (typeof p === "number") {
@@ -135,14 +144,13 @@ export default function UserEvents() {
         const res = await userEventApi.get({
           page,
           category: selectedCategory,
-          search,
-          location: locationFilter,
-          startDate: dateFrom,
-          endDate: dateTo,
-          minPrice,
-          maxPrice,
+          search: filters.search,
+          location: filters.location,
+          startDate: filters.dateFrom,
+          endDate: filters.dateTo,
+          minPrice: filters.minPrice,
+          maxPrice: filters.maxPrice,
         });
-
         setEvents(res.data.events || []);
         setTotalPages(res.data.totalPages || 1);
       } catch (err) {
@@ -153,53 +161,8 @@ export default function UserEvents() {
     };
 
     fetchEvents();
-  }, [
-    page,
-    selectedCategory,
-    search,
-    locationFilter,
-    dateFrom,
-    dateTo,
-    minPrice,
-    maxPrice,
-  ]);
-  // Only fires when stable debounced values change — no per-keystroke calls
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true);
+  }, [page, selectedCategory, filters]);
 
-      try {
-        const res = await userEventApi.get({
-          page,
-          category: selectedCategory,
-          search,
-          location: locationFilter,
-          startDate: dateFrom,
-          endDate: dateTo,
-          minPrice,
-          maxPrice,
-        });
-
-        setEvents(res.data.events || []);
-        setTotalPages(res.data.totalPages || 1);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, [
-    page,
-    selectedCategory,
-    search,
-    locationFilter,
-    dateFrom,
-    dateTo,
-    minPrice,
-    maxPrice,
-  ]);
   useEffect(() => {
     fetchPublicCategories();
   }, []);
@@ -237,135 +200,156 @@ export default function UserEvents() {
 
       <main className="pt-24 pb-20 grow bg-[#f8f9ff] min-h-screen">
         {/* <!-- Hero Section --> */}
-        <section className="max-w-7xl py-8 mx-auto sm:px-6 mb-12" id="top">
+        <section className="max-w-7xl py-8 mx-auto sm:px-6 mb-6" id="top">
           <EventCarousel events={allEvents} />
         </section>
 
         {/* ═══ SEARCH + FILTER BAR ═══ */}
         <section className="max-w-7xl mx-auto px-6 mb-8">
-          <div className="flex flex-col md:flex-row gap-3 mb-5">
-            <div className=" search-box relative flex-1 bg-white border border-slate-200 rounded-2xl transition-all overflow-hidden flex items-center">
-              <Search className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
-              <input
-                value={searchInput}
-                onChange={(e) => {
-                  setSearchInput(e.target.value);
-                  setPage(1);
-                }}
-                placeholder="Search events, artists, venues…"
-                className="w-full pl-12 pr-4 py-3.5 bg-transparent text-slate-800 font-medium placeholder:text-slate-400 text-sm outline-none"
-              />
-              {searchInput && (
-                <button
-                  onClick={() => {
-                    setSearchInput("");
+          {/* Advanced filter panel */}
+          <div className="filter-panel events-filter-glass rounded-3xl p-6 mb-5 shadow-xl border border-slate-100">
+            <div className="flex flex-col md:flex-row gap-3 mb-5">
+              <div className=" search-box relative flex-1 bg-white border border-slate-200 rounded-2xl transition-all overflow-hidden flex items-center">
+                <Search className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
+                <input
+                  value={searchInput}
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
                     setPage(1);
                   }}
-                  className="pr-4 text-slate-400 hover:text-slate-600"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-            <button
-              onClick={() => setShowFilters((p) => !p)}
-              className={` flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm border transition-all ${showFilters || hasFilters ? "bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25" : "bg-white text-slate-700 border-slate-200 hover:border-violet-300 hover:text-violet-600"}`}
-            >
-              <SlidersHorizontal className="w-4 h-4" /> Filters
-              {hasFilters && (
-                <span className="w-5 h-5 bg-white text-violet-600 rounded-full text-xs font-black flex items-center justify-center ml-1">
-                  !
-                </span>
-              )}
-            </button>
-            {hasFilters && (
-              <button
-                onClick={clearFilters}
-                className=" flex items-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-sm bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 transition-all"
-              >
-                <X className="w-4 h-4" /> Clear All
-              </button>
-            )}
-          </div>
+                  placeholder="Search events, artists, venues…"
+                  className="w-full pl-12 pr-4 py-3.5 bg-transparent text-slate-800 font-medium placeholder:text-slate-400 text-sm outline-none"
+                />
+                {searchInput && (
+                  <button
+                    onClick={() => {
+                      setSearchInput("");
+                      setPage(1);
+                    }}
+                    className="pr-4 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={!hasFilters}
+                  onClick={() => {
+                    setFilters({
+                      search: searchInput,
+                      location: locationInput,
+                      minPrice,
+                      maxPrice,
+                      dateFrom,
+                      dateTo,
+                    });
 
-          {/* Advanced filter panel */}
-          {showFilters && (
-            <div className="filter-panel events-filter-glass rounded-3xl p-6 mb-5 shadow-xl border border-slate-100">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div className="flex flex-col gap-2">
-                  <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
-                    <MapPin className="w-3 h-3 text-violet-500" /> Location
-                  </label>
+                    setPage(1);
+                  }}
+                  className={` flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm border transition-all ${hasFilters ? "bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25" : "bg-white text-slate-700 border-slate-200 hover:border-violet-300 hover:text-violet-600"}`}
+                >
+                  <SlidersHorizontal className="w-4 h-4" /> Filters
+                  {hasFilters && (
+                    <span className="w-5 h-5 bg-white text-violet-600 rounded-full text-xs font-black flex items-center justify-center ml-1">
+                      !
+                    </span>
+                  )}
+                </button>
+                {hasFilters && (
+                  <button
+                    onClick={() => {
+                      clearFilters();
+                      setFilters({
+                        search: "",
+                        location: "",
+                        minPrice: "",
+                        maxPrice: "",
+                        dateFrom: "",
+                        dateTo: "",
+                      });
+                    }}
+                    className="flex items-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-sm bg-red-50 text-red-500 border border-red-100 hover:bg-red-100 transition-all"
+                  >
+                    <X className="w-4 h-4" /> Clear All
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
+                  <MapPin className="w-3 h-3 text-violet-500" /> Location
+                </label>
+                <input
+                  value={locationInput}
+                  onChange={(e) => {
+                    setLocationInput(e.target.value);
+                    setPage(1);
+                  }}
+                  placeholder="City or venue…"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
+                  <Calendar className="w-3 h-3 text-violet-500" /> From
+                </label>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => {
+                    setDateFrom(e.target.value);
+                    setPage(1);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
+                  <Calendar className="w-3 h-3 text-violet-500" /> To
+                </label>
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => {
+                    setDateTo(e.target.value);
+                    setPage(1);
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
+                  <IndianRupee className="w-3 h-3 text-violet-500" /> Price
+                </label>
+                <div className="grid grid-cols-2 gap-2">
                   <input
-                    value={locationInput}
+                    type="number"
+                    min={0}
+                    value={minPrice}
                     onChange={(e) => {
-                      setLocationInput(e.target.value);
+                      setMinPrice(e.target.value);
                       setPage(1);
                     }}
-                    placeholder="City or venue…"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
+                    placeholder="Min ₹"
+                    className="w-full px-3 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
                   />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
-                    <Calendar className="w-3 h-3 text-violet-500" /> From
-                  </label>
                   <input
-                    type="date"
-                    value={dateFrom}
+                    type="number"
+                    min={0}
+                    value={maxPrice}
                     onChange={(e) => {
-                      setDateFrom(e.target.value);
+                      setMaxPrice(e.target.value);
                       setPage(1);
                     }}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
+                    placeholder="Max ₹"
+                    className="w-full px-3 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
                   />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
-                    <Calendar className="w-3 h-3 text-violet-500" /> To
-                  </label>
-                  <input
-                    type="date"
-                    value={dateTo}
-                    onChange={(e) => {
-                      setDateTo(e.target.value);
-                      setPage(1);
-                    }}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-slate-400">
-                    <IndianRupee className="w-3 h-3 text-violet-500" /> Price
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="number"
-                      min={0}
-                      value={minPrice}
-                      onChange={(e) => {
-                        setMinPrice(e.target.value);
-                        setPage(1);
-                      }}
-                      placeholder="Min ₹"
-                      className="w-full px-3 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      value={maxPrice}
-                      onChange={(e) => {
-                        setMaxPrice(e.target.value);
-                        setPage(1);
-                      }}
-                      placeholder="Max ₹"
-                      className="w-full px-3 py-3 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-400 bg-white transition-all"
-                    />
-                  </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
           {/* Category pills */}
           <div
@@ -374,7 +358,17 @@ export default function UserEvents() {
             id="category"
           >
             <button
-              onClick={clearFilters}
+              onClick={() => {
+                clearFilters();
+                setFilters({
+                  search: "",
+                  location: "",
+                  minPrice: "",
+                  maxPrice: "",
+                  dateFrom: "",
+                  dateTo: "",
+                });
+              }}
               className={`cat-pill flex items-center gap-1.5 px-5 py-2.5 rounded-full font-bold text-sm whitespace-nowrap border transition-all ${
                 selectedCategory === ""
                   ? "bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-600/25"
