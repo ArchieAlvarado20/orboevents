@@ -74,6 +74,8 @@ const getEvents = async (req, res) => {
       basePrice,
       minPrice,
       maxPrice,
+      dateFrom,
+      dateTo,
     } = req.query;
 
     const limit = 12;
@@ -156,6 +158,21 @@ const getEvents = async (req, res) => {
       return res.status(400).json({
         message: "minPrice cannot be greater than maxPrice",
       });
+    }
+
+    if (dateFrom || dateTo) {
+      const slotFilter = {};
+      const dateFilter = {};
+
+      if (dateFrom) dateFilter.$gte = new Date(dateFrom);
+      if (dateTo) dateFilter.$lte = new Date(dateTo);
+
+      slotFilter.date = dateFilter;
+
+      const matchingSlots = await Slot.find(slotFilter).select("event");
+      const eventIds = matchingSlots.map((s) => s.event.toString());
+
+      filter._id = { $in: eventIds }; // ✅ i-filter ang events na may matching slots
     }
 
     const events = await Event.find(filter)

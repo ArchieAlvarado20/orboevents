@@ -146,8 +146,8 @@ export default function UserEvents() {
           category: selectedCategory,
           search: filters.search,
           location: filters.location,
-          startDate: filters.dateFrom,
-          endDate: filters.dateTo,
+          dateFrom: filters.dateFrom,
+          dateTo: filters.dateTo,
           minPrice: filters.minPrice,
           maxPrice: filters.maxPrice,
         });
