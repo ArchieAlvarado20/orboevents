@@ -1,7 +1,9 @@
 import useSlots from "@/hooks/slot/useSlot";
+import useSlotsPublic from "@/hooks/slot/useSlotPublic";
 import { EventForm } from "@/types/event";
 import FormattedDate from "@/utils/dateLongFormat";
 import { CalendarDays, MapPin } from "lucide-react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 interface EventCardProps {
@@ -10,7 +12,7 @@ interface EventCardProps {
 
 export default function UserEventCard2({ event }: EventCardProps) {
   const navigate = useNavigate();
-  const { slots } = useSlots(event._id);
+  const { slotsPublic } = useSlotsPublic(event._id);
 
   const handleBookNow = (event: EventForm) => {
     navigate(`/slots/${event._id}`);
@@ -50,18 +52,21 @@ export default function UserEventCard2({ event }: EventCardProps) {
             {event.name}
           </h3>
           <p className="text-gray-600 line-clamp-2 mb-4">{event.description}</p>
-          {slots.length > 0 && (
+          {slotsPublic.length > 0 && (
             <div className="flex items-center gap-2 text-gray-500 mb-4">
               <h1 className="inline-block text-md text-start font-bold text-slate-200 bg-violet-600 rounded-md px-4 py-1">
-                <FormattedDate date={slots[0]?.date} showWeekday={false} />
+                <FormattedDate
+                  date={slotsPublic[0]?.date}
+                  showWeekday={false}
+                />
               </h1>
-              {slots.length > 1 && (
+              {slotsPublic.length > 1 && (
                 <>
                   {" "}
                   to{" "}
                   <h1 className="inline-block text-md font-bold text-slate-200 bg-violet-600 rounded-md px-4 py-1">
                     <FormattedDate
-                      date={slots[slots.length - 1]?.date}
+                      date={slotsPublic[slotsPublic.length - 1]?.date}
                       showWeekday={false}
                     />
                   </h1>

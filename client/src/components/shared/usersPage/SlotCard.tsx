@@ -1,21 +1,14 @@
-import Button from "@/components/shared/Button";
-import { formatTime } from "@/utils/timeLongFormat";
-
-import { SlotFormType } from "@/types/slot.type";
-import { useState } from "react";
-import FormattedDate from "@/utils/dateLongFormat";
-import { useNavigate } from "react-router-dom";
 import { EventForm } from "@/types/event";
-
-interface Props {
-  slots: SlotFormType;
-  event: EventForm;
-  onSelect: () => void;
-}
+import FormattedDate from "@/utils/dateLongFormat";
+import { formatTime } from "@/utils/timeLongFormat";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../Button";
 
 export default function SlotCard({ slots, event, onSelect }: Props) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleClick = async () => {
     try {
       setLoading(true);
@@ -24,13 +17,16 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
       setLoading(false);
     }
   };
+
   const handleBookNow = (event: EventForm) => {
     navigate(`/tickets/${event._id}/slots/${slots._id}`);
   };
 
+  const remaining = slots.capacity - (slots.booked ?? 0);
+
   return (
-    <div className="bg-white p-6 m-1  rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between relative">
-      {/* TITLE + DELETE */}
+    <div className="bg-white p-6 m-1 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between relative">
+      {/* TITLE */}
       <div className="flex justify-between items-center">
         <p className="font-bold text-lg text-slate-900">
           {slots.name || "Slot"}
@@ -45,10 +41,21 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
         {formatTime(slots.startTime)} - {formatTime(slots.endTime)}
       </p>
 
-      {/* STATUS */}
+      {/* REMAINING */}
+      {remaining > 0 && (
+        <span className="text-green-500 text-sm">
+          {remaining > 1 ? `${remaining} slots` : "1 slot"} remaining
+        </span>
+      )}
+
+      {/* BUTTON */}
       {slots.status === "pending" ? (
         <Button variant="secondary" className="w-full mt-2">
-          Comming Soon!
+          Coming Soon!
+        </Button>
+      ) : remaining <= 0 ? (
+        <Button variant="secondary" className="w-full mt-2">
+          Fully booked!
         </Button>
       ) : (
         <Button
@@ -58,8 +65,9 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
             handleClick();
             handleBookNow(event);
           }}
+          disabled={loading}
         >
-          Book Now!
+          {loading ? "Booking..." : "Book Now!"}
         </Button>
       )}
     </div>

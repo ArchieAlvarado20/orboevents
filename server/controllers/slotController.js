@@ -11,12 +11,16 @@ const getSlotsByEvent = async (req, res) => {
       status: { $in: ["published", "pending"] },
     }).sort({ date: 1 });
 
-    res.json(slots);
+    // ✅ i-map para may remaining field na
+    const slotsWithRemaining = slots.map((slot) => ({
+      ...slot.toObject(),
+      remaining: slot.capacity - slot.booked,
+    }));
+
+    res.json(slotsWithRemaining);
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      message: err.message,
-    });
+    res.status(500).json({ message: err.message });
   }
 };
 

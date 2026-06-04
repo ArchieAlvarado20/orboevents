@@ -17,6 +17,7 @@ export type SlotType = {
 
 export default function useSlots(eventId?: string) {
   const [slots, setSlots] = useState<SlotType[]>([]);
+  const [slotsPublic, setSlotsPublic] = useState<SlotType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [unauthorized, setUnauthorized] = useState(false);
@@ -65,6 +66,19 @@ export default function useSlots(eventId?: string) {
     }
   };
 
+  const fetchPublicSlots = async () => {
+    if (!eventId) return;
+    try {
+      const slotsRes = await slotApi.getByEventPublic(eventId);
+
+      setSlotsPublic(slotsRes.data || []);
+      console.log(slotsRes.data);
+    } catch (err) {
+      console.error("Slots failed", err);
+      setSlotsPublic([]);
+    }
+  };
+
   // =========================
   // DELETE SLOT
   // =========================
@@ -104,5 +118,7 @@ export default function useSlots(eventId?: string) {
     fetchSlots,
     deleteSlot,
     setSlots,
+    slotsPublic,
+    fetchPublicSlots,
   };
 }

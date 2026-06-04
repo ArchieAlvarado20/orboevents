@@ -92,7 +92,7 @@ export default function UserSlots() {
       <main className="max-w-7xl mt-24 mx-auto sm:px-4 sm:py-8" id="top">
         <div className="mt-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* <!-- BEGIN: ContentArea --> */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-12 space-y-8">
             {/* <!-- BEGIN: EventSummaryCard --> */}
 
             <div className="bg-white sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(124,58,237,0.18)] soft-shadow flex flex-col md:flex-row border border-slate-100">
@@ -142,8 +142,8 @@ export default function UserSlots() {
                   <NoSlotsAvailable />
                 </div>
               ) : (
-                <div className="flex mx-auto">
-                  <div className="grid mx-auto sm:px-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-full">
+                <div className="flex mx-auto ">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl mx-auto px-4 lg:min-w-300">
                     {/* <!-- Early Bird - Sold Out --> */}
                     {/* <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between opacity-60 grayscale relative">
                   <span className="absolute top-4 right-4 bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">

@@ -5,6 +5,9 @@ export type TicketTypeForm = {
   price: number | string;
   quantityTotal: number | string;
 
+  quantitySold: number | string;
+  quantityReserved: number | string;
+
   privileges: string; // comma-separated input
 
   accessLevel?: "vip" | "premium" | "regular";

@@ -1,7 +1,8 @@
 const Reservation = require("../models/Reservation.js");
 const TicketType = require("../models/TicketType.js");
+const Slot = require("../models/Slot");
 
-const HOLD_MINUTES = 10;
+const HOLD_MINUTES = 15;
 
 const generateRef = () => {
   return "RSV-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
@@ -11,19 +12,6 @@ const createReservation = async (req, res) => {
   try {
     const userId = req.user.id;
     const { eventId, ticketTypeId, slotId, quantity } = req.body;
-
-    // 1. check existing reservation (anti duplicate)
-    // const existing = await Reservation.findOne({
-    //   userId,
-    //   eventId,
-    //   status: { $in: "pending" },
-    // });
-
-    // if (existing) {
-    //   return res.status(400).json({
-    //     message: "You already have a reservation for this event.",
-    //   });
-    // }
 
     // CHECK IF USER RESERVED DIFFERENT TICKET TYPE
     const existingDifferentTicket = await Reservation.findOne({
@@ -85,8 +73,30 @@ const createReservation = async (req, res) => {
 
     if (!ticket) {
       return res.status(400).json({
-        message: "No available slots",
+        message: "Insufficient ticket availability",
       });
+    }
+
+    // ✅ SLOT CAPACITY CHECK — atomic
+    const slot = await Slot.findOneAndUpdate(
+      {
+        _id: slotId,
+        $expr: {
+          $lte: [{ $add: ["$booked", qty] }, "$capacity"], // booked + qty <= capacity
+        },
+      },
+      { $inc: { booked: qty } },
+      { new: true },
+    );
+
+    if (!slot) {
+      return res.status(400).json({ message: "Slot is fully booked" });
+    }
+
+    // ✅ i-rollback ang slot kung walang available na ticket
+    if (!ticket) {
+      await Slot.findByIdAndUpdate(slotId, { $inc: { booked: -qty } });
+      return res.status(400).json({ message: "No available tickets" });
     }
 
     // 3. create reservation
@@ -152,12 +162,17 @@ const cancelReservation = async (req, res) => {
 
     const reservation = await Reservation.findById(id);
 
-    if (!reservation) {
-      return res.status(404).json({ message: "Reservation not found" });
+    if (
+      reservation.status !== "pending" ||
+      reservation.status === "cancelled"
+    ) {
+      return res.status(400).json({
+        message: "This reservation is unavailable",
+      });
     }
 
-    if (reservation.status === "cancelled") {
-      return res.status(400).json({ message: "Already cancelled" });
+    if (!reservation) {
+      return res.status(404).json({ message: "Reservation not found" });
     }
 
     if (reservation.userId.toString() !== req.user.id) {
@@ -172,6 +187,10 @@ const cancelReservation = async (req, res) => {
     // 2. return slot to ticket type
     await TicketType.findByIdAndUpdate(reservation.ticketTypeId, {
       $inc: { quantityReserved: -1 },
+    });
+
+    await Slot.findByIdAndUpdate(reservation.slotId, {
+      $inc: { booked: -1 },
     });
 
     return res.json({
@@ -195,10 +214,15 @@ const expireReservations = async () => {
       r.status = "expired";
       await r.save();
 
-      // release slot
-      await TicketType.findByIdAndUpdate(r.ticketTypeId, {
-        $inc: { quantityReserved: -1 },
-      });
+      await TicketType.findOneAndUpdate(
+        { _id: r.ticketTypeId, quantityReserved: { $gt: 0 } }, // ✅ hindi magiging negative
+        { $inc: { quantityReserved: -1 } },
+      );
+
+      await Slot.findOneAndUpdate(
+        { _id: r.slotId, booked: { $gt: 0 } }, // ✅ hindi magiging negative
+        { $inc: { booked: -1 } },
+      );
     }
 
     console.log(`Expired: ${expired.length}`);

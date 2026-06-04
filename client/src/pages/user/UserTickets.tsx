@@ -64,41 +64,40 @@ export default function UserTickets() {
     }, 50);
   };
 
-  useEffect(() => {
+  const fetchData = async () => {
     if (!id || !slotId) return;
+    setLoading(true);
 
-    const fetchData = async () => {
-      setLoading(true);
+    try {
+      const eventRes = await userEventApi.getByEventID(id);
+      setEvent(eventRes.data);
+    } catch (err) {
+      console.error("Event failed", err);
+      setError("Failed to load event");
+    }
 
-      try {
-        const eventRes = await userEventApi.getByEventID(id);
-        setEvent(eventRes.data);
-      } catch (err) {
-        console.error("Event failed", err);
-        setError("Failed to load event");
-      }
+    try {
+      const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id, slotId);
+      setTickets(ticketRes.data || []);
+      // console.log(ticketRes.data);
+    } catch (err: unknown) {
+      console.error("Tickets failed", err);
+      setTickets([]);
+    }
 
-      try {
-        const ticketRes = await ticketTypeApi.getTicketTypesByEvent(id, slotId);
-        setTickets(ticketRes.data || []);
-        // console.log(ticketRes.data);
-      } catch (err: unknown) {
-        console.error("Tickets failed", err);
-        setTickets([]);
-      }
+    try {
+      const slotsRes = await slotApi.getSlotById(slotId);
 
-      try {
-        const slotsRes = await slotApi.getSlotById(slotId);
+      setSlot(slotsRes.data);
+      console.log(slotsRes.data);
+    } catch (err) {
+      console.error("Slots failed", err);
+    }
 
-        setSlot(slotsRes.data);
-        console.log(slotsRes.data);
-      } catch (err) {
-        console.error("Slots failed", err);
-      }
+    setLoading(false);
+  };
 
-      setLoading(false);
-    };
-
+  useEffect(() => {
     fetchData();
     fetchReservations();
   }, [id]);
@@ -147,7 +146,7 @@ export default function UserTickets() {
           });
         }
       }, 50);
-
+      fetchData();
       // navigate("/reservation");
     } catch (error: any) {
       console.log(error.response?.data || error.message);
@@ -521,6 +520,7 @@ export default function UserTickets() {
                             onClick={() =>
                               confirmToast("Cancel this reservation?", () => {
                                 cancelReservation(r._id);
+                                fetchData();
                               })
                             }
                             className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700  rounded-xl transition-all"

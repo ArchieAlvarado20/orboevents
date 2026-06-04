@@ -6,6 +6,7 @@ export type SlotFormType = {
   endTime: string;
   capacity: number | "";
   eventId?: string;
+  booked?: number;
 
   status: "pending" | "cancelled" | "published";
 };
@@ -32,6 +33,7 @@ export const initialSlotBulkForm = {
       startTime: "",
       endTime: "",
       capacity: null,
+      booked: 0,
       status: "pending",
     },
   ],

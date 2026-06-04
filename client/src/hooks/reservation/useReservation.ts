@@ -152,9 +152,17 @@ export default function useReservation() {
       showSuccess("Reservation cancelled");
 
       setReservations((prev) => prev.filter((r) => r._id !== reservationId));
-    } catch (err) {
-      console.error(err);
-      showError("Failed to cancel reservation");
+    } catch (err: any) {
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message;
+
+        if (err.response?.status === 400) {
+          showError(message); // "Reservation is already expired/cancelled"
+          fetchReservations();
+          return;
+        }
+      }
+      throw err; // ibang error — i-throw pa rin
     }
   };
 
