@@ -95,7 +95,7 @@ const getEvents = async (req, res) => {
 
     // STATUS FILTER
     filter.status = {
-      $nin: ["cancelled", "pending"],
+      $nin: ["cancelled", "pending", "completed"],
     };
 
     // LOCATION FILTER

@@ -1,6 +1,7 @@
 const Reservation = require("../models/Reservation.js");
 const TicketType = require("../models/TicketType.js");
 const Slot = require("../models/Slot");
+const Event = require("../models/Event");
 
 const HOLD_MINUTES = 15;
 

@@ -11,11 +11,18 @@ const getSlotsByEvent = async (req, res) => {
       status: { $in: ["published", "pending"] },
     }).sort({ date: 1 });
 
-    // ✅ i-map para may remaining field na
-    const slotsWithRemaining = slots.map((slot) => ({
-      ...slot.toObject(),
-      remaining: slot.capacity - slot.booked,
-    }));
+    const now = new Date();
+
+    const slotsWithRemaining = slots.map((slot) => {
+      const isCompleted = new Date(slot.date) < now;
+
+      return {
+        ...slot.toObject(),
+        remaining: Math.max(slot.capacity - (slot.booked ?? 0), 0),
+        status: isCompleted ? "completed" : slot.status,
+        isCompleted,
+      };
+    });
 
     res.json(slotsWithRemaining);
   } catch (err) {

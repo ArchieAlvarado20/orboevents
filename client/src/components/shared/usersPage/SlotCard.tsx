@@ -22,7 +22,7 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
     navigate(`/tickets/${event._id}/slots/${slots._id}`);
   };
 
-  const remaining = slots.capacity - (slots.booked ?? 0);
+  const remaining = slots.remaining;
 
   return (
     <div className="bg-white p-6 m-1 rounded-2xl border-2 border-slate-100 shadow-2xl flex flex-col justify-between relative">
@@ -42,7 +42,7 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
       </p>
 
       {/* REMAINING */}
-      {remaining > 0 && (
+      {!slots.isCompleted && remaining > 0 && (
         <span className="text-green-500 text-sm">
           {remaining > 1 ? `${remaining} slots` : "1 slot"} remaining
         </span>
@@ -52,6 +52,10 @@ export default function SlotCard({ slots, event, onSelect }: Props) {
       {slots.status === "pending" ? (
         <Button variant="secondary" className="w-full mt-2">
           Coming Soon!
+        </Button>
+      ) : slots.isCompleted ? (
+        <Button variant="primary" className="w-full mt-2" disabled>
+          Event Completed.
         </Button>
       ) : remaining <= 0 ? (
         <Button variant="secondary" className="w-full mt-2">

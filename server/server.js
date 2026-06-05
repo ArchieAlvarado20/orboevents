@@ -16,6 +16,7 @@ const ticketTypeRoutes = require("./routes/ticketTypeRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 require("./utils/expiredReservation");
+require("./utils/eventCompleted");
 const testRoutes = require("./routes/testRoutes");
 const roleRoutes = require("./routes/roleRoutes.js");
 const adminUsersRoutes = require("./routes/adminUsersRoutes.js");
