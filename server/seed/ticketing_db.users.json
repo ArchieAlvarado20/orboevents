@@ -1,0 +1,1158 @@
+[
+  {
+    "_id": {
+      "$oid": "6a01698d8ce672a04fbe32a2"
+    },
+    "name": "Tests",
+    "email": "test@gmail.com",
+    "phone": "09194398233",
+    "image": "https://res.cloudinary.com/dimv9axkl/image/upload/v1778477453/SmartTicketing/Users/1778477452486-test100.jpg",
+    "password": "$2b$10$HW3o2S4uPClsUgkr5gyXp.jtu6KkoYxEb2QUBQC8XO/jRhcrHXW/K",
+    "status": "active",
+    "role": {
+      "$oid": "6a01551a8ce672a04fbe32a0"
+    },
+    "createdAt": {
+      "$date": "2026-05-11T05:30:53.978Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T10:55:57.205Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a02adb356104c160b4d09f6"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvarado21@gmail.com",
+    "phone": "09194398233",
+    "image": "https://res.cloudinary.com/dimv9axkl/image/upload/v1778560436/SmartTicketing/Users/1778560434210-Archie%20Trinidad%20Alvarado.jpg",
+    "password": "$2b$10$BtcjQWx0gXvEdrTPv8KvkO0imu7b0A5EP.U6fq1E0PxiesQzNiIq.",
+    "status": "active",
+    "role": {
+      "$oid": "69fda927ca802309f1f77206"
+    },
+    "createdAt": {
+      "$date": "2026-05-12T04:33:55.893Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T17:21:03.762Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a04609751e568844cc9ecbc"
+    },
+    "name": "Archie Alvarado",
+    "email": "anime.aa47@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$kxGaln3In.oxUoihr3lKG./F2HdMvWQ28IQKNMMTOwgzV8H0wSQpO",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-13T11:29:27.933Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-13T11:29:27.933Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a069832986a87f32c5e98dc"
+    },
+    "name": "Juan Dela Cruz",
+    "email": "juan@sexample.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$eud8VVL6/rMeUB5HexV96el9XzswnL22ZIdfqroC8fewiKPQVc8sO",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-15T03:51:14.271Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T03:51:14.271Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a06997c986a87f32c5e98de"
+    },
+    "name": "Juan Dela Cruz",
+    "email": "jo@sexample.com",
+    "phone": "093232323232",
+    "image": "",
+    "password": "$2b$10$k3VhJeGizTp5tVlNGhMVmuvQmCuSfIrRgQk.IaYyjsTK7W5A1F5oi",
+    "status": "active",
+    "role": {
+      "$oid": "69fda927ca802309f1f77206"
+    },
+    "createdAt": {
+      "$date": "2026-05-15T03:56:44.036Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T17:19:10.690Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a069a77986a87f32c5e98df"
+    },
+    "name": "Juan Dela Cruz",
+    "email": "jo@example.com",
+    "phone": "2121212",
+    "image": "",
+    "password": "$2b$10$lJG0rMUJ5v7bpJP1kXcLfuW/qOTykiv6QNxuBrlfbR2lZTKCvWZuK",
+    "status": "active",
+    "role": {
+      "$oid": "69fda927ca802309f1f77206"
+    },
+    "createdAt": {
+      "$date": "2026-05-15T04:00:55.545Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T17:19:20.085Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a069aac986a87f32c5e98e0"
+    },
+    "name": "Jos",
+    "email": "jos@example.com",
+    "phone": "232323232",
+    "image": "",
+    "password": "$2b$10$sgFmrCfcuTIgKofXMCsZgeyEjzzjaqodUQSIVq93FDtQxm8s97eqq",
+    "status": "active",
+    "role": {
+      "$oid": "69fdbd9cf92b3aea749e753a"
+    },
+    "createdAt": {
+      "$date": "2026-05-15T04:01:48.221Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-26T08:29:52.763Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a074fe5e9d690ecb221773c"
+    },
+    "name": "ros",
+    "email": "ros@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$wUV3v6o0y3x5pQVGY67kvuHNsJMpmd8.3rojNar6qOI8aAEKDAdl2",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-15T16:55:01.875Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-15T16:55:01.875Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0a80d5aa269a77ac61a0be"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "a21212rchiealvarado20@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$iQiGqktDiuXvnIqDaE4E2eKLhRvj8R7hopLszjbCYn7yo2rEFqJ5G",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-18T03:00:37.442Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T03:00:37.442Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a0bd4d7d1697f68d9d8ba7b"
+    },
+    "name": "wer",
+    "email": "ert@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$GSEqV2MStm8rzB2QMQKKsO2q2Ee1s/I1Ks2POs0z/TWKOF7ScUdIq",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-19T03:11:19.954Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-19T03:11:19.954Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a117d48767dbcc170aeb481"
+    },
+    "name": "test",
+    "email": "test11111@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$iQiGqktDiuXvnIqDaE4E2eKLhRvj8R7hopLszjbCYn7yo2rEFqJ5G",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T10:11:20.860Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T10:11:20.860Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a117de4767dbcc170aeb482"
+    },
+    "name": "try",
+    "email": "try@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$0rtvS9lcaidK9DBqtrmnp.4aE7v4r5KliiMzbnxBj41JVjF/MB5KS",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T10:13:56.194Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T10:13:56.194Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a11894341242d1eee13f00b"
+    },
+    "name": "test99",
+    "email": "test99@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$sgFmrCfcuTIgKofXMCsZgeyEjzzjaqodUQSIVq93FDtQxm8s97eqq",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:02:27.488Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:02:27.488Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118bef41242d1eee13f00c"
+    },
+    "name": "test88",
+    "email": "test88@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$sgFmrCfcuTIgKofXMCsZgeyEjzzjaqodUQSIVq93FDtQxm8s97eqq",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:13:51.832Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:13:51.832Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118d73b7cd2e7f9bfa0138"
+    },
+    "name": "test77",
+    "email": "test77@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$lsJYuB4t1HFexIdKfnCEsOKQgqxZfMCHypCl3dsEndlM8sX5m0Ruu",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:20:19.263Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:20:19.263Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118e22143ee7b38a9a597b"
+    },
+    "name": "test66",
+    "email": "test66@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$ZbrKLUqso6Xi6lFaaWl.ter.Opl9/A4eUqeSzC./8hoUeyWZAVk1q",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:23:14.793Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:23:14.793Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118e8d143ee7b38a9a597c"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "test123@gmail.com",
+    "phone": "09194398233",
+    "image": "https://res.cloudinary.com/dimv9axkl/image/upload/v1779535502/SmartTicketing/Users/1779535500263-Archie%20Trinidad%20Alvarado.jpg",
+    "password": "$2b$10$pCyXBsN9Je3uk.kcfe.87eA6kEIwOcvDamx.jdmRgQ991Ddezuy1.",
+    "status": "active",
+    "role": {
+      "$oid": "69fdbd9cf92b3aea749e753a"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:25:01.572Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:25:01.572Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a118fc0b7d74bbf554c3e5d"
+    },
+    "name": "t100",
+    "email": "t100@agmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$58BDN0IdKKR2NoYwrR1BDuB5zXJkbOdWegLlIs5zQ0VsYQUOJ/0Wm",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:30:08.204Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:30:08.204Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a11903bb7d74bbf554c3e5e"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "123@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$E9tnHeOai9IGMI8Ypkx2fuqKnQkorIaEDSiBFMXtrqvS4ze/otGBi",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:32:11.815Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:32:11.815Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a119371de83a71579e7fbde"
+    },
+    "name": "12345",
+    "email": "1234@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$1dNmCKMFoDHIbYj4cuvcF.F7f9EchuDQwAN06RdFjRODJPUDGntey",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:45:53.830Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:45:53.830Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a119546de83a71579e7fbdf"
+    },
+    "name": "hashed",
+    "email": "hashed@gmail.com",
+    "phone": "09194398233",
+    "image": "https://res.cloudinary.com/dimv9axkl/image/upload/v1779537223/SmartTicketing/Users/1779537220969-hashed.jpg",
+    "password": "$2b$10$5KaetR5c/qNstWrCJ9hhjO6Gb8V25YEfuEVSXUCdfLk3pS42IvPiq",
+    "status": "active",
+    "role": {
+      "$oid": "69fdbd9cf92b3aea749e753a"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T11:53:42.387Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T11:53:42.387Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a119816475ef1a6205847a5"
+    },
+    "name": "jon",
+    "email": "jon@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$fGsWoNVSdSf6fonMu0BbfuASUJ1UGc/QCbfQwJpaDz1Vt9HVrIiOy",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-23T12:05:42.261Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-23T12:05:42.261Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a157d04991dff122968c4dd"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archsdsdsiealvarado20@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$oYuak.S/0DL6xIaVjqjKyeT7NRJM46B4AvC5zjmATroFuLWeEOW3u",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-26T10:59:16.927Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-26T10:59:16.927Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a169b192aa38055b34c42a3"
+    },
+    "name": "phone",
+    "email": "phone@gmail.com",
+    "phone": "",
+    "image": "",
+    "password": "$2b$10$kJDL8ApzSoK3VXUNss0iQudW1QtF1hSR8xaBVCAfMc7Qvm3WS8VgC",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:19:53.085Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:19:53.085Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a169cc998aee58c930c3931"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvarado21110@gmail.com",
+    "phone": "9194398233",
+    "image": "",
+    "password": "$2b$10$gvLgRXUmlQWkjYZu9Lq0duwbzsbcXqoc/xBS28rfdcNEHHAH0aAL6",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:27:05.797Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:27:05.797Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a169d8698aee58c930c3932"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiesssalvarado20@gmail.com",
+    "phone": "9194398233",
+    "image": "",
+    "password": "$2b$10$uCJTW2uRSAuQkHF/gOkWQezmqekFiOoNZkggSB0fAwMWEmTlGHqLm",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:30:14.717Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:30:14.717Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a169fef98aee58c930c3933"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archsiealvarado20@gmail.com",
+    "phone": "9194398233",
+    "image": "",
+    "password": "$2b$10$PXOZykwUJ3Ns4Jh5zkVd0uMudjfmy7k07HOCInBEKJ.lk6gmFNg6C",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:40:31.463Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:40:31.463Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16a00598aee58c930c3934"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archisealvarado20@gmail.com",
+    "phone": "9194398233",
+    "image": "",
+    "password": "$2b$10$xMNpKZlVf.gGTDYknFfdWOhMMUvf4lH09FWqWdDJJiN4OD1iKiPFC",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:40:53.976Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:40:53.976Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16a2ca98aee58c930c3935"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "yayaya@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$znZbUZX2AUyrraos8XMrpuVRONIhTx1RQf0lhuPd.rigmsaiwK/De",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T07:52:42.406Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T07:52:42.406Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16a78698aee58c930c3936"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiea243434lvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$Xpo65Po0fuaPcaGREnIgcefnB2X2vvty0Q1.mFaRA9feeHOXHDghm",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T08:12:54.653Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T08:12:54.653Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16a98398aee58c930c3937"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiedddalvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$ZdUMcfN1g06J7XdLSwZNi.q35dOpzubB7JvPbMjxGIrxu3YbwGVTG",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T08:21:23.479Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T08:21:23.479Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16ab4798aee58c930c3938"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvardado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$zdRD2tvO3YqY7AlmOLyuTeKL1Wnlf7cCAcLGBAaMvkD3L2t.o8dd.",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T08:28:55.570Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T08:28:55.570Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16ac5e98aee58c930c3939"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archie1111alvarado20@gmail.com",
+    "phone": "+639927270042",
+    "image": "",
+    "password": "$2b$10$z9wJL.6YjdE0hP9R/pRniuZxjX5QQPpgI1gBs1viyDyyC0Bj4/vx2",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T08:33:34.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T08:33:34.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b2d1c655c635d717a06a"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiesalvarado20@gmail.com",
+    "phone": "+639927270042",
+    "image": "",
+    "password": "$2b$10$wy2rAf7O2NHoTkYnPvgLR.qje9cbsT9AtaCrriLfl8XjjPiOjNqKa",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:01:05.707Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:01:05.707Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b450c655c635d717a06b"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archftiealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$qxHwBuu0LI7USD.OnFC67uPHBT9BP6mHK1v8GSI2dV1LCNWf2v2QS",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:07:28.808Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:07:28.808Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b5afc655c635d717a06c"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "arcdddhiealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$SXGoBgLf8cCkyvo5CzgTr.NYlkFMpyXxdVjV.BKL5I1uepUCashwq",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:13:19.912Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:13:19.912Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b64bc655c635d717a06d"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archssiealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$NxqUUdtFVH53NnvdK8JtNuLjyNhJvrGH.z1Uo5s3B6VLfl6fH3hO.",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:15:55.105Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:15:55.105Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b765c655c635d717a06e"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvarado20fdfd@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$k/4LWL2bguVe/0dyn1JTD.h2vYc6hLZdfYLJIV5oo43SUixylD0wO",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:20:37.228Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:20:37.228Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16b956c655c635d717a06f"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvarado20ds@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$xna2vCzP5uz1T31nHbOY5.GNcg2q5bOJOZukqJwDJpnQh0r7GsXh2",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:28:54.008Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:28:54.008Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16bbecc655c635d717a070"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealbbbvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$AnqpMAL55ic0BDFXlCiEKuxCNGh2SBKoM5rL6vmWqTGXVzaHHgm2e",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:39:56.385Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:39:56.385Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16bdf7c655c635d717a071"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvsasasarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$pMl7ib7GMrttwECiSKiTrO6MlHY/vviq22.LynnajBnfUFgUdd5Be",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:48:39.381Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:48:39.381Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16bf6dc655c635d717a072"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "xarchiesalvarado20@gmail.com",
+    "phone": "+639927270042",
+    "image": "",
+    "password": "$2b$10$Z4Ru7cwAABbEbHjnTacWKeEP2ukwcYGGX2hgXDCgHJVgNCrycy1xm",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T09:54:53.006Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T09:54:53.006Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16c1bfc655c635d717a07d"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvvarado20@gmail.com",
+    "phone": "+639992656561",
+    "image": "",
+    "password": "$2b$10$SE5nzgGYwLQ6ysVDgdImWuWIVBZ3cxnGLFrYmaDXBPJCBtJCWVJzW",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T10:04:47.996Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:04:47.996Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16c9dec655c635d717a07e"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvsarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$Now2FdCoh5ZdcTgCu/QBxOEUrNs3Fowx9Snstt2aXd8m2Pt43gOke",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T10:39:26.438Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:39:26.438Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16ccfbc655c635d717a07f"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archissealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$/2mWxL2oQS9kYqOvCht.5OqZwpBR4xtpObFXg8.ZV2W6kSts6wXYO",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T10:52:43.328Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:52:43.328Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16cd32c655c635d717a080"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvewewewearado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$pAAIZR.ShEPBSuAuWkgCN.gL4yRNmoZ7vsewZEenVh0f2IA/8GtxO",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T10:53:38.865Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:53:38.865Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16cdb4c655c635d717a081"
+    },
+    "name": "jgjghg",
+    "email": "archfdvccviealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$.KqoTyv.Cl3fgfjM5nzUeO1Nn4nrAQtLHEc7RwoPMnVsyvYDKx90W",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T10:55:48.365Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T10:55:48.365Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16cf00c655c635d717a0a3"
+    },
+    "name": "Archie Alvarado",
+    "email": "archiealvarsasasado20@gmail.com",
+    "phone": "+639123456789",
+    "image": "",
+    "password": "$2b$10$06aPYhuL34HH7bYemY6Lk.ocU.d9mz6lI8OkFz19ujAyC3tGZH.0u",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T11:01:20.330Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T11:01:20.330Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16d014c655c635d717a0a4"
+    },
+    "name": "popo",
+    "email": "archiealvarado20232323@gmail.com",
+    "phone": "+639876543210",
+    "image": "",
+    "password": "$2b$10$EgvwC3K.T5vjt0JuZFIwPuFpgmxZsrmg/dpyD8Pf68gY20SoIx1TS",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T11:05:56.214Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T11:05:56.214Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16d2aec655c635d717a0a5"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealvsasaarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$aFSrJDxplnfDwd4f2eqbU.80db/DaVo3KgAWWhPD5hybpZWS19Nuy",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T11:17:02.296Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T11:17:02.296Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16dad2c655c635d717a0a6"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiea55lvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$9ZJbcHL.8hlXUB7bKv4X9OVuFRNFiMbWN4pRhiC2ju1qBjW4wnLMC",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T11:51:46.503Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T11:51:46.503Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a16db54c655c635d717a0a7"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "ar1chiealvarado20@gmail.com",
+    "phone": "+639194398233",
+    "image": "",
+    "password": "$2b$10$QfgJmYRqpP0sGfaybww9wukvNfx9fdIiufTUYTpB1Q9mTWyx8CYdu",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-27T11:53:56.846Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T11:53:56.846Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a17e501986c74ec63d120a9"
+    },
+    "name": "gimini",
+    "email": "gimini@gmail.com",
+    "phone": "+639123456789",
+    "image": "",
+    "password": "$2b$10$s5tJ1UuPzAR.x04WQHjalO35QX/cXbtEjuHajLg5SiFTBH8UYqGe6",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-28T06:47:29.180Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-28T06:47:29.180Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a17e568986c74ec63d120aa"
+    },
+    "name": "Archie Trinidad Alvarado",
+    "email": "archiealwwvarado20@gmail.com",
+    "phone": "+639876543210",
+    "image": "",
+    "password": "$2b$10$bO020HDb2moZ0U3PCQfe3.hEgl2cQ6bWzQ3fUFpmPvyCPv0Bicih.",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee642"
+    },
+    "createdAt": {
+      "$date": "2026-05-28T06:49:12.465Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-28T06:49:12.465Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a17fa6fdbae8f477018f0f9"
+    },
+    "name": "Im the admin",
+    "email": "admin@gmail.com",
+    "phone": "9194398233",
+    "image": "",
+    "password": "$2b$10$jtDaxehWtt0lb0.QEcIC3utF4sOa7nVcofTif2WTtGFVYhQDfQWhW",
+    "status": "active",
+    "role": {
+      "$oid": "69fd54cf42d4daf0b1fee64c"
+    },
+    "createdAt": {
+      "$date": "2026-05-28T08:18:55.275Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-02T10:15:22.464Z"
+    },
+    "__v": 0,
+    "isOtpVerified": false
+  }
+]
