@@ -146,7 +146,8 @@ export default function UserTickets() {
           });
         }
       }, 50);
-      fetchData();
+
+      // fetchData();
       // navigate("/reservation");
     } catch (error: any) {
       console.log(error.response?.data || error.message);
@@ -520,7 +521,6 @@ export default function UserTickets() {
                             onClick={() =>
                               confirmToast("Cancel this reservation?", () => {
                                 cancelReservation(r._id);
-                                fetchData();
                               })
                             }
                             className="absolute top-2 right-2 p-2 text-red-500 hover:text-red-700  rounded-xl transition-all"
