@@ -2,8 +2,6 @@
 # GLOBAL
 # ========================
 node_modules/
-.env
-.env.*
 *.log
 .DS_Store
 Thumbs.db
@@ -32,3 +30,4 @@ server/.env*
 # BUILD / CACHE
 # ========================
 coverage/
+config.bat

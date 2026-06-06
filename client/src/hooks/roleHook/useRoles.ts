@@ -17,7 +17,7 @@ export default function useRoles() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Unauthorized");
+      setLoading(false);
       return;
     }
 
@@ -42,6 +42,8 @@ export default function useRoles() {
       }
 
       console.log(message);
+    } finally {
+      setLoading(false);
     }
   };
 

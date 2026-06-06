@@ -1,15 +1,5 @@
 import FormattedDate from "@/utils/dateLongFormat";
-import {
-  Calendar,
-  MapPin,
-  MoreVertical,
-  Edit,
-  Ticket,
-  Delete,
-  Trash,
-  Trash2,
-  Trash2Icon,
-} from "lucide-react";
+import { Calendar, Edit, MapPin, Ticket, Trash2 } from "lucide-react";
 
 interface EventType {
   _id: string;
@@ -26,95 +16,115 @@ interface EventCardProps {
   onDelete: (event: EventType) => void;
 }
 
-export default function EventCard({
-  event,
-  onAddTicket,
-  onDelete,
-}: EventCardProps) {
-  const statusStyle = {
-    active: "bg-green-100 text-green-700",
-    pending: "bg-yellow-100 text-yellow-700",
-    completed: "bg-gray-100 text-gray-600",
-    cancelled: "bg-red-600 text-yellow-600",
-  };
+const statusConfig: Record<
+  string,
+  { label: string; dot: string; badge: string }
+> = {
+  active: {
+    label: "Active",
+    dot: "bg-emerald-400",
+    badge: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+  },
+  pending: {
+    label: "Pending",
+    dot: "bg-amber-400",
+    badge: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
+  },
+  completed: {
+    label: "Completed",
+    dot: "bg-slate-400",
+    badge: "bg-slate-500/20 text-slate-300 border border-slate-500/30",
+  },
+};
+
+export default function EventCard({ event, onAddTicket, onDelete }: EventCardProps) {
+  const status = event.status ?? "active";
+  const cfg = statusConfig[status] ?? statusConfig.active;
 
   return (
-    <div className="bg-white  border border-slate-200  rounded-xl overflow-hidden group shadow-[0_15px_50px_rgba(75,85,99,0.2)] hover:shadow-md transition-shadow">
-      {/* IMAGE */}
-      <div className="h-48 relative overflow-hidden">
+    <div className="group relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 hover:-translate-y-1">
+      {/* ── IMAGE AREA ── */}
+      <div className="relative h-52 overflow-hidden flex-shrink-0">
         <img
           src={event.image || "/images/images.jpg"}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          alt={event.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
 
-        {/* STATUS */}
-        <div className="absolute top-4 left-4">
+        {/* Dark gradient overlay bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+        {/* Status badge — top-left */}
+        <div className="absolute top-3 left-3">
           <span
-            className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${
-              statusStyle[event.status || "active"]
-            }`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${cfg.badge}`}
           >
-            {event.status || "active"}
+            <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} animate-pulse`} />
+            {cfg.label}
           </span>
+        </div>
+
+        {/* Event name over gradient — bottom-left */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-6">
+          <h3 className="text-white font-bold text-base leading-tight line-clamp-2 drop-shadow-md">
+            {event.name}
+          </h3>
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="p-6">
-        {/* HEADER */}
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-semibold text-lg text-slate-900  leading-tight">
-            {event.name}
-          </h3>
-
-          <button className="text-slate-400 hover:text-slate-600 transition-colors">
-            <MoreVertical size={18} />
-          </button>
-        </div>
-
-        {/* INFO */}
-        <div className="space-y-2 mb-6">
+      {/* ── CONTENT AREA ── */}
+      <div className="flex flex-col flex-1 px-4 pt-3 pb-0">
+        {/* Date & Location */}
+        <div className="space-y-2 py-3">
           <div className="flex items-center gap-2 text-slate-500 text-sm">
-            <Calendar size={16} />
-            <span>
+            <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-500 flex-shrink-0">
+              <Calendar size={14} />
+            </span>
+            <span className="truncate font-medium text-slate-600">
               <FormattedDate date={event.date} />
             </span>
           </div>
 
           <div className="flex items-center gap-2 text-slate-500 text-sm">
-            <MapPin size={16} />
-            <span>{event.location}</span>
+            <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-violet-50 text-violet-500 flex-shrink-0">
+              <MapPin size={14} />
+            </span>
+            <span className="truncate font-medium text-slate-600">
+              {event.location}
+            </span>
           </div>
         </div>
 
-        {/* FOOTER */}
-        <div className="pt-4 border-t border-slate-100  flex items-center justify-between">
-          {/* AVATARS (placeholder) */}
-          <div className="flex -space-x-2">
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
-              A
-            </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
-              B
-            </div>
-            <div className="w-8 h-8 rounded-full border-2 border-white  bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">
-              +99
-            </div>
-          </div>
+        {/* ── ACTION BAR ── */}
+        <div className="mt-auto border-t border-slate-100 py-2 flex items-center justify-end gap-1">
+          {/* Edit */}
+          <button
+            title="Edit Event"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors duration-200"
+          >
+            <Edit size={15} />
+            <span>Edit</span>
+          </button>
 
-          {/* ACTIONS */}
-          <div className="flex gap-2">
-            <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-              <Edit size={18} />
-            </button>
-            <button className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-              <Trash2Icon size={18} onClick={() => onDelete(event)} />
-            </button>
+          {/* Delete */}
+          <button
+            title="Delete Event"
+            onClick={() => onDelete(event)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-500 hover:bg-rose-50 transition-colors duration-200"
+          >
+            <Trash2 size={15} />
+            <span>Delete</span>
+          </button>
 
-            <button className="p-2  text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors">
-              <Ticket size={18} onClick={() => onAddTicket(event)} />
-            </button>
-          </div>
+          {/* Add Ticket */}
+          <button
+            title="Add Ticket"
+            onClick={() => onAddTicket(event)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-violet-600 hover:bg-violet-50 transition-colors duration-200"
+          >
+            <Ticket size={15} />
+            <span>Ticket</span>
+          </button>
         </div>
       </div>
     </div>
