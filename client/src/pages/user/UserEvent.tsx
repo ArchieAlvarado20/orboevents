@@ -22,7 +22,6 @@ import { useCategory } from "@/hooks/category/useCategory";
 import { EventForm } from "@/types/event";
 import { categoryIconMap } from "@/types/categoryIcon.type";
 import TransparentSpinner from "@/components/shared/TransparentSpinner";
-import useSlots from "@/hooks/slot/useSlot";
 
 /* ─── Skeleton Card ─── */
 function SkeletonCard() {

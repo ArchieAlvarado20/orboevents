@@ -33,6 +33,8 @@ import UserForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetpassword";
 import ProtectedRoute from "./components/shared/ProtectedRoutes";
 import UserEvents from "./pages/user/UserEvent";
+import HowItWorks from "./pages/user/HowItWorks";
+import Contact from "./pages/user/Contact";
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
           <Route path="transaction" element={<Transaction />} />
           <Route path="forgot-password" element={<UserForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="how-it-works" element={<HowItWorks />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
 
         <Route path="/admin" element={<Auth />} />

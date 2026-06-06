@@ -24,3 +24,6 @@
     fadeIn 0.9s ease,
     fadeOut 0.9s ease 1.8s forwards;
 }
+body {
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+}

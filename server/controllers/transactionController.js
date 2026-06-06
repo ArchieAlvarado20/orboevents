@@ -53,7 +53,7 @@ const checkout = async (req, res) => {
 
     const discount = 0;
     const discountAmount = 0;
-    const serviceFee = 100;
+    const serviceFee = 0;
 
     const total = subtotal - discountAmount + serviceFee;
 
