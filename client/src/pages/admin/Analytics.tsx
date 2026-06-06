@@ -5,10 +5,9 @@ import Topbar from "@/components/shared/Topbar";
 import { useState } from "react";
 
 export default function Analytics() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
-      <main className={`flex ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}>
+      <main className="min-h-screen p-6 bg-slate-50">
         <div className="mx-auto">
           {/* <!-- Page Header --> */}
           <div className="mb-0 space-y-1">

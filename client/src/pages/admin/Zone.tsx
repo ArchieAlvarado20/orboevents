@@ -41,7 +41,7 @@ export default function ZonePage() {
           <Unauthorized message="Admin access only!" />
         </div>
       ) : (
-        <main className="flex-1 mb-12 p-4 min-h-screen overflow-y-auto md:ml-64">
+        <main className="min-h-screen p-6 bg-slate-50">
           {/* MODAL */}
           <ZoneModal
             open={openModal}

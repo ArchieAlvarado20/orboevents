@@ -22,10 +22,8 @@ import { CategoryType } from "@/types/categoryIcon.type";
 import CategoryCard from "@/components/features/category/CategoryCard";
 
 export default function Categories() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedcategory, setSelectedcategory] = useState<any>(null);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const { categories, loading, deleteCategory, unauthorized, fetchCategories } =
     useCategory();
 
@@ -58,9 +56,7 @@ export default function Categories() {
           </div>
         </>
       ) : (
-        <main
-          className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
-        >
+        <main className="min-h-screen p-6 bg-slate-50">
           <CategoryModal
             open={openModal}
             category={selectedcategory}

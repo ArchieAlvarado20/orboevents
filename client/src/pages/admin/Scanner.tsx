@@ -9,19 +9,16 @@ import {
 import { useState } from "react";
 
 export default function Scanner() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
-      <main className={` flex ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}>
+      <main className="flex-1 mb-12 p-4 min-h-screen overflow-y-auto">
         <div className="max-w-container-max mx-auto">
           {/* <!-- Page Header --> */}
           <div className="mb-0 space-y-1">
             <ComingSoon />
           </div>
         </div>
-        <div
-          className={`hidden flex-1 justify-center mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
-        >
+        <div className="hidden flex-1 justify-center mb-12 p-4 min-h-screen overflow-y-auto">
           <div className="w-full overflow-hidden h-screen max-w-4xl flex flex-col lg:flex-row gap-8 items-stretch mt-5 min-h-screen">
             {/* <!-- Left: Scanner Viewport Section --> */}
             <div className="flex-1 flex flex-col gap-6">

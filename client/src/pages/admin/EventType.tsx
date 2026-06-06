@@ -62,9 +62,7 @@ export default function EventType() {
           </div>
         </>
       ) : (
-        <main
-          className={`flex-1 mb-12 p-4 min-h-screen overflow-y-auto ${isCollapsed ? "md:ml-16" : "md:ml-64"}`}
-        >
+        <main className="min-h-screen p-6 bg-slate-50">
           <EventTypeModal
             open={openModal}
             eventType={selectedEventType}
