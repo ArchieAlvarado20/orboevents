@@ -177,7 +177,7 @@ export default function Reservation() {
                     </div>
 
                     {/* Image */}
-                    <div className="w-36 h-28 rounded-2xl overflow-hidden shrink-0">
+                    <div className="w-36 h-28 hidden sm:block rounded-2xl overflow-hidden shrink-0">
                       <img
                         src={r.eventId?.image || "/images/images.jpg"}
                         alt={r.eventId?.name}
