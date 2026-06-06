@@ -335,7 +335,7 @@ export default function EventInfoPage() {
   };
 
   return (
-    <div className="max-w-full md:ml-64 md:py-10 md:px-10  xl:px-20">
+    <main className="min-h-screen p-10 bg-slate-50">
       {openEventZoneModal && event && (
         <EventZoneModal
           open={openEventZoneModal}
@@ -746,6 +746,6 @@ export default function EventInfoPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
