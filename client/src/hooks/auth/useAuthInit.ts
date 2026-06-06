@@ -45,7 +45,8 @@ export const useAuthInit = ({
         localStorage.removeItem("user");
 
         showError?.("Authentication failed.");
-        navigate("/login");
+        const isAdminRoute = window.location.pathname.startsWith("/admin");
+        navigate(isAdminRoute ? "/admin" : "/login");
       }
     };
 

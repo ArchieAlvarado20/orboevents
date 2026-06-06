@@ -17,9 +17,9 @@ export default function _404UserPage() {
         <h1 className="text-[80px] font-bold text-slate-900 mb-2">404</h1>
 
         {/* Subtitle */}
-        <p className="text-indigo-600 font-semibold mb-4 flex items-center justify-center gap-2">
+        <div className="text-indigo-600 font-semibold mb-4 flex items-center justify-center gap-2">
           <OrboeventsLogo className="w-38 h-18 text-indigo-600" />
-        </p>
+        </div>
 
         {/* Message */}
         <p className="text-slate-500  mb-8">Ops Something went wrong.</p>
