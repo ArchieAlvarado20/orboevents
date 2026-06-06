@@ -27,18 +27,18 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-semibold text-slate-700  mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
           {label}
         </label>
       )}
 
       <div
         onClick={handleClick}
-        className={`w-full h-40 border-2 border-dashed rounded-xl flex flex-col items-center justify-center bg-slate-50  group transition-colors
+        className={`w-full h-40 border-2 border-dashed rounded-xl flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/50 group transition-colors
         ${
           error
             ? "border-red-500"
-            : "border-slate-200  hover:border-indigo-400 cursor-pointer"
+            : "border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 cursor-pointer"
         }`}
       >
         {value ? (
@@ -49,11 +49,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
           />
         ) : (
           <>
-            <ImagePlus className="w-6 h-6 text-slate-400 group-hover:text-indigo-500 mb-2" />
-            <p className="text-sm font-medium text-slate-500 group-hover:text-indigo-600">
+            <ImagePlus className="w-6 h-6 text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 mb-2" />
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
               {clickNote}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
               Recommended size: 1200x630px
             </p>
           </>

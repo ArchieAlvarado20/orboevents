@@ -88,30 +88,39 @@ export default function RoleModal({
       {open && (
         <div
           onClick={onClose}
-          className="fixed max-h-screen inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4"
         >
           <div
             ref={modalRef}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-white w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            className="relative bg-slate-900 border border-white/10 w-full max-w-xl sm:rounded-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] text-white"
           >
+            {/* Top gradient highlight */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-600" />
+
             {/* HEADER */}
-            <div className="px-6 py-4 border-b flex items-center justify-between sticky top-0 bg-white z-10">
-              <h3 className="text-xl font-bold text-slate-900">Create Role</h3>
+            <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
+              <div>
+                <h3 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-violet-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
+                  {role ? "Edit Role" : "Create New Role"}
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">Configure access level permissions and settings</p>
+              </div>
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-slate-600"
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
               >
-                <X />
+                <X size={20} />
               </button>
             </div>
 
             {/* BODY */}
-            <div className="px-6 py-6 overflow-y-auto space-y-6">
+            <div className="px-6 py-6 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
               {/* Role Name */}
               <Input
                 label="Role Name"
                 name="name"
+                placeholder="e.g. Event Coordinator"
                 value={form.name}
                 onChange={handleChange}
                 error={errors.name}
@@ -121,6 +130,7 @@ export default function RoleModal({
               <Textarea
                 label="Description"
                 name="description"
+                placeholder="Tell us what this role is responsible for..."
                 value={form.description}
                 onChange={handleChange}
                 error={errors.description}
@@ -128,13 +138,13 @@ export default function RoleModal({
 
               {/* Permissions */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-semibold text-slate-200 mb-2">
                   Permissions
                 </label>
 
                 <div
-                  className={`grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 rounded-lg border transition ${
-                    errors.permissions ? "border-red-500" : "border-slate-200"
+                  className={`grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-xl border bg-slate-950/20 transition ${
+                    errors.permissions ? "border-red-500" : "border-slate-300 dark:border-slate-800"
                   }`}
                 >
                   {permissionsList.map((perm) => (
@@ -157,7 +167,7 @@ export default function RoleModal({
 
               {/* Status */}
               <Select
-                label="is Active?"
+                label="Is Active?"
                 name="status"
                 value={form.status}
                 onChange={handleChange}
@@ -166,18 +176,30 @@ export default function RoleModal({
             </div>
 
             {/* FOOTER */}
-            <div className="px-6 py-4 border-t bg-slate-50 flex justify-end gap-3">
-              <Button
-                variant="outline"
-                className="text-indigo-500"
-                onClick={() => onClose()}
+            <div className="px-6 py-4 border-t border-white/5 bg-slate-950/40 flex items-center justify-end gap-3 sticky bottom-0 z-10">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
               >
-                cancel
-              </Button>
+                Cancel
+              </button>
 
-              <Button onClick={handleSubmit} loading={loading}>
-                {role ? "Update Role" : "Create Role"}
-              </Button>
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="relative group overflow-hidden px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 text-white text-sm font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] hover:shadow-indigo-500/35 active:scale-95 transition-all flex items-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{role ? "Update Role" : "Create Role"}</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

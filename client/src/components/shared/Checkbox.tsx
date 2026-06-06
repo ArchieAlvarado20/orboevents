@@ -22,13 +22,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
         name={name}
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 mt-1 accent-blue-500"
+        className="w-4 h-4 mt-1 accent-indigo-600 dark:accent-indigo-500"
       />
 
       <div>
-        <p className="text-sm font-medium text-slate-800">{label}</p>
+        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{label}</p>
 
-        {description && <p className="text-xs text-slate-500">{description}</p>}
+        {description && <p className="text-xs text-slate-500 dark:text-slate-400">{description}</p>}
       </div>
     </label>
   );

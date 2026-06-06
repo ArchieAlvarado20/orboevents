@@ -2,8 +2,6 @@
 # GLOBAL
 # ========================
 node_modules/
-.env
-.env.*
 *.log
 .DS_Store
 Thumbs.db
@@ -25,10 +23,10 @@ server/.env*
 # ========================
 # EDITOR
 # ========================
-.vscode/
 .idea/
 
 # ========================
 # BUILD / CACHE
 # ========================
 coverage/
+config.bat
